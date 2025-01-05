@@ -1,0 +1,4 @@
+Seed: 2
+Base: Starter Base
+
+Diesel available just north of the starter base.
