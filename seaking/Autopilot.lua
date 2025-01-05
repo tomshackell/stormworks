@@ -91,18 +91,13 @@ tgtAltitude = 0             -- the altitude to hold
 
 -- Input: the angular difference, Output: the target yaw rate
 headingPID = PID:new({
-    kp = 2.0,
-    --ki = 0.0001,
-    kd = 0.0,
-    --iDecay = 1.0,
-    minOut = -TAXI_MAX_YAW_RATE,
-    maxOut = TAXI_MAX_YAW_RATE,
+    kp = 2.0, ki = 0, kd = 0, minOut = -TAXI_MAX_YAW_RATE, maxOut = TAXI_MAX_YAW_RATE,
 })
 
 -- Input: the target yaw rate, Output: the yaw control surface
 yawRatePID = PID:new({
-    kp = 0.015, ki = 0.001, kd = 0.02,  -- Found with PID Tuner, works up to 30 deg/second.
-    minOut = -1.0, maxOut = 1.0,
+    -- Found with PID Tuner, works up to 30 deg/second.
+    kp = 0.015, ki = 0.001, kd = 0.02, minOut = -1.0, maxOut = 1.0,
 })
 
 lines = {}
@@ -143,11 +138,7 @@ function onTick()
         tgtHeading = sixdof.bearing
         tgtAltitude = sixdof.baroAlt
     end
-       
 
-    --local tgtHeading = sixdof.bearing
-    --local 
-    
     if hMode == TAXI then
         collective = TAXI_COLLECTIVE
         pitch = clamp(controls.ws * TAXI_MAX_PITCH, TAXI_MIN_PITCH, TAXI_MAX_PITCH)
@@ -196,16 +187,7 @@ function onDraw()
     else
         local inf = 1/0
         local tgtCur = { min=-25, max=25 }
-        --local cur = {min=-10, max=10}
         local out = {min=-1,max=1} -- { min=inf, max=-inf }
-        for v in buffer:iter() do
-            --tgtCur.min = math.min(v.tgt, v.cur, tgtCur.min)
-            --tgtCur.max = math.max(v.tgt, v.cur, tgtCur.max)
-            --cur.min = math.min(v.cur, cur.min)
-            --cur.max = math.max(v.cur, cur.max)
-            --out.min = math.min(v.out, out.min)
-            --out.max = math.max(v.out, out.max)
-        end
         if tgtCur.min == tgtCur.max then
             tgtCur.min = tgtCur.min - 0.5
             tgtCur.max = tgtCur.max + 0.5
