@@ -78,16 +78,22 @@ TAXI_MAX_PITCH = 0.37           -- maximum pitch to use when taxiing
 TAXI_MIN_PITCH = -0.2           -- minimum pitch to use when taxiing
 TAXI_HEADING_GAIN = 10          -- target heading offset at full yaw control deflection while taxiing
 TAXI_MAX_YAW_RATE = 20.0        -- maximum rate of yaw (degrees per second) while taxiing
+TAXI_TO_HOVER_ALT = 2.0         -- how much to lift up into a hover
 
-NUM_INIT_FRAMES = 5         -- frames required to initialise
+HOVR_MAX_VSPEED = 10.0          -- maximum vertical speed (m/s)
+HOVR_TAXI_RALT = 0.85           -- maximum radar alt that we can transition from HOVR to TAXI
 
-initFrames = 0
-hMode = TAXI                -- current horizontal mode
-vMode = LEVL                -- current vertical mode
-tgtSpeed = 0                -- the speed to hold 
-tgtGPS = { x=0, y=0 }       -- the GPS coordinate to hover over
-tgtHeading = 0              -- the heading to face
-tgtAltitude = 0             -- the altitude to hold
+NUM_INIT_FRAMES = 5             -- frames required to initialise
+
+initFrames = 0                  -- how many init frames have been run
+hMode = TAXI                    -- current horizontal mode
+vMode = LEVL                    -- current vertical mode
+tgtSpeed = 0                    -- the speed to hold 
+tgtGPS = { x=0, y=0 }           -- the GPS coordinate to hover over
+tgtHeading = 0                  -- the heading to face
+tgtAltitude = 0                 -- the altitude to hold
+tgtVSpeed = 0                   -- the vertical speed to target
+display = { min=-10, max=10 }   -- the display constraints
 
 -- Input: the angular difference, Output: the target yaw rate
 headingPID = PID:new({
@@ -95,17 +101,24 @@ headingPID = PID:new({
 })
 
 -- Input: the target yaw rate, Output: the yaw control surface
-yawRatePID = PID:new({
-    -- Found with PID Tuner, works up to 30 deg/second.
-    kp = 0.015, ki = 0.001, kd = 0.02, minOut = -1.0, maxOut = 1.0,
+-- Found with PID Tuner, works up to 30 deg/second.
+yawRatePID = PID:new({ kp = 0.015, ki = 0.001, kd = 0.02, minOut = -1, maxOut = 1 })
+
+-- Input: the target vertical speed (m/s), Output: the collective control surface
+vSpeedPID = PID:new({
+    kp = 0.1, ki = 0.0005, kd = 0.25, iDecay = 20, minOut = 0, maxOut = 1, bias = 0.4
 })
 
 lines = {}
 
 function onTick()
-    hMode = (input.getBool(1) and TAXI) or (input.getBool(2) and HOVR) or
-        (input.getBool(3) and CRUS) or (input.getBool(4) and WNAV) or hMode
-    vMode = (input.getBool(5) and LEVL) or (input.getBool(6) and ALTH) or vMode
+    local taxiMode = input.getBool(1)
+    local hovrMode = input.getBool(2)
+    local crusMode = input.getBool(3)
+    local wnavMode = input.getBool(4)
+    local levlMode = input.getBool(5)
+    local althMode = input.getBool(6)
+
     local wpValid = input.getBool(7)
     local wpDisconnect = hMode == WNAV and not wpValid
     if wpDisconnect then
@@ -113,59 +126,96 @@ function onTick()
     end
 
     local controls = {
-        ws = clamp(input.getNumber(1), -1, 1), ad = clamp(input.getNumber(2), -1, 1),
-        lr = clamp(input.getNumber(3), -1, 1), ud = clamp(input.getNumber(4), -1, 1),
+        ws = clamp(input.getNumber(22), -1, 1), ad = clamp(input.getNumber(23), -1, 1),
+        lr = clamp(input.getNumber(24), -1, 1), ud = clamp(input.getNumber(25), -1, 1),
     }
-    local altSetting = input.getNumber(5)
-    local wp = { x = input.getNumber(7), y = input.getNumber(8) }
-    local sixdof = {
-        pitchTilt = input.getNumber(20), rollTilt = input.getNumber(21),
-        bearing = compassToBearing(input.getNumber(22)),
-        pitchAngVel = input.getNumber(23) * 360,
-        yawAngVel = input.getNumber(24) * 360,      -- +ve = CW
-        rollAngVel = input.getNumber(25) * 360,
-        gps = { x = input.getNumber(26), y = input.getNumber(27) },
-        baroAlt = input.getNumber(28), radarAlt = input.getNumber(29),
-        fwSpeed = input.getNumber(30), rtSpeed = input.getNumber(31), upSpeed = input.getNumber(32)
+    local altSetting = input.getNumber(26)
+    local wp = { x = input.getNumber(19), y = input.getNumber(20) }
+
+    -- https://steamcommunity.com/sharedfiles/filedetails/?id=2936283512
+    local phys = {
+        pitchTilt = radToDeg(input.getNumber(5)), rollTilt = radToDeg(input.getNumber(4)),
+        bearing = radToDeg(input.getNumber(6)),
+        pitchAngVel = radToDeg(input.getNumber(11)),
+        yawAngVel = radToDeg(input.getNumber(12)),
+        rollAngVel = radToDeg(input.getNumber(10)),
+        gps = { x = input.getNumber(1), y = input.getNumber(2) },
+        baroAlt = input.getNumber(3), radarAlt = input.getNumber(21),
+        fwSpeed = input.getNumber(7), rtSpeed = input.getNumber(8), upSpeed = -input.getNumber(9)
     }
 
     -- define the output controls: initially just the input controls
     local pitch = controls.ws
     local roll = controls.ad
-    local collective = controls.ud
+    local collective = 0
+
+    -- if we are initializing then do that
     initFrames = initFrames + 1
     if initFrames <= NUM_INIT_FRAMES then
-        tgtHeading = sixdof.bearing
-        tgtAltitude = sixdof.baroAlt
+        tgtHeading = phys.bearing
+        tgtAltitude = phys.baroAlt
+        return
     end
+
+    -- yaw controls: TAXI or HOVR mode
+    if hMode == TAXI or hMode == HOVR then
+        local deflect = clamp(controls.ad + controls.lr, -1, 1) -- either AD or LS controls allowed
+        if math.abs(deflect) > 0.1 then
+            -- set target heading if there is some left/right control input
+            tgtHeading = phys.bearing + deflect * TAXI_HEADING_GAIN
+        end
+    end
+
+    -- update the target PID
+    --[[
+    local tgtPID = vSpeedPID
+    local divisor = math.max(input.getNumber(27), 1)
+    tgtPID.kp = input.getNumber(28) / divisor
+    tgtPID.ki = input.getNumber(29) / divisor
+    tgtPID.kd = input.getNumber(30) / divisor
+    tgtPID.iDecay = input.getNumber(26)
+    ]]
+    display = { min = input.getNumber(31), max = input.getNumber(32) }
 
     if hMode == TAXI then
         collective = TAXI_COLLECTIVE
         pitch = clamp(controls.ws * TAXI_MAX_PITCH, TAXI_MIN_PITCH, TAXI_MAX_PITCH)
-        local deflect = clamp(controls.ad + controls.lr, -1, 1) -- either AD or LS controls allowed
-        if math.abs(deflect) > 0.1 then
-            -- set target heading if there is some left/right control input
-            tgtHeading = sixdof.bearing + deflect * TAXI_HEADING_GAIN
+
+        -- check whether to switch to HOVR mode
+        if hovrMode then
+            hMode = HOVR
+            tgtAltitude = phys.baroAlt + TAXI_TO_HOVER_ALT
         end
     elseif hMode == HOVR then
+        if taxiMode then
+            if phys.radarAlt <= HOVR_TAXI_RALT then
+                hMode = TAXI
+            else
+                wpDisconnect = true -- warn that we are too high 
+            end
+        end
+        local tgtVSpeed = clamp(controls.ud * HOVR_MAX_VSPEED, -HOVR_MAX_VSPEED, HOVR_MAX_VSPEED)
+
+        collective = vSpeedPID:update(tgtVSpeed, phys.upSpeed)
+        pitch = 0
+        buffer:push({tgt=tgtVSpeed, cur=phys.upSpeed, out=collective})
     elseif hMode == CRUS then
     else -- hMode == WNAV
     end
-    
+
+
     -- yaw/heading autopilot
-    local yawDiff = angularDiffDeg(sixdof.bearing, tgtHeading)
+    local yawDiff = angularDiffDeg(phys.bearing, tgtHeading)
     local tgtYawRate = headingPID:update(yawDiff, 0)
-    local yaw = yawRatePID:update(tgtYawRate, sixdof.yawAngVel)
-    lines = {
-        string.format("Bearing: %.2f", sixdof.bearing),
+    local yaw = yawRatePID:update(tgtYawRate, phys.yawAngVel)
+    --[[lines = {
+        string.format("Bearing: %.2f", phys.bearing),
         string.format("TgtHead: %.2f", tgtHeading),
         string.format("YawDiff: %.2f", yawDiff),
         string.format("TgtYRat: %.2f", tgtYawRate),
-        string.format("YawAngV: %.2f", sixdof.yawAngVel),
+        string.format("YawAngV: %.2f", phys.yawAngVel),
         string.format("YawCtrl: %.2f", yaw)
-    }
-
-    buffer:push({tgt=tgtYawRate, cur=sixdof.yawAngVel, out=yaw})
+    }]]
 
     -- Write outputs
     output.setBool(1, wpDisconnect)
@@ -185,8 +235,9 @@ function onDraw()
             screen.drawText(0, (i - 1) * 8, line)
         end
     else
+        local w, h = screen.getWidth(), screen.getHeight()
         local inf = 1/0
-        local tgtCur = { min=-25, max=25 }
+        local tgtCur = display
         local out = {min=-1,max=1} -- { min=inf, max=-inf }
         if tgtCur.min == tgtCur.max then
             tgtCur.min = tgtCur.min - 0.5
@@ -196,8 +247,11 @@ function onDraw()
             out.min = out.min - 0.5
             out.max = out.max + 0.5
         end
-        local h, x = 64, 0
+        local x = 0
         local last = nil
+        screen.setColor(64, 64, 64)
+        local zeroY = lerp(0, tgtCur.min, h, tgtCur.max, 0)
+        screen.drawLine(0, zeroY, w, zeroY)
         for v in buffer:iter() do
             local t = lerp(v.tgt, tgtCur.min, h, tgtCur.max, 0)
             local c = lerp(v.cur, tgtCur.min, h, tgtCur.max, 0)
@@ -207,8 +261,8 @@ function onDraw()
                 screen.drawLine(last.x, last.t, x, t)
                 screen.setColor(255, 255, 0)
                 screen.drawLine(last.x, last.c, x, c)
-                screen.setColor(0, 0, 255)
-                screen.drawLine(last.x, last.o, x, o)
+                --screen.setColor(0, 0, 255)
+                --screen.drawLine(last.x, last.o, x, o)
             end
             last = { x=x, t=t, c=c, o=o }
             x = x + 1
