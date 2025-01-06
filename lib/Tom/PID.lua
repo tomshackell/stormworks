@@ -17,6 +17,7 @@ PID = {
             minOut = p.minOut or -(1/0),
             -- The maximum output value (clamp)
             maxOut = p.maxOut or (1/0),
+            last = {},
             errorPrior = 0,
             integralPrior = 0,
             update = cls.update,
@@ -30,7 +31,9 @@ PID = {
         local valueOut = self.kp*error + self.ki*integral + self.kd*derivative + self.bias
         self.errorPrior = error
         self.integralPrior = integral
-        return math.min(math.max(valueOut, self.minOut), self.maxOut)
+        local output = math.min(math.max(valueOut, self.minOut), self.maxOut)
+        self.last = { target=target, current=current, output=output }
+        return output
     end,
 }
 ---@endsection

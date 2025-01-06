@@ -78,10 +78,9 @@ TAXI_MAX_PITCH = 0.37           -- maximum pitch to use when taxiing
 TAXI_MIN_PITCH = -0.2           -- minimum pitch to use when taxiing
 TAXI_HEADING_GAIN = 10          -- target heading offset at full yaw control deflection while taxiing
 TAXI_MAX_YAW_RATE = 20.0        -- maximum rate of yaw (degrees per second) while taxiing
-TAXI_TO_HOVER_ALT = 2.0         -- how much to lift up into a hover
 
 HOVR_MAX_VSPEED = 10.0          -- maximum vertical speed (m/s)
-HOVR_TAXI_RALT = 0.85           -- maximum radar alt that we can transition from HOVR to TAXI
+HOVR_TO_TAXI_RALT = 0.85        -- maximum radar alt that we can transition from HOVR to TAXI
 
 NUM_INIT_FRAMES = 5             -- frames required to initialise
 
@@ -102,7 +101,9 @@ headingPID = PID:new({
 
 -- Input: the target yaw rate, Output: the yaw control surface
 -- Found with PID Tuner, works up to 30 deg/second.
-yawRatePID = PID:new({ kp = 0.015, ki = 0.001, kd = 0.02, minOut = -1, maxOut = 1 })
+yawRatePID = PID:new({ 
+    kp = 0.012, ki = 0.002, kd = 0.02, iDecay = 0.2, minOut = -1, maxOut = 1
+})
 
 -- Input: the target vertical speed (m/s), Output: the collective control surface
 vSpeedPID = PID:new({
@@ -166,15 +167,15 @@ function onTick()
         end
     end
 
-    -- update the target PID
-    --[[
-    local tgtPID = vSpeedPID
-    local divisor = math.max(input.getNumber(27), 1)
-    tgtPID.kp = input.getNumber(28) / divisor
-    tgtPID.ki = input.getNumber(29) / divisor
-    tgtPID.kd = input.getNumber(30) / divisor
-    tgtPID.iDecay = input.getNumber(26)
-    ]]
+    -- update the debug PID
+    local debugPID = yawRatePID
+    if debugPID then
+        local divisor = math.max(input.getNumber(27), 1)
+        debugPID.kp = input.getNumber(28) / divisor
+        debugPID.ki = input.getNumber(29) / divisor
+        debugPID.kd = input.getNumber(30) / divisor
+        debugPID.iDecay = input.getNumber(26)
+    end
     display = { min = input.getNumber(31), max = input.getNumber(32) }
 
     if hMode == TAXI then
@@ -184,11 +185,12 @@ function onTick()
         -- check whether to switch to HOVR mode
         if hovrMode then
             hMode = HOVR
-            tgtAltitude = phys.baroAlt + TAXI_TO_HOVER_ALT
+            tgtAltitude = phys.baroAlt
         end
     elseif hMode == HOVR then
+        -- check whether to switch to TAXI mode
         if taxiMode then
-            if phys.radarAlt <= HOVR_TAXI_RALT then
+            if phys.radarAlt <= HOVR_TO_TAXI_RALT then -- must be below max height
                 hMode = TAXI
             else
                 wpDisconnect = true -- warn that we are too high 
@@ -198,24 +200,14 @@ function onTick()
 
         collective = vSpeedPID:update(tgtVSpeed, phys.upSpeed)
         pitch = 0
-        buffer:push({tgt=tgtVSpeed, cur=phys.upSpeed, out=collective})
     elseif hMode == CRUS then
     else -- hMode == WNAV
     end
-
 
     -- yaw/heading autopilot
     local yawDiff = angularDiffDeg(phys.bearing, tgtHeading)
     local tgtYawRate = headingPID:update(yawDiff, 0)
     local yaw = yawRatePID:update(tgtYawRate, phys.yawAngVel)
-    --[[lines = {
-        string.format("Bearing: %.2f", phys.bearing),
-        string.format("TgtHead: %.2f", tgtHeading),
-        string.format("YawDiff: %.2f", yawDiff),
-        string.format("TgtYRat: %.2f", tgtYawRate),
-        string.format("YawAngV: %.2f", phys.yawAngVel),
-        string.format("YawCtrl: %.2f", yaw)
-    }]]
 
     -- Write outputs
     output.setBool(1, wpDisconnect)
@@ -225,6 +217,11 @@ function onTick()
     output.setNumber(4, collective)
     output.setNumber(5, hMode)
     output.setNumber(6, vMode)
+
+    -- add output for the debug PID (if enabled)
+    if debugPID then
+        buffer:push(debugPID.last)
+    end
 end
 
 buffer = RingBuffer:new(96)
@@ -253,9 +250,9 @@ function onDraw()
         local zeroY = lerp(0, tgtCur.min, h, tgtCur.max, 0)
         screen.drawLine(0, zeroY, w, zeroY)
         for v in buffer:iter() do
-            local t = lerp(v.tgt, tgtCur.min, h, tgtCur.max, 0)
-            local c = lerp(v.cur, tgtCur.min, h, tgtCur.max, 0)
-            local o = lerp(v.out, out.min, h, out.max, 0)
+            local t = lerp(v.target, tgtCur.min, h, tgtCur.max, 0)
+            local c = lerp(v.current, tgtCur.min, h, tgtCur.max, 0)
+            local o = lerp(v.output, out.min, h, out.max, 0)
             if last then
                 screen.setColor(255, 0, 0)
                 screen.drawLine(last.x, last.t, x, t)
