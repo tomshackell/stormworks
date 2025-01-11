@@ -73,14 +73,21 @@ WNAV = 3
 LEVL = 0
 ALTH = 1
 
+THRUST_FAN_FACTOR = 2           -- how much to multiply pitch to get the thrust fan output
+
 TAXI_COLLECTIVE = 0.2           -- collective to use for taxiing
-TAXI_MAX_PITCH = 0.37           -- maximum pitch to use when taxiing     
-TAXI_MIN_PITCH = -0.2           -- minimum pitch to use when taxiing
+TAXI_MAX_PITCH = 0.32           -- maximum pitch to use when taxiing     
+TAXI_MIN_PITCH = -0.35          -- minimum pitch to use when taxiing
+TAXI_MAX_SPEED = 5              -- maximum taxi speed (m/s)
+TAXI_MIN_SPEED = -1             -- minimum taxi speed (m/s)
 TAXI_HEADING_GAIN = 10          -- target heading offset at full yaw control deflection while taxiing
 TAXI_MAX_YAW_RATE = 20.0        -- maximum rate of yaw (degrees per second) while taxiing
 
-HOVR_MAX_VSPEED = 10.0          -- maximum vertical speed (m/s)
+HOVR_MAX_VSPEED = 15.0          -- maximum vertical speed (m/s)
 HOVR_TO_TAXI_RALT = 0.85        -- maximum radar alt that we can transition from HOVR to TAXI
+HOVR_MAX_SPEED = 80.0           -- maximum forward speed (m/s)
+
+MAX_ROLL_ANGLE = 25             -- maximum angle of roll (degrees)
 
 NUM_INIT_FRAMES = 5             -- frames required to initialise
 
@@ -94,23 +101,61 @@ tgtAltitude = 0                 -- the altitude to hold
 tgtVSpeed = 0                   -- the vertical speed to target
 display = { min=-10, max=10 }   -- the display constraints
 
+-- Input: the target yaw rate, Output: the yaw control surface (tail rotor)
+yawRatePID = PID:new({
+    kp = 0.012, ki = 0.001, kd = 0.02, minOut = -1, maxOut = 1
+})
+
 -- Input: the angular difference, Output: the target yaw rate
 headingPID = PID:new({
     kp = 2.0, ki = 0, kd = 0, minOut = -TAXI_MAX_YAW_RATE, maxOut = TAXI_MAX_YAW_RATE,
 })
 
--- Input: the target yaw rate, Output: the yaw control surface
--- Found with PID Tuner, works up to 30 deg/second.
-yawRatePID = PID:new({ 
-    kp = 0.012, ki = 0.002, kd = 0.02, iDecay = 0.2, minOut = -1, maxOut = 1
-})
+-- Input: the target roll angle, Output: the roll control surface
+rollAnglePID = PID:new({ kp = 0.07, ki = 0.0002, kd = 1, minOut = -1, maxOut = 1, gain = 1.8 })
 
 -- Input: the target vertical speed (m/s), Output: the collective control surface
 vSpeedPID = PID:new({
-    kp = 0.1, ki = 0.0005, kd = 0.25, iDecay = 20, minOut = 0, maxOut = 1, bias = 0.4
+    kp = 0.025, ki = 0, kd = 0, minOut = 0, maxOut = 1, bias = 0.4
 })
 
-lines = {}
+-- Input: the target forward speed (m/s), Output: the pitch control surface.
+taxiSpeedPID = PID:new({ kp = 0.3, minOut = TAXI_MIN_PITCH, maxOut = TAXI_MAX_PITCH })
+
+-- Input: the target forward speed (m/s), Output: the pitch control surface.
+fwSpeedPID = PID:new({
+    kp = 0.03, ki = 0.00003, kd = 0, minOut = -1, maxOut = 1
+})
+
+-- An acceleration limiter: controls one of the output control surfaces. Used to limit acceleration 
+-- in the controls and preventing an overly aggressive response.
+AccelLimiter = {
+    new = function(cls, p)
+        local p = p or {}
+        return {
+            current = 0,
+            target = 0,
+            min = p.min or -1,
+            max = p.max or 1,
+            accel = p.accel or 0,
+            update = cls.update
+        }
+    end,
+    update = function(self, dt)
+        local acc = self.accel * (dt or (1/60))
+        local newCurrent = self.current + clamp(self.target - self.current, -acc, acc)
+        self.current = clamp(newCurrent, self.min, self.max)
+        return self.current
+    end,
+}
+act = {
+    yaw = AccelLimiter:new({ accel=2.0 }),
+    roll = AccelLimiter:new({ accel=2.0 }),
+    pitch = AccelLimiter:new({ accel=0.25, min=-0.5, max=0.75 }),
+    collective = AccelLimiter:new({ accel=0.25, min=0, max=1 }),
+    thrustFan = AccelLimiter:new({ accel=0.25, min=0, max=1 }),
+    fwSpeed = AccelLimiter:new({ accel=3, min=-10, max=HOVR_MAX_SPEED })
+}
 
 function onTick()
     local taxiMode = input.getBool(1)
@@ -134,21 +179,23 @@ function onTick()
     local wp = { x = input.getNumber(19), y = input.getNumber(20) }
 
     -- https://steamcommunity.com/sharedfiles/filedetails/?id=2936283512
+    local worldVelocity = { x=input.getNumber(13), y=input.getNumber(14), z=input.getNumber(15) }
+    local bearing = input.getNumber(6)
+    local bearingVector = vFromPolar(bearing, 0)
+    local rightVector = vFromPolar(bearing + math.pi / 2, 0)
     local phys = {
-        pitchTilt = radToDeg(input.getNumber(5)), rollTilt = radToDeg(input.getNumber(4)),
-        bearing = radToDeg(input.getNumber(6)),
+        pitchTilt = radToDeg(input.getNumber(5)),
+        rollTilt = radToDeg(input.getNumber(4)),
+        bearing = radToDeg(bearing),
         pitchAngVel = radToDeg(input.getNumber(11)),
         yawAngVel = radToDeg(input.getNumber(12)),
         rollAngVel = radToDeg(input.getNumber(10)),
         gps = { x = input.getNumber(1), y = input.getNumber(2) },
         baroAlt = input.getNumber(3), radarAlt = input.getNumber(21),
-        fwSpeed = input.getNumber(7), rtSpeed = input.getNumber(8), upSpeed = -input.getNumber(9)
+        fwSpeed = vDot(bearingVector, worldVelocity),
+        rtSpeed = vDot(rightVector, worldVelocity),
+        upSpeed = worldVelocity.z,
     }
-
-    -- define the output controls: initially just the input controls
-    local pitch = controls.ws
-    local roll = controls.ad
-    local collective = 0
 
     -- if we are initializing then do that
     initFrames = initFrames + 1
@@ -160,7 +207,8 @@ function onTick()
 
     -- yaw controls: TAXI or HOVR mode
     if hMode == TAXI or hMode == HOVR then
-        local deflect = clamp(controls.ad + controls.lr, -1, 1) -- either AD or LS controls allowed
+        -- local deflect = clamp(controls.ad + controls.lr, -1, 1) -- either AD or LS controls allowed
+        local deflect = controls.lr
         if math.abs(deflect) > 0.1 then
             -- set target heading if there is some left/right control input
             tgtHeading = phys.bearing + deflect * TAXI_HEADING_GAIN
@@ -168,19 +216,23 @@ function onTick()
     end
 
     -- update the debug PID
-    local debugPID = yawRatePID
+    local inputGain = input.getNumber(26)
+    local debugPID = nil -- rollAnglePID -- taxiSpeedPID -- fwSpeedPID
     if debugPID then
         local divisor = math.max(input.getNumber(27), 1)
         debugPID.kp = input.getNumber(28) / divisor
         debugPID.ki = input.getNumber(29) / divisor
         debugPID.kd = input.getNumber(30) / divisor
-        debugPID.iDecay = input.getNumber(26)
     end
     display = { min = input.getNumber(31), max = input.getNumber(32) }
 
     if hMode == TAXI then
-        collective = TAXI_COLLECTIVE
-        pitch = clamp(controls.ws * TAXI_MAX_PITCH, TAXI_MIN_PITCH, TAXI_MAX_PITCH)
+        act.collective.target = TAXI_COLLECTIVE
+        local tgtFwSpeed = clamp(controls.ws * TAXI_MAX_SPEED, TAXI_MIN_SPEED, TAXI_MAX_SPEED)
+        local pitch = taxiSpeedPID:update(tgtFwSpeed, phys.fwSpeed)
+        act.pitch.target = pitch
+        act.thrustFan.target = pitch * THRUST_FAN_FACTOR
+        --pitch = clamp(controls.ws * TAXI_MAX_PITCH, TAXI_MIN_PITCH, TAXI_MAX_PITCH)
 
         -- check whether to switch to HOVR mode
         if hovrMode then
@@ -198,8 +250,17 @@ function onTick()
         end
         local tgtVSpeed = clamp(controls.ud * HOVR_MAX_VSPEED, -HOVR_MAX_VSPEED, HOVR_MAX_VSPEED)
 
-        collective = vSpeedPID:update(tgtVSpeed, phys.upSpeed)
-        pitch = 0
+        local fracUp = 1 -- math.cos(math.abs(phys.pitchTilt))
+        act.collective.target = vSpeedPID:update(tgtVSpeed, phys.upSpeed) / fracUp
+
+        act.fwSpeed.target = clamp(controls.ws * HOVR_MAX_SPEED, -HOVR_MAX_SPEED, HOVR_MAX_SPEED)
+        local tgtFwSpeed = act.fwSpeed:update()
+        local fwSpeed = fwSpeedPID:update(tgtFwSpeed, phys.fwSpeed)
+        act.pitch.target = fwSpeed
+        act.thrustFan.target = fwSpeed * THRUST_FAN_FACTOR
+
+        local tgtRollAngle = controls.ad * MAX_ROLL_ANGLE
+        act.roll.target = rollAnglePID:update(tgtRollAngle, phys.rollTilt)
     elseif hMode == CRUS then
     else -- hMode == WNAV
     end
@@ -207,62 +268,59 @@ function onTick()
     -- yaw/heading autopilot
     local yawDiff = angularDiffDeg(phys.bearing, tgtHeading)
     local tgtYawRate = headingPID:update(yawDiff, 0)
-    local yaw = yawRatePID:update(tgtYawRate, phys.yawAngVel)
+    act.yaw.target = yawRatePID:update(tgtYawRate, phys.yawAngVel)
 
     -- Write outputs
     output.setBool(1, wpDisconnect)
-    output.setNumber(1, pitch)
-    output.setNumber(2, roll)
-    output.setNumber(3, yaw)
-    output.setNumber(4, collective)
+    output.setNumber(1, act.pitch:update())
+    output.setNumber(2, act.roll:update())
+    output.setNumber(3, act.yaw:update())
+    output.setNumber(4, act.collective:update())
     output.setNumber(5, hMode)
     output.setNumber(6, vMode)
+    output.setNumber(7, clutchFactor(act.thrustFan:update()))
 
     -- add output for the debug PID (if enabled)
-    if debugPID then
+    if debugPID and debugPID.last then
         buffer:push(debugPID.last)
     end
 end
 
 buffer = RingBuffer:new(96)
 
+function clutchFactor(x) return lerpClamp(x, 0, 0.3, 1.0, 1.0) end
+
 function onDraw()
-    if false then
-        for i, line in ipairs(lines) do
-            screen.drawText(0, (i - 1) * 8, line)
+    local w, h = screen.getWidth(), screen.getHeight()
+    local inf = 1/0
+    local tgtCur = display
+    local out = {min=-1,max=1} -- { min=inf, max=-inf }
+    if tgtCur.min == tgtCur.max then
+        tgtCur.min = tgtCur.min - 0.5
+        tgtCur.max = tgtCur.max + 0.5
+    end
+    if out.min == out.max then
+        out.min = out.min - 0.5
+        out.max = out.max + 0.5
+    end
+    local x = 0
+    local last = nil
+    screen.setColor(64, 64, 64)
+    local zeroY = lerp(0, tgtCur.min, h, tgtCur.max, 0)
+    screen.drawLine(0, zeroY, w, zeroY)
+    for v in buffer:iter() do
+        local t = lerp(v.target, tgtCur.min, h, tgtCur.max, 0)
+        local c = lerp(v.current, tgtCur.min, h, tgtCur.max, 0)
+        local o = lerp(v.output, out.min, h, out.max, 0)
+        if last then
+            screen.setColor(255, 0, 0)
+            screen.drawLine(last.x, last.t, x, t)
+            screen.setColor(255, 255, 0)
+            screen.drawLine(last.x, last.c, x, c)
+            --screen.setColor(0, 0, 255)
+            --screen.drawLine(last.x, last.o, x, o)
         end
-    else
-        local w, h = screen.getWidth(), screen.getHeight()
-        local inf = 1/0
-        local tgtCur = display
-        local out = {min=-1,max=1} -- { min=inf, max=-inf }
-        if tgtCur.min == tgtCur.max then
-            tgtCur.min = tgtCur.min - 0.5
-            tgtCur.max = tgtCur.max + 0.5
-        end
-        if out.min == out.max then
-            out.min = out.min - 0.5
-            out.max = out.max + 0.5
-        end
-        local x = 0
-        local last = nil
-        screen.setColor(64, 64, 64)
-        local zeroY = lerp(0, tgtCur.min, h, tgtCur.max, 0)
-        screen.drawLine(0, zeroY, w, zeroY)
-        for v in buffer:iter() do
-            local t = lerp(v.target, tgtCur.min, h, tgtCur.max, 0)
-            local c = lerp(v.current, tgtCur.min, h, tgtCur.max, 0)
-            local o = lerp(v.output, out.min, h, out.max, 0)
-            if last then
-                screen.setColor(255, 0, 0)
-                screen.drawLine(last.x, last.t, x, t)
-                screen.setColor(255, 255, 0)
-                screen.drawLine(last.x, last.c, x, c)
-                --screen.setColor(0, 0, 255)
-                --screen.drawLine(last.x, last.o, x, o)
-            end
-            last = { x=x, t=t, c=c, o=o }
-            x = x + 1
-        end
+        last = { x=x, t=t, c=c, o=o }
+        x = x + 1
     end
 end

@@ -68,7 +68,7 @@ function onTick()
 	sn(4, cphi)--roll
 	sn(5, cthe)--pitch
 	sn(6, mod(pi2*1.25-cpsi,pi2))--nautical azimuth(North:0, clockwise, 0->+pi2) 
-	sn(15,cpsi)--raw azimuth(East:0, counterclockwise, -pi<-0->+pi), for calc. use
+	sn(21,cpsi)--raw azimuth(East:0, counterclockwise, -pi<-0->+pi), for calc. use
 	
 	rot = {gn(10),gn(11),gn(12)}
 	MAG = Mtrans(EFB)
@@ -87,8 +87,8 @@ function onTick()
 	sn(12,  ang[2]*pi2)
 	--10~12: local angular speed, roll, pitch, yaw
 	
-	sn(13,gn(13))--abs. linear speed
-	sn(14,gn(17))--compass, for compatibility, not recomended
+	sn(19,gn(13))--abs. linear speed
+	sn(20,gn(17))--compass, for compatibility, not recomended
 	
 	--tiltx = cthe/pi2
 	--tilty = as(-si(cphi)*co(cthe))/pi2
@@ -99,9 +99,9 @@ function onTick()
 	sn(18,tiltz)--tilt z, for compatibility
 	
 	vew = rotate(AMS, vel)
-	sn(19, vew[1])
-	sn(20, -vew[2])
-	sn(21, -vew[3])
-	--19~21: world linear speed, X:East +, Y:North +, Z:upward +
+	sn(13, vew[1])
+	sn(14, -vew[2])
+	sn(15, -vew[3])
+	--13~15: world linear speed, X:East +, Y:North +, Z:upward +
 	
 end

@@ -45,8 +45,8 @@ end
 ---@endsection
 
 ---@section vFromPolar
----@param bearing number the polar bearing (radians)
----@param pitch number the polar pitch (radians)
+---@param bearing number the polar bearing (radians) 0 = North, +ve = CW
+---@param pitch number the polar pitch (radians) +ve = up
 ---@return vector3: the bearing & pitch expressed as a direction vector
 function vFromPolar(bearing, pitch)
     local f = math.cos(pitch)
@@ -61,12 +61,12 @@ end
 ---@return vector3: the vector representation
 function vFromDistanceAzimuthElevation(distance, azimuth, elevation)
     local q = distance * math.cos(elevation)
-    return { 
+    return {
         x = q * math.sin(azimuth),
         y = q * math.cos(azimuth),
-        z = distance * math.sin(elevation) 
+        z = distance * math.sin(elevation)
     }
-end 
+end
 ---@endsection
 
 ---@section vToDistanceAzimuthElevation

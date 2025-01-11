@@ -1,0 +1,13 @@
+{
+    "lifeboatapi.stormworks.isMicrocontrollerProject": true,
+    "Lua.workspace.library": [
+        "c:/Dev/stormworks/tiltrotor/",
+        "c:/Users/tomsh/.vscode/extensions/nameouschangey.lifeboatapi-0.0.33/assets/lua/Common/",
+        "c:/Users/tomsh/.vscode/extensions/nameouschangey.lifeboatapi-0.0.33/assets/lua/Microcontroller/",
+        "C:/Dev/stormworks/lib/",
+        "c:/Dev/stormworks/tiltrotor/_build/libs/"
+    ],
+    "Lua.diagnostics.disable": [
+        "lowercase-global"
+    ]
+}
