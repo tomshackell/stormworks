@@ -220,6 +220,10 @@ function lerp(x, minX, minY, maxX, maxY) return (x - minX) / (maxX - minX) * (ma
 function lerpClamp(x, minX, minY, maxX, maxY) return clamp(lerp(x, minX, minY, maxX, maxY), minY, maxY) end
 ---@endsection
 
+---@section nanGuard
+function nanGuard(x, r) return (x == x) and x or (r or 0) end
+---@endsection
+
 --- Calculate the angular difference between two angles (in degrees), given the circular property 
 --- of angles. For example if current=350 and target=10, then the angular difference is 20.
 ---@section angularDiffDeg

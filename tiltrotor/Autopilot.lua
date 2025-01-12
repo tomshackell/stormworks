@@ -15,7 +15,32 @@ ROLL_ANGLE_GAIN = 45.0          -- target roll angle at max deflection (1.0)
 
 VSPEED_GAIN = 20.0              -- target vertical speed at max deflection (1.0)
 
+MIN_FW_SPEED = -10              -- minimum target forward speed (backwards)
+MAX_FW_SPEED = 100              -- maximum target forward spede (forward)
+
 display = { min=-10, max=10, out=false }   -- the display constraints
+
+-- Used to limit something: both in min/max and also in acceleration (how fast it can change)
+Limiter = {
+    new = function(cls, p)
+        local p = p or {}
+        return {
+            accel = p.accel,
+            min = p.min,
+            max = p.max,
+            current = 0,
+            target = 0,
+            update = cls.update,
+        }
+    end,
+    update = function(self, dt)
+        local acc = self.accel * (dt or (1/60))
+        local curr = nanGuard(self.current)
+        local newCurrent = curr + clamp(nanGuard(self.target) - curr, -acc, acc)
+        self.current = clamp(newCurrent, self.min, self.max)
+        return self.current
+    end,
+}
 
 yawRatePID = PID:new({
     kp = 0.1, ki = 0, kd = 0, minOut = -1, maxOut = 1, gain = 1.3 * YAW_GAIN
@@ -35,26 +60,10 @@ rollAnglePID = PID:new({
 vSpeedPID = PID:new({
     kp = 0.15, ki = 0.00001, kd = 0.5, minOut = -1, maxOut = 1, bias = 0.4, gain = VSPEED_GAIN
 })
-
-Limiter = {
-    new = function(cls, p)
-        local p = p or {}
-        return {
-            accel = p.accel,
-            min = p.min,
-            max = p.max,
-            current = 0,
-            target = 0,
-            update = cls.update,
-        }
-    end,
-    update = function(self, dt)
-        local acc = self.accel * (dt or (1/60))
-        local newCurrent = self.current + clamp(self.target - self.current, -acc, acc)
-        self.current = clamp(newCurrent, self.min, self.max)
-        return self.current
-    end,
-}
+fwSpeedPID = PID:new({
+    kp = 0.05, ki = 0.000001, kd = 0.4, minOut = -1, maxOut = 1, gain = MAX_FW_SPEED,
+})
+fwSpeedLimiter = Limiter:new({ accel = 3, min = MIN_FW_SPEED, max = MAX_FW_SPEED })
 
 function makeRotor()
     return {
@@ -69,6 +78,9 @@ end
 act = {
     left = makeRotor(),
     right = makeRotor(),
+    elevators = Limiter:new({ accel = 10, min = -1, max = 1 }),
+    ailerons = Limiter:new({ accel = 10, min = -1, max = 1 }),
+    rudders = Limiter:new({ accel = 10, min = -1, max = 1 }),
 }
 
 function onTick()
@@ -105,7 +117,7 @@ function onTick()
     local rotorPosRight = input.getNumber(20)
 
     -- update the debug PID
-    local debugPID = nil -- vSpeedPID
+    local debugPID = nil -- fwSpeedPID -- vSpeedPID
     if debugPID then
         local divisor = math.max(input.getNumber(27), 1)
         debugPID.gain = input.getNumber(26)
@@ -115,45 +127,52 @@ function onTick()
     end
     display = { min = input.getNumber(31), max = input.getNumber(32), out = input.getBool(1) }
 
-    -- Collective: needed for testing
-    act.left.collect.target = controls.ud
-    act.right.collect.target = controls.ud
+    -- Conversion
+    --local airplane = lerpClamp(phys.fwSpeed, 30, 0, 50, 1)
+    --local blend = function(h, a) return h end -- * (1 - airplane) + a * airplane end
 
-    -- Rotor angle
-    local tgtSpeed = controls.ws
-    
+    -- Forward speed
+    fwSpeedLimiter.target = controls.ws * MAX_FW_SPEED
+    local tgtSpeedNow = controls.ws -- fwSpeedLimiter:update()
+    local fwSpeedControl = fwSpeedPID:update(tgtSpeedNow, phys.fwSpeed)
+        
     -- Pitch angle & pitch rate
     local tgtPitchAngle = 0 -- helicopter mode holds a flat pitch -controls.ws
     local tgtPitchRate = pitchAnglePID:update(tgtPitchAngle, phys.pitchTilt)
     local pitchControl = pitchRatePID:update(tgtPitchRate, phys.pitchAngVel)
 
     -- Yaw rate
-    local tgtYawRate = controls.lr
+    local tgtYawRate = controls.ad
     local yawControl = yawRatePID:update(tgtYawRate, phys.yawAngVel)
 
     -- Roll rate
-    local tgtRollAngle = controls.ad
+    local tgtRollAngle = controls.lr
     local tgtRollRate = rollAnglePID:update(tgtRollAngle, phys.rollTilt)
     local rollControl = rollRatePID:update(tgtRollRate, phys.rollAngVel)
 
     -- Collective & vertical speed
     local tgtVSpeed = controls.ud
-    local collectControl = vSpeedPID:update(tgtVSpeed, phys.upSpeed)
+    local vspeedControl = vSpeedPID:update(tgtVSpeed, phys.upSpeed)
 
     -- Control the left and right rotor angle & pitch
-    act.left.rotor.target = controls.ws + (yawControl * YAW_ROTOR_FACTOR)
+    act.left.rotor.target = fwSpeedControl --+ (yawControl * YAW_ROTOR_FACTOR)
     act.left.pitch.target = pitchControl + yawControl
     act.left.roll.target = -rollControl
-    act.left.collect.target = collectControl
-    act.right.rotor.target = controls.ws + (yawControl * YAW_ROTOR_FACTOR)
+    act.left.collect.target = vspeedControl -- , fwSpeedControl)
+
+    act.right.rotor.target = fwSpeedControl -- + (yawControl * YAW_ROTOR_FACTOR)
     act.right.pitch.target = pitchControl - yawControl
     act.right.roll.target = rollControl
-    act.right.collect.target = collectControl
+    act.right.collect.target = vspeedControl -- , fwSpeedControl)
 
-    -- Limit rotor tilt when too close to the ground
-    local rotorLimit = 0.5 -- phys.radarAlt < RALT_ON_GROUND and 0.5 or 1.0
+    -- Limit rotor tilt when too close to the ground    
+    local rotorLimit = 0.5 --phys.radarAlt < RALT_ON_GROUND and 0.5 or 1.0
     act.left.rotor.max = rotorLimit
     act.right.rotor.max = rotorLimit
+
+    act.elevators.target = controls.ud
+    act.ailerons.target = controls.lr
+    act.rudders.target = controls.ad
 
     -- Write outputs
     output.setNumber(1, act.left.rotor:update())
@@ -164,6 +183,9 @@ function onTick()
     output.setNumber(6, act.right.collect:update())
     output.setNumber(7, act.right.pitch:update())
     output.setNumber(8, act.right.roll:update())
+    output.setNumber(9, act.elevators:update())
+    output.setNumber(10, act.ailerons:update())
+    output.setNumber(11, act.rudders:update())
 
     -- add output for the debug PID (if enabled)
     if debugPID and debugPID.last then
