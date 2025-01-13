@@ -4,19 +4,6 @@ require("Tom.RingBuffer")
 
 RALT_ON_GROUND = 3.0            -- radar altimeter reading that we consider to be on the ground.
 
-YAW_GAIN = 15.0                 -- target degrees per second at max deflection
-YAW_ROTOR_FACTOR = 0 -- 0.15    -- how much to tilt rotors compared to pitch for yaw control
-
-PITCH_RATE_GAIN = 20.0          -- target degrees per second at max deflection (1.0)
-PITCH_ANGLE_GAIN = 45.0         -- target pitch angle at max deflection (1.0)
-
-ROLL_RATE_GAIN = 30.0           -- target degrees per second at max deflection (1.0)
-ROLL_ANGLE_GAIN = 45.0          -- target roll angle at max deflection (1.0)
-
-VSPEED_GAIN = 20.0              -- target vertical speed at max deflection (1.0)
-
-MIN_FW_SPEED = -10              -- minimum target forward speed (backwards)
-MAX_FW_SPEED = 100              -- maximum target forward spede (forward)
 
 display = { min=-10, max=10, out=false }   -- the display constraints
 
@@ -42,29 +29,6 @@ Limiter = {
     end,
 }
 
-yawRatePID = PID:new({
-    kp = 0.1, ki = 0, kd = 0, minOut = -1, maxOut = 1, gain = 1.3 * YAW_GAIN
-})
-pitchRatePID = PID:new({
-    kp = -0.01, ki = -0.0, kd = -0, minOut = -1, maxOut = 1, gain = PITCH_RATE_GAIN
-})
-pitchAnglePID = PID:new({
-    kp = 0.2, ki = 0.002, kd = 3.0, minOut = -1, maxOut = 1, gain = PITCH_ANGLE_GAIN
-})
-rollRatePID = PID:new({
-    kp = 0.01, ki = 0, kd = 0, minOut = -1, maxOut = 1, gain = ROLL_RATE_GAIN
-})
-rollAnglePID = PID:new({
-    kp = 0.1, ki = 0, kd = 1.0, minOut = -1, maxOut = 1, gain = ROLL_ANGLE_GAIN
-})
-vSpeedPID = PID:new({
-    kp = 0.15, ki = 0.00001, kd = 0.5, minOut = -1, maxOut = 1, bias = 0.4, gain = VSPEED_GAIN
-})
-fwSpeedPID = PID:new({
-    kp = 0.05, ki = 0.000001, kd = 0.4, minOut = -1, maxOut = 1, gain = MAX_FW_SPEED,
-})
-fwSpeedLimiter = Limiter:new({ accel = 3, min = MIN_FW_SPEED, max = MAX_FW_SPEED })
-
 function makeRotor()
     return {
         -- NOTE: lower than -0.2 and it will hit the wing.
@@ -78,9 +42,9 @@ end
 act = {
     left = makeRotor(),
     right = makeRotor(),
-    elevators = Limiter:new({ accel = 10, min = -1, max = 1 }),
-    ailerons = Limiter:new({ accel = 10, min = -1, max = 1 }),
-    rudders = Limiter:new({ accel = 10, min = -1, max = 1 }),
+    elevators = Limiter:new({ accel = 1, min = -1, max = 1 }),
+    ailerons = Limiter:new({ accel = 1, min = -1, max = 1 }),
+    rudders = Limiter:new({ accel = 1, min = -1, max = 1 }),
 }
 
 function onTick()
@@ -117,7 +81,7 @@ function onTick()
     local rotorPosRight = input.getNumber(20)
 
     -- update the debug PID
-    local debugPID = nil -- fwSpeedPID -- vSpeedPID
+    local debugPID = AirplaneAP.rollAnglePID
     if debugPID then
         local divisor = math.max(input.getNumber(27), 1)
         debugPID.gain = input.getNumber(26)
@@ -127,52 +91,7 @@ function onTick()
     end
     display = { min = input.getNumber(31), max = input.getNumber(32), out = input.getBool(1) }
 
-    -- Conversion
-    --local airplane = lerpClamp(phys.fwSpeed, 30, 0, 50, 1)
-    --local blend = function(h, a) return h end -- * (1 - airplane) + a * airplane end
-
-    -- Forward speed
-    fwSpeedLimiter.target = controls.ws * MAX_FW_SPEED
-    local tgtSpeedNow = controls.ws -- fwSpeedLimiter:update()
-    local fwSpeedControl = fwSpeedPID:update(tgtSpeedNow, phys.fwSpeed)
-        
-    -- Pitch angle & pitch rate
-    local tgtPitchAngle = 0 -- helicopter mode holds a flat pitch -controls.ws
-    local tgtPitchRate = pitchAnglePID:update(tgtPitchAngle, phys.pitchTilt)
-    local pitchControl = pitchRatePID:update(tgtPitchRate, phys.pitchAngVel)
-
-    -- Yaw rate
-    local tgtYawRate = controls.ad
-    local yawControl = yawRatePID:update(tgtYawRate, phys.yawAngVel)
-
-    -- Roll rate
-    local tgtRollAngle = controls.lr
-    local tgtRollRate = rollAnglePID:update(tgtRollAngle, phys.rollTilt)
-    local rollControl = rollRatePID:update(tgtRollRate, phys.rollAngVel)
-
-    -- Collective & vertical speed
-    local tgtVSpeed = controls.ud
-    local vspeedControl = vSpeedPID:update(tgtVSpeed, phys.upSpeed)
-
-    -- Control the left and right rotor angle & pitch
-    act.left.rotor.target = fwSpeedControl --+ (yawControl * YAW_ROTOR_FACTOR)
-    act.left.pitch.target = pitchControl + yawControl
-    act.left.roll.target = -rollControl
-    act.left.collect.target = vspeedControl -- , fwSpeedControl)
-
-    act.right.rotor.target = fwSpeedControl -- + (yawControl * YAW_ROTOR_FACTOR)
-    act.right.pitch.target = pitchControl - yawControl
-    act.right.roll.target = rollControl
-    act.right.collect.target = vspeedControl -- , fwSpeedControl)
-
-    -- Limit rotor tilt when too close to the ground    
-    local rotorLimit = 0.5 --phys.radarAlt < RALT_ON_GROUND and 0.5 or 1.0
-    act.left.rotor.max = rotorLimit
-    act.right.rotor.max = rotorLimit
-
-    act.elevators.target = controls.ud
-    act.ailerons.target = controls.lr
-    act.rudders.target = controls.ad
+    AirplaneAP:update(phys, controls, act)
 
     -- Write outputs
     output.setNumber(1, act.left.rotor:update())
@@ -192,6 +111,119 @@ function onTick()
         buffer:push(debugPID.last)
     end
 end
+
+AirplaneAP = {
+    rollRatePID = PID:new({
+        kp = 0.003, ki = 0.00007, kd = 0.01, minOut = -1, maxOut = 1, gain = 30,
+    }),
+    rollAnglePID = PID:new({
+        minOut = -1, maxOut = 1
+    }),
+    pitchRatePID = PID:new({
+        kp = 0.0001, ki = 0.0001, kd = 0.0005, minOut = -1, maxOut = 1, gain = 20,
+    }),
+    pitchAnglePID = PID:new({
+        kp = 0.04, ki = 0, kd = 4, minOut = -1, maxOut = 1, gain = 45
+    }),
+    update = function(self, phys, controls, act)
+        local tgtRoll = controls.lr
+        local tgtRollRate = self.rollAnglePID:update(tgtRoll, phys.rollTilt)
+        local rollControl = self.rollRatePID:update(tgtRollRate, phys.rollAngVel)
+
+        local tgtPitch = controls.ud
+        local tgtPitchRate = self.pitchAnglePID:update(tgtPitch, phys.pitchTilt)
+        local pitchControl = self.pitchRatePID:update(tgtPitchRate, phys.pitchAngVel)
+
+        --local pitchControl = tgtPitchRate * self.pitchRatePID.kp
+        
+        act.left.rotor.target = 1
+        act.left.collect.target = controls.ws + controls.ad * 0.3
+        act.left.pitch.target = -pitchControl
+        act.right.rotor.target = 1
+        act.right.collect.target = controls.ws - controls.ad * 0.3
+        act.right.pitch.target = -pitchControl
+
+        act.elevators.target = pitchControl -- controls.ud
+        act.ailerons.target = rollControl
+        act.rudders.target = controls.ad
+    end,
+}
+
+HeliAP = {
+    yawRatePID = PID:new({
+        kp = 0.1, ki = 0, kd = 0, minOut = -1, maxOut = 1, gain = 1.3 * 15
+    }),
+    pitchRatePID = PID:new({
+        kp = -0.01, ki = -0.0, kd = -0, minOut = -1, maxOut = 1, gain = 20
+    }),
+    pitchAnglePID = PID:new({
+        kp = 0.2, ki = 0.002, kd = 3.0, minOut = -1, maxOut = 1, gain = 45
+    }),
+    rollRatePID = PID:new({
+        kp = 0.01, ki = 0, kd = 0, minOut = -1, maxOut = 1, gain = 30
+    }),
+    rollAnglePID = PID:new({
+        kp = 0.1, ki = 0, kd = 1.0, minOut = -1, maxOut = 1, gain = 45
+    }),
+    vSpeedPID = PID:new({
+        kp = 0.15, ki = 0.00001, kd = 0.5, minOut = -1, maxOut = 1, bias = 0.4, gain = 20
+    }),
+    fwSpeedPID = PID:new({
+        kp = 0.05, ki = 0.000001, kd = 0.4, minOut = -1, maxOut = 1, gain = 400,
+    }),
+    fwSpeedLimiter = Limiter:new({ accel = 3, min = -10, max = 400 }),
+
+    update = function(self, phys, controls, act)
+        -- Conversion
+        local airplane = lerpClamp(phys.fwSpeed, 40, 0, 60, 1)
+        local blend = function(h, a) return h * (1 - airplane) + a * airplane end
+
+        -- Forward speed
+        self.fwSpeedLimiter.target = controls.ws * self.fwSpeedLimiter.max
+        local tgtSpeedNow = controls.ws -- fwSpeedLimiter:update()
+        local fwSpeedControl = self.fwSpeedPID:update(tgtSpeedNow, phys.fwSpeed)
+            
+        -- Pitch angle & pitch rate
+        local tgtPitchAngle = 0 -- helicopter mode holds a flat pitch -controls.ws
+        local tgtPitchRate = self.pitchAnglePID:update(tgtPitchAngle, phys.pitchTilt)
+        local pitchControl = self.pitchRatePID:update(tgtPitchRate, phys.pitchAngVel)
+
+        -- Yaw rate
+        local tgtYawRate = controls.ad
+        local yawControl = self.yawRatePID:update(tgtYawRate, phys.yawAngVel)
+
+        -- Roll rate
+        local tgtRollAngle = controls.lr
+        local tgtRollRate = self.rollAnglePID:update(tgtRollAngle, phys.rollTilt)
+        local rollControl = self.rollRatePID:update(tgtRollRate, phys.rollAngVel)
+
+        -- Collective & vertical speed
+        local tgtVSpeed = controls.ud
+        local vspeedControl = vSpeedPID:update(tgtVSpeed, phys.upSpeed)
+        
+        -- Control the left and right rotor angle & pitch
+        local leftRotor = function(up, dn) return lerpClamp(rotorPosLeft, 0, up, 1, dn) end
+        act.left.rotor.target = blend(fwSpeedControl, 1) --+ (yawControl * YAW_ROTOR_FACTOR)
+        act.left.pitch.target = blend(pitchControl + yawControl, 0)
+        act.left.roll.target = blend(-rollControl, 0)
+        act.left.collect.target = blend(vspeedControl, fwSpeedControl)
+
+        local rightRotor = function(up, dn) return lerpClamp(rotorPosRight, 0, up, 1, dn) end
+        act.right.rotor.target = blend(fwSpeedControl, 1) -- + (yawControl * YAW_ROTOR_FACTOR)
+        act.right.pitch.target = blend(pitchControl - yawControl, 0)
+        act.right.roll.target = blend(rollControl, 0)
+        act.right.collect.target = blend(vspeedControl, fwSpeedControl)
+
+        -- Limit rotor tilt when too close to the ground    
+        local rotorLimit = blend(phys.radarAlt, 1.0)
+        act.left.rotor.max = rotorLimit
+        act.right.rotor.max = rotorLimit
+
+        act.elevators.target = controls.ud
+        act.ailerons.target = controls.lr
+        act.rudders.target = controls.ad
+    end,
+}
 
 buffer = RingBuffer:new(96)
 
