@@ -76,7 +76,7 @@ function vToDistanceAzimuthElevation(v)
     local elevation = math.atan(v.z, math.sqrt(v.x^2 + v.y^2))
     local azimuth = math.atan(v.x, v.y)
     return distance, azimuth, elevation
-end 
+end
 ---@endsection
 
 -- Quaternions ---------------------------------------------------------------------------------------------------
@@ -86,9 +86,9 @@ end
 --
 --      qMulV(qLocalToGlobalFromSW(rightTilt, forwardTilt, compass), v)
 --
--- will translate v from local coordinates of the sensors to global map 
+-- will translate v from local coordinates of the sensors to global map
 -- coordinates: +x = right, +y = forward, +z = up.
--- 
+--
 --      qInverse(qLocalToGlobalFromSW(rightTilt, forwardTilt, compass))
 --
 -- gives the global-to-local transformation that will rotate a global point into this local frame of reference.
@@ -140,7 +140,7 @@ function qMulQ(a, b)
         y = a.w * b.y - a.x * b.z + a.y * b.w + a.z * b.x,
         z = a.w * b.z + a.x * b.y - a.y * b.x + a.z * b.w
     }
-end 
+end
 ---@endsection
 
 ---@section qMulV
@@ -155,19 +155,19 @@ function qFromScalar(s) return { w=s,x=0,y=0,z=0 } end
 ---@endsection
 
 ---@section qInverse
-function qInverse(q) 
+function qInverse(q)
     local i = 1.0 / (q.w^2 + q.x^2 + q.y^2 + q.z^2)
     return { w=q.w*i, x=-q.x*i, y=-q.y*i, z=-q.z*i }
 end
 ---@endsection
 
 ---@section qConjugate
-function qConjugate(q) 
+function qConjugate(q)
     return { w=q.w, x=-q.x, y=-q.y, z=-q.z }
 end
 ---@endsection
 
----@section qAngularVelocity 
+---@section qAngularVelocity
 -- calculates the 'body' angular velocity going from qfrom to qto in dt time
 ---@param qfrom quaternion the initial orientation
 ---@param qto quaternion the final orientation
@@ -200,6 +200,10 @@ function turnsToRad(t) return t*math.pi*2 end
 
 -- General Math ----------------------------------------------------------------------------------------------------------
 
+---@section round
+function round(x) return math.floor(x + 0.5) end
+---@endsection
+
 ---@section radToDeg
 function radToDeg(r) return r*180/math.pi end
 ---@endsection
@@ -217,14 +221,16 @@ function lerp(x, minX, minY, maxX, maxY) return (x - minX) / (maxX - minX) * (ma
 ---@endsection
 
 ---@section lerpClamp
-function lerpClamp(x, minX, minY, maxX, maxY) return clamp(lerp(x, minX, minY, maxX, maxY), minY, maxY) end
+function lerpClamp(x, minX, minY, maxX, maxY)
+    return clamp((x - minX) / (maxX - minX), 0, 1) * (maxY - minY) + minY
+end
 ---@endsection
 
 ---@section nanGuard
 function nanGuard(x, r) return (x == x) and x or (r or 0) end
 ---@endsection
 
---- Calculate the angular difference between two angles (in degrees), given the circular property 
+--- Calculate the angular difference between two angles (in degrees), given the circular property
 --- of angles. For example if current=350 and target=10, then the angular difference is 20.
 ---@section angularDiffDeg
 function angularDiffDeg(current, target)
@@ -250,8 +256,8 @@ function invert3x3(matrix)
     -- Calculate the inverse matrix elements & return  the inverted matrix
     local invDet = 1 / det
     return {
-        determinant2x2(e, f, h, i) / det, -determinant2x2(b, c, h, i) / det, determinant2x2(b, c, e, f) / det, 
-        -determinant2x2(d, f, g, i) / det, determinant2x2(a, c, g, i) / det, -determinant2x2(a, c, d, f) / det, 
+        determinant2x2(e, f, h, i) / det, -determinant2x2(b, c, h, i) / det, determinant2x2(b, c, e, f) / det,
+        -determinant2x2(d, f, g, i) / det, determinant2x2(a, c, g, i) / det, -determinant2x2(a, c, d, f) / det,
         determinant2x2(d, e, g, h) / det, -determinant2x2(a, b, g, h) / det, determinant2x2(a, b, d, e) / det
     }
 end

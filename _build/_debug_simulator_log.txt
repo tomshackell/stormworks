@@ -1,0 +1,5 @@
+23/03/2025 15:02:57 Launching, time stamp.
+23/03/2025 15:02:57 Opening connection on port 14238
+23/03/2025 15:02:57 Now Accepting TCP clients
+23/03/2025 15:02:57 MainWindow Initialized and running
+23/03/2025 15:02:57 Client accepted - Client Connected: True, beginning Message Loop

@@ -33,7 +33,7 @@ function makeRotor()
     return {
         -- NOTE: lower than -0.2 and it will hit the wing.
         rotor = Limiter:new({ accel = 10, min = -0.2, max = 1 }),
-        collect = Limiter:new({ accel = 10, min = 0, max = 1 }),
+        collect = Limiter:new({ accel = 10, min = -1, max = 1 }),
         pitch = Limiter:new({ accel = 10, min = -1, max = 1 }),
         roll = Limiter:new({ accel = 10, min = -1, max = 1 }),
     }
@@ -81,8 +81,9 @@ function onTick()
     local rotorPosRight = input.getNumber(20)
 
     -- update the debug PID
-    local debugPID = AirplaneAP.rollAnglePID
-    if debugPID then
+    local debugEnabled = input.getBool(2)
+    local debugPID = AirplaneAP.yawRatePID
+    if debugPID and debugEnabled then
         local divisor = math.max(input.getNumber(27), 1)
         debugPID.gain = input.getNumber(26)
         debugPID.kp = input.getNumber(28) / divisor
@@ -113,11 +114,18 @@ function onTick()
 end
 
 AirplaneAP = {
+    YAW_COLLECT_FACTOR = 0.4, -- how much to use collective to yaw, relative to rudders
+
+    yawRatePID = PID:new({
+        kp = 0.002, ki = 0, kd = 0.005, minOut = -1, maxOut = 1, gain = 130
+    }),
+    yawControlLimiter = Limiter:new({ accel = 0.1, min = -0.4, max = 0.4 }),
+    simRollLimiter = Limiter:new({ accel = 0.05, min = -0.2, max = 0.2 }),
     rollRatePID = PID:new({
-        kp = 0.003, ki = 0.00007, kd = 0.01, minOut = -1, maxOut = 1, gain = 30,
+        kp = 0.002, ki = 0.00005, kd = 0.003, minOut = -1, maxOut = 1, gain = 30,
     }),
     rollAnglePID = PID:new({
-        minOut = -1, maxOut = 1
+        kp = 0.08, ki = 0, kd = 1, minOut = -1, maxOut = 1, gain = 45,
     }),
     pitchRatePID = PID:new({
         kp = 0.0001, ki = 0.0001, kd = 0.0005, minOut = -1, maxOut = 1, gain = 20,
@@ -126,26 +134,32 @@ AirplaneAP = {
         kp = 0.04, ki = 0, kd = 4, minOut = -1, maxOut = 1, gain = 45
     }),
     update = function(self, phys, controls, act)
-        local tgtRoll = controls.lr
-        local tgtRollRate = self.rollAnglePID:update(tgtRoll, phys.rollTilt)
-        local rollControl = self.rollRatePID:update(tgtRollRate, phys.rollAngVel)
 
         local tgtPitch = controls.ud
         local tgtPitchRate = self.pitchAnglePID:update(tgtPitch, phys.pitchTilt)
         local pitchControl = self.pitchRatePID:update(tgtPitchRate, phys.pitchAngVel)
 
-        --local pitchControl = tgtPitchRate * self.pitchRatePID.kp
-        
+        local tgtYawRate = controls.ad
+        self.yawControlLimiter.target = self.yawRatePID:update(tgtYawRate, phys.yawAngVel)
+        local yawControl = self.yawControlLimiter:update()
+
+        self.simRollLimiter.target =
+            controls.ad * lerpClamp(phys.fwSpeed, 50, 0, 75, self.simRollLimiter.max)
+
+        local tgtRoll = controls.lr -- + self.simRollLimiter:update()
+        local tgtRollRate = self.rollAnglePID:update(tgtRoll, phys.rollTilt)
+        local rollControl = self.rollRatePID:update(tgtRollRate, phys.rollAngVel)
+
         act.left.rotor.target = 1
-        act.left.collect.target = controls.ws + controls.ad * 0.3
+        act.left.collect.target = controls.ws + yawControl * self.YAW_COLLECT_FACTOR
         act.left.pitch.target = -pitchControl
         act.right.rotor.target = 1
-        act.right.collect.target = controls.ws - controls.ad * 0.3
+        act.right.collect.target = controls.ws - yawControl * self.YAW_COLLECT_FACTOR
         act.right.pitch.target = -pitchControl
 
         act.elevators.target = pitchControl -- controls.ud
         act.ailerons.target = rollControl
-        act.rudders.target = controls.ad
+        act.rudders.target = yawControl
     end,
 }
 
