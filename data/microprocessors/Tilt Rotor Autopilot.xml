@@ -1,0 +1,1043 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<microprocessor name="TiltRotor Autopilot" description="No description set." width="5" length="6" id_counter="84" id_counter_node="29" sym2="336" sym3="336" sym4="880" sym5="1360" sym6="800" sym9="2340" sym10="1188" sym11="1156" sym12="3748" sym13="1166">
+	<nodes>
+		<n id="1" component_id="2">
+			<node label="Physics Sensor" mode="1" type="5" description="The input signal to be processed."/>
+		</n>
+		<n id="2" component_id="6">
+			<node label="Rotor L" type="1" description="The input signal to be processed.">
+				<position z="2"/>
+			</node>
+		</n>
+		<n id="3" component_id="8">
+			<node label="Collect L" type="1" description="The input signal to be processed.">
+				<position x="1" z="2"/>
+			</node>
+		</n>
+		<n id="4" component_id="11">
+			<node label="Pitch L" type="1" description="The input signal to be processed.">
+				<position x="2" z="2"/>
+			</node>
+		</n>
+		<n id="5" component_id="14">
+			<node label="Roll L" type="1" description="The input signal to be processed.">
+				<position x="3" z="2"/>
+			</node>
+		</n>
+		<n id="6" component_id="17">
+			<node label="Rotor R" type="1" description="The input signal to be processed.">
+				<position z="1"/>
+			</node>
+		</n>
+		<n id="7" component_id="20">
+			<node label="Collect R" type="1" description="The input signal to be processed.">
+				<position x="1" z="1"/>
+			</node>
+		</n>
+		<n id="8" component_id="23">
+			<node label="Pitch R" type="1" description="The input signal to be processed.">
+				<position x="2" z="1"/>
+			</node>
+		</n>
+		<n id="9" component_id="26">
+			<node label="Roll R" type="1" description="The input signal to be processed.">
+				<position x="3" z="1"/>
+			</node>
+		</n>
+		<n id="10" component_id="37">
+			<node label="WS" mode="1" type="1" description="The input signal to be processed.">
+				<position z="3"/>
+			</node>
+		</n>
+		<n id="11" component_id="39">
+			<node label="AD" mode="1" type="1" description="The input signal to be processed.">
+				<position x="1" z="3"/>
+			</node>
+		</n>
+		<n id="12" component_id="41">
+			<node label="UD" mode="1" type="1" description="The input signal to be processed.">
+				<position x="2" z="3"/>
+			</node>
+		</n>
+		<n id="13" component_id="43">
+			<node label="LR" mode="1" type="1" description="The input signal to be processed.">
+				<position x="3" z="3"/>
+			</node>
+		</n>
+		<n id="14" component_id="45">
+			<node label="P" mode="1" type="1" description="The input signal to be processed.">
+				<position z="4"/>
+			</node>
+		</n>
+		<n id="15" component_id="47">
+			<node label="I" mode="1" type="1" description="The input signal to be processed.">
+				<position x="1" z="4"/>
+			</node>
+		</n>
+		<n id="16" component_id="49">
+			<node label="D" mode="1" type="1" description="The input signal to be processed.">
+				<position x="2" z="4"/>
+			</node>
+		</n>
+		<n id="17" component_id="51">
+			<node label="Gain" mode="1" type="1" description="The input signal to be processed.">
+				<position x="3" z="4"/>
+			</node>
+		</n>
+		<n id="18" component_id="53">
+			<node label="Display Min" mode="1" type="1" description="The input signal to be processed.">
+				<position x="1" z="5"/>
+			</node>
+		</n>
+		<n id="19" component_id="55">
+			<node label="Display Max" mode="1" type="1" description="The input signal to be processed.">
+				<position x="2" z="5"/>
+			</node>
+		</n>
+		<n id="20" component_id="57">
+			<node label="PID Divisor" mode="1" type="1" description="The input signal to be processed.">
+				<position x="3" z="5"/>
+			</node>
+		</n>
+		<n id="21" component_id="60">
+			<node label="Radar Alt" mode="1" type="1" description="The input signal to be processed.">
+				<position x="1"/>
+			</node>
+		</n>
+		<n id="22" component_id="65">
+			<node label="Video Out" type="6" description="The input signal to be processed.">
+				<position x="4" z="3"/>
+			</node>
+		</n>
+		<n id="23" component_id="67">
+			<node label="Rotor Pos L" mode="1" type="1" description="The input signal to be processed.">
+				<position x="4" z="2"/>
+			</node>
+		</n>
+		<n id="24" component_id="69">
+			<node label="Rotor Pos R" mode="1" type="1" description="The input signal to be processed.">
+				<position x="4" z="1"/>
+			</node>
+		</n>
+		<n id="25" component_id="70">
+			<node label="Display Output" mode="1" description="The input signal to be processed.">
+				<position z="5"/>
+			</node>
+		</n>
+		<n id="26" component_id="74">
+			<node label="Elevators" type="1" description="The input signal to be processed.">
+				<position x="2"/>
+			</node>
+		</n>
+		<n id="27" component_id="78">
+			<node label="Ailerons" type="1" description="The input signal to be processed.">
+				<position x="3"/>
+			</node>
+		</n>
+		<n id="28" component_id="80">
+			<node label="Rudders" type="1" description="The input signal to be processed.">
+				<position x="4"/>
+			</node>
+		</n>
+		<n id="29" component_id="84">
+			<node label="Debug Enable" mode="1" description="The input signal to be processed.">
+				<position x="4" z="4"/>
+			</node>
+		</n>
+	</nodes>
+	<group>
+		<data>
+			<inputs/>
+			<outputs/>
+		</data>
+		<components>
+			<c type="56">
+				<object id="27" script='-- Author: Tom Shackell
+-- GitHub: &lt;GithubLink&gt;
+-- Workshop: &lt;WorkshopLink&gt;
+--
+-- Developed &amp; Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
+-- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
+--      By Nameous Changey
+-- Minimized Size: 4486 (4803 with comment) chars
+
+O=.5
+az=nil
+N=math
+bh=input
+E=output
+V=screen
+Z=V.drawLine
+Y=V.setColor
+u=E.setNumber
+bi=bh.getBool
+d=bh.getNumber
+aI=N.max
+bp=N.min
+aT=N.pi
+bd=N.sin
+bk=N.cos
+function bc(S,aO)return S.e*aO.e+S.ag*aO.ag+S.ae*aO.ae end
+function bq(F,y)local aV=bk(y)return{e=bd(F)*aV,ag=bk(F)*aV,ae=bd(y)}end
+function M(ap)return ap*180/aT end
+function D(e,G,P)return bp(aI(e,G),P)end
+function ad(e,G,R,P,am)return(e-G)/(P-G)*(am-R)+R end
+function au(e,G,R,P,am)return D((e-G)/(P-G),0,1)*(am-R)+R
+end
+function bt(e,ap)return(e==e)and e or(ap or 0)end
+q={f=function(I,j)local j=j or{}return{i=j.i or 0,l=j.l or 0,m=j.m or 0,ay=j.ay or 0,o=j.o or-(1/0),n=j.n or(1/0),k=j.k or 1.0,p=az,aY=0,bn=0,b=I.b}end,b=function(_,c,B)local c=c*_.k
+local T=c-B
+local bb=_.bn+T
+local bC=T-_.aY
+local aL=_.i*T+_.l*bb+_.m*bC+_.ay
+_.aY=T
+local E=bp(aI(aL,_.o),_.n)if E==aL or T*aL&lt;=0 then
+_.bn=bb
+end
+_.p={c=c,B=B,E=E}return E
+end}bz={f=function(I,by)return{bl={},ab=by+1,Q=0,aa=0,aq=I.aq,ar=I.ar}end,aq=function(_,bw)_.bl[_.Q]=bw
+_.Q=(_.Q+1)%_.ab
+if _.Q==_.aa then
+_.aa=(_.aa+1)%_.ab
+end
+end,ar=function(_,bG)local at,aK=-1,(_.aa+(bG or 0))%_.ab
+return function()at,aK=aK,(aK+1)%_.ab
+if at==_.Q then
+return az
+else
+return _.bl[at]end
+end
+end}bV=3.0
+ao={min=-10,max=10,v=false}x={f=function(I,j)local j=j or{}return{w=j.w,min=j.min,max=j.max,B=0,c=0,b=I.b}end,b=function(_,bQ)local aP=_.w*(bQ or(1/60))local bf=bt(_.B)local bO=bf+D(bt(_.c)-bf,-aP,aP)_.B=D(bO,_.min,_.max)return _.B
+end}function aX()return{C=x:f({w=10,min=-.2,max=1}),J=x:f({w=10,min=-1,max=1}),y=x:f({w=10,min=-1,max=1}),W=x:f({w=10,min=-1,max=1})}end
+a={t=aX(),r=aX(),aJ=x:f({w=1,min=-1,max=1}),aB=x:f({w=1,min=-1,max=1}),aD=x:f({w=1,min=-1,max=1})}function onTick()local h={af=D(d(22),-1,1),aH=D(d(23),-1,1),aM=D(d(24),-1,1),aw=D(d(25),-1,1)}local aN={e=d(13),ag=d(14),ae=d(15)}local F=d(6)local bL=bq(F,0)local bu=bq(F+aT/2,0)local g={bj=M(d(5)),br=M(d(4)),F=M(F),aR=M(d(11)),bo=M(d(12)),aZ=M(d(10)),bY={e=d(1),ag=d(2)},bX=d(3),bA=d(21),aQ=bc(bL,aN),bS=bc(bu,aN),bB=aN.ae}local bv=d(19)local bP=d(20)local bF=bi(2)local A=bm.ai
+if A and bF then
+local aC=aI(d(27),1)A.k=d(26)A.i=d(28)/aC
+A.l=d(29)/aC
+A.m=d(30)/aC
+end
+ao={min=d(31),max=d(32),v=bi(1)}bm:b(g,h,a)u(1,a.t.C:b())u(2,a.t.J:b())u(3,a.t.y:b())u(4,a.t.W:b())u(5,a.r.C:b())u(6,a.r.J:b())u(7,a.r.y:b())u(8,a.r.W:b())u(9,a.aJ:b())u(10,a.aB:b())u(11,a.aD:b())if A and A.p then
+aU:aq(A.p)end
+end
+bm={ai=q:f({i=.002,l=0,m=.005,o=-1,n=1,k=100}),bs=x:f({w=.1,min=-.3,max=.3}),aE=q:f({i=.002,l=.00005,m=.003,o=-1,n=1,k=30}),al=q:f({i=.08,l=0,m=1,o=-1,n=1,k=45}),aF=q:f({i=.0001,l=.0001,m=.0005,o=-1,n=1,k=20}),aA=q:f({i=.04,l=0,m=4,o=-1,n=1,k=45}),b=function(_,g,h,a)local bI=h.aw
+local ax=_.al:b(bI,g.br)local aj=_.aE:b(ax,g.aZ)local bJ=h.aM
+local av=_.aA:b(bJ,g.bj)local L=_.aF:b(av,g.aR)local ak=h.aH
+_.bs.c=_.ai:b(ak,g.bo)local ba=.3
+local H=_.bs:b()a.t.C.c=1
+a.t.J.c=h.af+H*ba
+a.t.y.c=-L
+a.r.C.c=1
+a.r.J.c=h.af-H*ba
+a.r.y.c=-L
+a.aJ.c=L
+a.aB.c=aj
+a.aD.c=H
+end}bR={ai=q:f({i=.1,l=0,m=0,o=-1,n=1,k=1.3*15}),aF=q:f({i=-.01,l=-.0,m=-0,o=-1,n=1,k=20}),aA=q:f({i=.2,l=.002,m=3.0,o=-1,n=1,k=45}),aE=q:f({i=.01,l=0,m=0,o=-1,n=1,k=30}),al=q:f({i=.1,l=0,m=1.0,o=-1,n=1,k=45}),bx=q:f({i=.15,l=.00001,m=O,o=-1,n=1,ay=.4,k=20}),bM=q:f({i=.05,l=.000001,m=.4,o=-1,n=1,k=400}),aW=x:f({w=3,min=-10,max=400}),b=function(_,g,h,a)local bg=au(g.aQ,40,0,60,1)local z=function(K,S)return K*(1-bg)+S*bg end
+_.aW.c=h.af*_.aW.max
+local bD=h.af
+local ah=_.bM:b(bD,g.aQ)local bN=0
+local av=_.aA:b(bN,g.bj)local L=_.aF:b(av,g.aR)local ak=h.aH
+local H=_.ai:b(ak,g.bo)local bH=h.aw
+local ax=_.al:b(bH,g.br)local aj=_.aE:b(ax,g.aZ)local bE=h.aM
+local aS=bx:b(bE,g.bB)local bW=function(as,an)return au(bv,0,as,1,an)end
+a.t.C.c=z(ah,1)a.t.y.c=z(L+H,0)a.t.W.c=z(-aj,0)a.t.J.c=z(aS,ah)local bT=function(as,an)return au(bP,0,as,1,an)end
+a.r.C.c=z(ah,1)a.r.y.c=z(L-H,0)a.r.W.c=z(aj,0)a.r.J.c=z(aS,ah)local b_=z(g.bA,1.0)a.t.C.max=b_
+a.r.C.max=b_
+a.aJ.c=h.aM
+a.aB.c=h.aw
+a.aD.c=h.aH
+end}aU=bz:f(96)function onDraw()local bK,K=V.getWidth(),V.getHeight()local bU=1/0
+local s=ao
+local v={min=-1,max=1}if s.min==s.max then
+s.min=s.min-O
+s.max=s.max+O
+end
+if v.min==v.max then
+v.min=v.min-O
+v.max=v.max+O
+end
+local e=0
+local p=az
+Y(64,64,64)local be=ad(0,s.min,K,s.max,0)Z(0,be,bK,be)for aG in aU:ar()do
+local ac=ad(aG.c,s.min,K,s.max,0)local X=ad(aG.B,s.min,K,s.max,0)local U=ad(aG.E,v.min,K,v.max,0)if p then
+Y(255,0,0)Z(p.e,p.ac,e,ac)Y(255,255,0)Z(p.e,p.X,e,X)if ao.v then
+Y(0,0,255)Z(p.e,p.U,e,U)end
+end
+p={e=e,ac=ac,X=X,U=U}e=e+1
+end
+end
+'>
+					<pos x="-1" y="2"/>
+					<in1 component_id="62"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="28">
+					<pos x="1" y="5"/>
+					<in1 component_id="27"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="29" i="1">
+					<pos x="1" y="4.5"/>
+					<in1 component_id="27"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="30" i="2">
+					<pos x="1" y="4"/>
+					<in1 component_id="27"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="31" i="3">
+					<pos x="1" y="3.5"/>
+					<in1 component_id="27"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="32" i="4">
+					<pos x="1" y="2.75"/>
+					<in1 component_id="27"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="33" i="5">
+					<pos x="1" y="2.25"/>
+					<in1 component_id="27"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="34" i="6">
+					<pos x="1" y="1.75"/>
+					<in1 component_id="27"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="35" i="7">
+					<pos x="1" y="1.25"/>
+					<in1 component_id="27"/>
+				</object>
+			</c>
+			<c type="56">
+				<object id="58" script="i  = input
+o  = output
+m  = math
+gn = i.getNumber
+sn = o.setNumber
+pi = m.pi
+pi2= pi*2
+si = m.sin
+co = m.cos
+ta = m.tan
+as = m.asin
+ac = m.acos
+at = m.atan
+abs= m.abs
+deg= m.deg
+rad= m.rad
+mod= m.fmod
+sq = m.sqrt
+ins= table.insert
+rem= table.remove
+
+grr= {{0,0,0},{0,0,0},{0,0,0}}
+
+function makematC(phi, the, psi)
+	mar = {
+        {co(the)*co(psi), si(phi)*si(the)*co(psi)-co(phi)*si(psi), co(phi)*si(the)*co(psi)+si(phi)*si(psi)},
+        {co(the)*si(psi), si(phi)*si(the)*si(psi)+co(phi)*co(psi), co(phi)*si(the)*si(psi)-si(phi)*co(psi)}, 
+        {-si(the), si(phi)*co(the), co(phi)*co(the)}
+    }
+	return mar
+end
+
+function rotate(mat, vec)
+	temp = {0, 0, 0}
+	for i=1, 3 do
+		ali = 0
+		for j=1, 3 do
+			ali = ali + mat[i][j] * vec[j]
+		end
+		temp[i] = ali
+	end
+	return temp
+end
+
+
+function Mtrans(maa)
+	for i=1, 3 do
+		for j=1, 3 do
+			grr[j][i] = maa[i][j]
+		end
+	end
+	return grr
+end
+
+
+function onTick()
+
+	sn(1,gn(1))--Map X
+	sn(2,gn(3))--Map Y
+	sn(3,gn(2))--Altitude
+	
+	EFB = makematC(gn(4), gn(5), gn(6))
+	
+	cphi = -at(EFB[2][1],EFB[2][2])
+	cthe = as(EFB[2][3])
+	cpsi = at(EFB[3][3], EFB[1][3])
+	
+	sn(4, cphi)--roll
+	sn(5, cthe)--pitch
+	sn(6, mod(pi2*1.25-cpsi,pi2))--nautical azimuth(North:0, clockwise, 0-&gt;+pi2) 
+	sn(21,cpsi)--raw azimuth(East:0, counterclockwise, -pi&lt;-0-&gt;+pi), for calc. use
+	
+	rot = {gn(10),gn(11),gn(12)}
+	MAG = Mtrans(EFB)
+	ang = rotate(MAG, rot)
+	
+	--eul = {cphi, cthe, -cpsi}
+	AMS = makematC(cphi,cthe,-cpsi)
+	vel = {gn(9),gn(7),-gn(8)}
+	for i=1,3 do
+		sn(i+6, vel[i])
+	end
+	--7~9  : local linear speed, x:forward +, y:right +, z:downward +
+	
+	sn(10, -ang[3]*pi2)
+	sn(11, -ang[1]*pi2)
+	sn(12,  ang[2]*pi2)
+	--10~12: local angular speed, roll, pitch, yaw
+	
+	sn(19,gn(13))--abs. linear speed
+	sn(20,gn(17))--compass, for compatibility, not recomended
+	
+	--tiltx = cthe/pi2
+	--tilty = as(-si(cphi)*co(cthe))/pi2
+	tiltz = as(-co(cphi)*co(cthe))/pi2
+	
+	sn(16,gn(15))--tilt x
+	sn(17,gn(16))--tilt y
+	sn(18,tiltz)--tilt z, for compatibility
+	
+	vew = rotate(AMS, vel)
+	sn(13, vew[1])
+	sn(14, -vew[2])
+	sn(15, -vew[3])
+	--13~15: world linear speed, X:East +, Y:North +, Z:upward +
+	
+end">
+					<pos x="-4.75" y="5.5"/>
+					<in1 component_id="2"/>
+				</object>
+			</c>
+			<c type="40">
+				<object id="62" count="14" offset="18">
+					<pos x="-2.25" y="0.25"/>
+					<inc component_id="71"/>
+					<in1 component_id="67"/>
+					<in2 component_id="69"/>
+					<in3 component_id="60"/>
+					<in4 component_id="37"/>
+					<in5 component_id="39"/>
+					<in6 component_id="41"/>
+					<in7 component_id="43"/>
+					<in8 component_id="51"/>
+					<in9 component_id="57"/>
+					<in10 component_id="45"/>
+					<in11 component_id="47"/>
+					<in12 component_id="49"/>
+					<in13 component_id="53"/>
+					<in14 component_id="55"/>
+				</object>
+			</c>
+			<c type="41">
+				<object id="71" count="2">
+					<pos x="-3.5" y="4.5"/>
+					<inc component_id="58"/>
+					<in1 component_id="70"/>
+					<in2 component_id="84"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="81" i="8">
+					<pos x="1" y="0.5"/>
+					<in1 component_id="27"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="82" i="9">
+					<pos x="1"/>
+					<in1 component_id="27"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="83" i="10">
+					<pos x="1" y="-0.5"/>
+					<in1 component_id="27"/>
+				</object>
+			</c>
+		</components>
+		<components_bridge>
+			<c type="4">
+				<object id="2">
+					<pos x="-6" y="5.75"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="6">
+					<pos x="2.25" y="5"/>
+					<in1 component_id="28"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="8">
+					<pos x="2.25" y="4.5"/>
+					<in1 component_id="29"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="11">
+					<pos x="2.25" y="4"/>
+					<in1 component_id="30"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="14">
+					<pos x="2.25" y="3.5"/>
+					<in1 component_id="31"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="17">
+					<pos x="2.25" y="2.75"/>
+					<in1 component_id="32"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="20">
+					<pos x="2.25" y="2.25"/>
+					<in1 component_id="33"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="23">
+					<pos x="2.25" y="1.75"/>
+					<in1 component_id="34"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="26">
+					<pos x="2.25" y="1.25"/>
+					<in1 component_id="35"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="37">
+					<pos x="-6" y="1.75"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="39">
+					<pos x="-6" y="1.25"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="41">
+					<pos x="-6" y="0.75"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="43">
+					<pos x="-6" y="0.25"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="45">
+					<pos x="-6" y="-1.5"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="47">
+					<pos x="-6" y="-2"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="49">
+					<pos x="-6" y="-2.5"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="51">
+					<pos x="-6" y="-0.5"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="53">
+					<pos x="-6" y="-3"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="55">
+					<pos x="-6" y="-3"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="57">
+					<pos x="-6" y="-1"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="60">
+					<pos x="-6" y="2.5"/>
+				</object>
+			</c>
+			<c type="7">
+				<object id="65">
+					<pos x="1" y="-1.25"/>
+					<in1 component_id="27" node_index="1"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="67">
+					<pos x="-6" y="3.5"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="69">
+					<pos x="-6" y="3"/>
+				</object>
+			</c>
+			<c>
+				<object id="70">
+					<pos x="-6" y="4.75"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="74">
+					<pos x="2.25" y="0.5"/>
+					<in1 component_id="81"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="78">
+					<pos x="2.25"/>
+					<in1 component_id="82"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="80">
+					<pos x="2.25" y="-0.5"/>
+					<in1 component_id="83"/>
+				</object>
+			</c>
+			<c>
+				<object id="84">
+					<pos x="-6" y="4.25"/>
+				</object>
+			</c>
+		</components_bridge>
+		<groups/>
+		<component_states>
+			<c0 id="27" script='-- Author: Tom Shackell
+-- GitHub: &lt;GithubLink&gt;
+-- Workshop: &lt;WorkshopLink&gt;
+--
+-- Developed &amp; Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
+-- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
+--      By Nameous Changey
+-- Minimized Size: 4486 (4803 with comment) chars
+
+O=.5
+az=nil
+N=math
+bh=input
+E=output
+V=screen
+Z=V.drawLine
+Y=V.setColor
+u=E.setNumber
+bi=bh.getBool
+d=bh.getNumber
+aI=N.max
+bp=N.min
+aT=N.pi
+bd=N.sin
+bk=N.cos
+function bc(S,aO)return S.e*aO.e+S.ag*aO.ag+S.ae*aO.ae end
+function bq(F,y)local aV=bk(y)return{e=bd(F)*aV,ag=bk(F)*aV,ae=bd(y)}end
+function M(ap)return ap*180/aT end
+function D(e,G,P)return bp(aI(e,G),P)end
+function ad(e,G,R,P,am)return(e-G)/(P-G)*(am-R)+R end
+function au(e,G,R,P,am)return D((e-G)/(P-G),0,1)*(am-R)+R
+end
+function bt(e,ap)return(e==e)and e or(ap or 0)end
+q={f=function(I,j)local j=j or{}return{i=j.i or 0,l=j.l or 0,m=j.m or 0,ay=j.ay or 0,o=j.o or-(1/0),n=j.n or(1/0),k=j.k or 1.0,p=az,aY=0,bn=0,b=I.b}end,b=function(_,c,B)local c=c*_.k
+local T=c-B
+local bb=_.bn+T
+local bC=T-_.aY
+local aL=_.i*T+_.l*bb+_.m*bC+_.ay
+_.aY=T
+local E=bp(aI(aL,_.o),_.n)if E==aL or T*aL&lt;=0 then
+_.bn=bb
+end
+_.p={c=c,B=B,E=E}return E
+end}bz={f=function(I,by)return{bl={},ab=by+1,Q=0,aa=0,aq=I.aq,ar=I.ar}end,aq=function(_,bw)_.bl[_.Q]=bw
+_.Q=(_.Q+1)%_.ab
+if _.Q==_.aa then
+_.aa=(_.aa+1)%_.ab
+end
+end,ar=function(_,bG)local at,aK=-1,(_.aa+(bG or 0))%_.ab
+return function()at,aK=aK,(aK+1)%_.ab
+if at==_.Q then
+return az
+else
+return _.bl[at]end
+end
+end}bV=3.0
+ao={min=-10,max=10,v=false}x={f=function(I,j)local j=j or{}return{w=j.w,min=j.min,max=j.max,B=0,c=0,b=I.b}end,b=function(_,bQ)local aP=_.w*(bQ or(1/60))local bf=bt(_.B)local bO=bf+D(bt(_.c)-bf,-aP,aP)_.B=D(bO,_.min,_.max)return _.B
+end}function aX()return{C=x:f({w=10,min=-.2,max=1}),J=x:f({w=10,min=-1,max=1}),y=x:f({w=10,min=-1,max=1}),W=x:f({w=10,min=-1,max=1})}end
+a={t=aX(),r=aX(),aJ=x:f({w=1,min=-1,max=1}),aB=x:f({w=1,min=-1,max=1}),aD=x:f({w=1,min=-1,max=1})}function onTick()local h={af=D(d(22),-1,1),aH=D(d(23),-1,1),aM=D(d(24),-1,1),aw=D(d(25),-1,1)}local aN={e=d(13),ag=d(14),ae=d(15)}local F=d(6)local bL=bq(F,0)local bu=bq(F+aT/2,0)local g={bj=M(d(5)),br=M(d(4)),F=M(F),aR=M(d(11)),bo=M(d(12)),aZ=M(d(10)),bY={e=d(1),ag=d(2)},bX=d(3),bA=d(21),aQ=bc(bL,aN),bS=bc(bu,aN),bB=aN.ae}local bv=d(19)local bP=d(20)local bF=bi(2)local A=bm.ai
+if A and bF then
+local aC=aI(d(27),1)A.k=d(26)A.i=d(28)/aC
+A.l=d(29)/aC
+A.m=d(30)/aC
+end
+ao={min=d(31),max=d(32),v=bi(1)}bm:b(g,h,a)u(1,a.t.C:b())u(2,a.t.J:b())u(3,a.t.y:b())u(4,a.t.W:b())u(5,a.r.C:b())u(6,a.r.J:b())u(7,a.r.y:b())u(8,a.r.W:b())u(9,a.aJ:b())u(10,a.aB:b())u(11,a.aD:b())if A and A.p then
+aU:aq(A.p)end
+end
+bm={ai=q:f({i=.002,l=0,m=.005,o=-1,n=1,k=100}),bs=x:f({w=.1,min=-.3,max=.3}),aE=q:f({i=.002,l=.00005,m=.003,o=-1,n=1,k=30}),al=q:f({i=.08,l=0,m=1,o=-1,n=1,k=45}),aF=q:f({i=.0001,l=.0001,m=.0005,o=-1,n=1,k=20}),aA=q:f({i=.04,l=0,m=4,o=-1,n=1,k=45}),b=function(_,g,h,a)local bI=h.aw
+local ax=_.al:b(bI,g.br)local aj=_.aE:b(ax,g.aZ)local bJ=h.aM
+local av=_.aA:b(bJ,g.bj)local L=_.aF:b(av,g.aR)local ak=h.aH
+_.bs.c=_.ai:b(ak,g.bo)local ba=.3
+local H=_.bs:b()a.t.C.c=1
+a.t.J.c=h.af+H*ba
+a.t.y.c=-L
+a.r.C.c=1
+a.r.J.c=h.af-H*ba
+a.r.y.c=-L
+a.aJ.c=L
+a.aB.c=aj
+a.aD.c=H
+end}bR={ai=q:f({i=.1,l=0,m=0,o=-1,n=1,k=1.3*15}),aF=q:f({i=-.01,l=-.0,m=-0,o=-1,n=1,k=20}),aA=q:f({i=.2,l=.002,m=3.0,o=-1,n=1,k=45}),aE=q:f({i=.01,l=0,m=0,o=-1,n=1,k=30}),al=q:f({i=.1,l=0,m=1.0,o=-1,n=1,k=45}),bx=q:f({i=.15,l=.00001,m=O,o=-1,n=1,ay=.4,k=20}),bM=q:f({i=.05,l=.000001,m=.4,o=-1,n=1,k=400}),aW=x:f({w=3,min=-10,max=400}),b=function(_,g,h,a)local bg=au(g.aQ,40,0,60,1)local z=function(K,S)return K*(1-bg)+S*bg end
+_.aW.c=h.af*_.aW.max
+local bD=h.af
+local ah=_.bM:b(bD,g.aQ)local bN=0
+local av=_.aA:b(bN,g.bj)local L=_.aF:b(av,g.aR)local ak=h.aH
+local H=_.ai:b(ak,g.bo)local bH=h.aw
+local ax=_.al:b(bH,g.br)local aj=_.aE:b(ax,g.aZ)local bE=h.aM
+local aS=bx:b(bE,g.bB)local bW=function(as,an)return au(bv,0,as,1,an)end
+a.t.C.c=z(ah,1)a.t.y.c=z(L+H,0)a.t.W.c=z(-aj,0)a.t.J.c=z(aS,ah)local bT=function(as,an)return au(bP,0,as,1,an)end
+a.r.C.c=z(ah,1)a.r.y.c=z(L-H,0)a.r.W.c=z(aj,0)a.r.J.c=z(aS,ah)local b_=z(g.bA,1.0)a.t.C.max=b_
+a.r.C.max=b_
+a.aJ.c=h.aM
+a.aB.c=h.aw
+a.aD.c=h.aH
+end}aU=bz:f(96)function onDraw()local bK,K=V.getWidth(),V.getHeight()local bU=1/0
+local s=ao
+local v={min=-1,max=1}if s.min==s.max then
+s.min=s.min-O
+s.max=s.max+O
+end
+if v.min==v.max then
+v.min=v.min-O
+v.max=v.max+O
+end
+local e=0
+local p=az
+Y(64,64,64)local be=ad(0,s.min,K,s.max,0)Z(0,be,bK,be)for aG in aU:ar()do
+local ac=ad(aG.c,s.min,K,s.max,0)local X=ad(aG.B,s.min,K,s.max,0)local U=ad(aG.E,v.min,K,v.max,0)if p then
+Y(255,0,0)Z(p.e,p.ac,e,ac)Y(255,255,0)Z(p.e,p.X,e,X)if ao.v then
+Y(0,0,255)Z(p.e,p.U,e,U)end
+end
+p={e=e,ac=ac,X=X,U=U}e=e+1
+end
+end
+'>
+				<pos x="-1" y="2"/>
+				<in1 component_id="62"/>
+			</c0>
+			<c1 id="28">
+				<pos x="1" y="5"/>
+				<in1 component_id="27"/>
+			</c1>
+			<c2 id="29" i="1">
+				<pos x="1" y="4.5"/>
+				<in1 component_id="27"/>
+			</c2>
+			<c3 id="30" i="2">
+				<pos x="1" y="4"/>
+				<in1 component_id="27"/>
+			</c3>
+			<c4 id="31" i="3">
+				<pos x="1" y="3.5"/>
+				<in1 component_id="27"/>
+			</c4>
+			<c5 id="32" i="4">
+				<pos x="1" y="2.75"/>
+				<in1 component_id="27"/>
+			</c5>
+			<c6 id="33" i="5">
+				<pos x="1" y="2.25"/>
+				<in1 component_id="27"/>
+			</c6>
+			<c7 id="34" i="6">
+				<pos x="1" y="1.75"/>
+				<in1 component_id="27"/>
+			</c7>
+			<c8 id="35" i="7">
+				<pos x="1" y="1.25"/>
+				<in1 component_id="27"/>
+			</c8>
+			<c9 id="58" script="i  = input
+o  = output
+m  = math
+gn = i.getNumber
+sn = o.setNumber
+pi = m.pi
+pi2= pi*2
+si = m.sin
+co = m.cos
+ta = m.tan
+as = m.asin
+ac = m.acos
+at = m.atan
+abs= m.abs
+deg= m.deg
+rad= m.rad
+mod= m.fmod
+sq = m.sqrt
+ins= table.insert
+rem= table.remove
+
+grr= {{0,0,0},{0,0,0},{0,0,0}}
+
+function makematC(phi, the, psi)
+	mar = {
+        {co(the)*co(psi), si(phi)*si(the)*co(psi)-co(phi)*si(psi), co(phi)*si(the)*co(psi)+si(phi)*si(psi)},
+        {co(the)*si(psi), si(phi)*si(the)*si(psi)+co(phi)*co(psi), co(phi)*si(the)*si(psi)-si(phi)*co(psi)}, 
+        {-si(the), si(phi)*co(the), co(phi)*co(the)}
+    }
+	return mar
+end
+
+function rotate(mat, vec)
+	temp = {0, 0, 0}
+	for i=1, 3 do
+		ali = 0
+		for j=1, 3 do
+			ali = ali + mat[i][j] * vec[j]
+		end
+		temp[i] = ali
+	end
+	return temp
+end
+
+
+function Mtrans(maa)
+	for i=1, 3 do
+		for j=1, 3 do
+			grr[j][i] = maa[i][j]
+		end
+	end
+	return grr
+end
+
+
+function onTick()
+
+	sn(1,gn(1))--Map X
+	sn(2,gn(3))--Map Y
+	sn(3,gn(2))--Altitude
+	
+	EFB = makematC(gn(4), gn(5), gn(6))
+	
+	cphi = -at(EFB[2][1],EFB[2][2])
+	cthe = as(EFB[2][3])
+	cpsi = at(EFB[3][3], EFB[1][3])
+	
+	sn(4, cphi)--roll
+	sn(5, cthe)--pitch
+	sn(6, mod(pi2*1.25-cpsi,pi2))--nautical azimuth(North:0, clockwise, 0-&gt;+pi2) 
+	sn(21,cpsi)--raw azimuth(East:0, counterclockwise, -pi&lt;-0-&gt;+pi), for calc. use
+	
+	rot = {gn(10),gn(11),gn(12)}
+	MAG = Mtrans(EFB)
+	ang = rotate(MAG, rot)
+	
+	--eul = {cphi, cthe, -cpsi}
+	AMS = makematC(cphi,cthe,-cpsi)
+	vel = {gn(9),gn(7),-gn(8)}
+	for i=1,3 do
+		sn(i+6, vel[i])
+	end
+	--7~9  : local linear speed, x:forward +, y:right +, z:downward +
+	
+	sn(10, -ang[3]*pi2)
+	sn(11, -ang[1]*pi2)
+	sn(12,  ang[2]*pi2)
+	--10~12: local angular speed, roll, pitch, yaw
+	
+	sn(19,gn(13))--abs. linear speed
+	sn(20,gn(17))--compass, for compatibility, not recomended
+	
+	--tiltx = cthe/pi2
+	--tilty = as(-si(cphi)*co(cthe))/pi2
+	tiltz = as(-co(cphi)*co(cthe))/pi2
+	
+	sn(16,gn(15))--tilt x
+	sn(17,gn(16))--tilt y
+	sn(18,tiltz)--tilt z, for compatibility
+	
+	vew = rotate(AMS, vel)
+	sn(13, vew[1])
+	sn(14, -vew[2])
+	sn(15, -vew[3])
+	--13~15: world linear speed, X:East +, Y:North +, Z:upward +
+	
+end">
+				<pos x="-4.75" y="5.5"/>
+				<in1 component_id="2"/>
+			</c9>
+			<c10 id="62" count="14" offset="18">
+				<pos x="-2.25" y="0.25"/>
+				<inc component_id="71"/>
+				<in1 component_id="67"/>
+				<in2 component_id="69"/>
+				<in3 component_id="60"/>
+				<in4 component_id="37"/>
+				<in5 component_id="39"/>
+				<in6 component_id="41"/>
+				<in7 component_id="43"/>
+				<in8 component_id="51"/>
+				<in9 component_id="57"/>
+				<in10 component_id="45"/>
+				<in11 component_id="47"/>
+				<in12 component_id="49"/>
+				<in13 component_id="53"/>
+				<in14 component_id="55"/>
+			</c10>
+			<c11 id="71" count="2">
+				<pos x="-3.5" y="4.5"/>
+				<inc component_id="58"/>
+				<in1 component_id="70"/>
+				<in2 component_id="84"/>
+			</c11>
+			<c12 id="81" i="8">
+				<pos x="1" y="0.5"/>
+				<in1 component_id="27"/>
+			</c12>
+			<c13 id="82" i="9">
+				<pos x="1"/>
+				<in1 component_id="27"/>
+			</c13>
+			<c14 id="83" i="10">
+				<pos x="1" y="-0.5"/>
+				<in1 component_id="27"/>
+			</c14>
+		</component_states>
+		<component_bridge_states>
+			<c0 id="2">
+				<pos x="-6" y="5.75"/>
+			</c0>
+			<c1 id="6">
+				<pos x="2.25" y="5"/>
+				<in1 component_id="28"/>
+			</c1>
+			<c2 id="8">
+				<pos x="2.25" y="4.5"/>
+				<in1 component_id="29"/>
+			</c2>
+			<c3 id="11">
+				<pos x="2.25" y="4"/>
+				<in1 component_id="30"/>
+			</c3>
+			<c4 id="14">
+				<pos x="2.25" y="3.5"/>
+				<in1 component_id="31"/>
+			</c4>
+			<c5 id="17">
+				<pos x="2.25" y="2.75"/>
+				<in1 component_id="32"/>
+			</c5>
+			<c6 id="20">
+				<pos x="2.25" y="2.25"/>
+				<in1 component_id="33"/>
+			</c6>
+			<c7 id="23">
+				<pos x="2.25" y="1.75"/>
+				<in1 component_id="34"/>
+			</c7>
+			<c8 id="26">
+				<pos x="2.25" y="1.25"/>
+				<in1 component_id="35"/>
+			</c8>
+			<c9 id="37">
+				<pos x="-6" y="1.75"/>
+			</c9>
+			<c10 id="39">
+				<pos x="-6" y="1.25"/>
+			</c10>
+			<c11 id="41">
+				<pos x="-6" y="0.75"/>
+			</c11>
+			<c12 id="43">
+				<pos x="-6" y="0.25"/>
+			</c12>
+			<c13 id="45">
+				<pos x="-6" y="-1.5"/>
+			</c13>
+			<c14 id="47">
+				<pos x="-6" y="-2"/>
+			</c14>
+			<c15 id="49">
+				<pos x="-6" y="-2.5"/>
+			</c15>
+			<c16 id="51">
+				<pos x="-6" y="-0.5"/>
+			</c16>
+			<c17 id="53">
+				<pos x="-6" y="-3"/>
+			</c17>
+			<c18 id="55">
+				<pos x="-6" y="-3"/>
+			</c18>
+			<c19 id="57">
+				<pos x="-6" y="-1"/>
+			</c19>
+			<c20 id="60">
+				<pos x="-6" y="2.5"/>
+			</c20>
+			<c21 id="65">
+				<pos x="1" y="-1.25"/>
+				<in1 component_id="27" node_index="1"/>
+			</c21>
+			<c22 id="67">
+				<pos x="-6" y="3.5"/>
+			</c22>
+			<c23 id="69">
+				<pos x="-6" y="3"/>
+			</c23>
+			<c24 id="70">
+				<pos x="-6" y="4.75"/>
+			</c24>
+			<c25 id="74">
+				<pos x="2.25" y="0.5"/>
+				<in1 component_id="81"/>
+			</c25>
+			<c26 id="78">
+				<pos x="2.25"/>
+				<in1 component_id="82"/>
+			</c26>
+			<c27 id="80">
+				<pos x="2.25" y="-0.5"/>
+				<in1 component_id="83"/>
+			</c27>
+			<c28 id="84">
+				<pos x="-6" y="4.25"/>
+			</c28>
+		</component_bridge_states>
+		<group_states/>
+	</group>
+</microprocessor>
+

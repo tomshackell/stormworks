@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<microprocessor name="Fuel Use Meter" description="No description set." width="2" length="1" id_counter="9" id_counter_node="2" sym3="1124" sym4="650" sym5="3658" sym6="2602" sym7="1226" sym10="17474" sym11="8866" sym12="11942" sym13="10914" sym14="9390">
+	<nodes>
+		<n id="1" component_id="2">
+			<node label="Input Fuel Level" mode="1" type="1" description="The input signal to be processed."/>
+		</n>
+		<n id="2" component_id="5">
+			<node label="Fuel Use Rate (l/min)" type="1" description="The input signal to be processed.">
+				<position x="1"/>
+			</node>
+		</n>
+	</nodes>
+	<group>
+		<data>
+			<inputs/>
+			<outputs/>
+		</data>
+		<components>
+			<c type="34">
+				<object id="6" n="Moving average samples">
+					<pos x="-2.5" y="-0.25"/>
+					<v text="5" value="5"/>
+				</object>
+			</c>
+			<c type="40">
+				<object id="7" count="2">
+					<pos x="-1"/>
+					<in1 component_id="2"/>
+					<in2 component_id="6"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="8">
+					<pos x="1.5" y="0.5"/>
+					<in1 component_id="9"/>
+				</object>
+			</c>
+			<c type="56">
+				<object id="9">
+					<pos x="0.25" y="0.25"/>
+					<in1 component_id="7"/>
+				</object>
+			</c>
+		</components>
+		<components_bridge>
+			<c type="2">
+				<object id="2">
+					<pos x="-2.5" y="0.25"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="5">
+					<pos x="2.75" y="0.5"/>
+					<in1 component_id="8"/>
+				</object>
+			</c>
+		</components_bridge>
+		<groups/>
+		<component_states>
+			<c0 id="6" n="Moving average samples">
+				<pos x="-2.5" y="-0.25"/>
+				<v text="5" value="5"/>
+			</c0>
+			<c1 id="7" count="2">
+				<pos x="-1"/>
+				<in1 component_id="2"/>
+				<in2 component_id="6"/>
+			</c1>
+			<c2 id="8">
+				<pos x="1.5" y="0.5"/>
+				<in1 component_id="9"/>
+			</c2>
+			<c3 id="9">
+				<pos x="0.25" y="0.25"/>
+				<in1 component_id="7"/>
+			</c3>
+		</component_states>
+		<component_bridge_states>
+			<c0 id="2">
+				<pos x="-2.5" y="0.25"/>
+			</c0>
+			<c1 id="5">
+				<pos x="2.75" y="0.5"/>
+				<in1 component_id="8"/>
+			</c1>
+		</component_bridge_states>
+		<group_states/>
+	</group>
+</microprocessor>
+

@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<microprocessor name="Simple AFR Controller" description="No description set." width="3" length="2" id_counter="122" id_counter_node="24" sym0="2129" sym1="2129" sym2="2129" sym3="2129" sym4="2193" sym5="30879" sym6="2193" sym7="2193" sym8="2321" sym9="2321" sym10="2321" sym11="2321" sym12="2577" sym13="2577" sym14="2570" sym15="64004">
+	<nodes>
+		<n id="7" component_id="22">
+			<node label="Composite from Cylinder" mode="1" type="5" description="The input signal to be processed."/>
+		</n>
+		<n id="10" component_id="29">
+			<node label="Air Intake" type="1" description="The input signal to be processed.">
+				<position z="1"/>
+			</node>
+		</n>
+		<n id="17" component_id="93">
+			<node label="Fuel Intake" type="1" description="The input signal to be processed.">
+				<position x="2" z="1"/>
+			</node>
+		</n>
+		<n id="18" component_id="96">
+			<node label="Throttle" mode="1" type="1" description="The input signal to be processed.">
+				<position x="1"/>
+			</node>
+		</n>
+		<n id="23" component_id="118">
+			<node label="Stoichiometric" mode="1" type="1" description="The input signal to be processed.">
+				<position x="2"/>
+			</node>
+		</n>
+		<n id="24" component_id="117">
+			<node label="Temperature" type="1" description="The input signal to be processed.">
+				<position x="1" z="1"/>
+			</node>
+		</n>
+	</nodes>
+	<group>
+		<data>
+			<inputs/>
+			<outputs/>
+		</data>
+		<components>
+			<c type="31">
+				<object id="2">
+					<pos x="4" y="6.5"/>
+					<in1 component_id="22"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="3" i="1">
+					<pos x="4" y="6"/>
+					<in1 component_id="22"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="4" i="2">
+					<pos x="4" y="5.5"/>
+					<in1 component_id="22"/>
+				</object>
+			</c>
+			<c type="36">
+				<object id="82" e="clamp(x+((1-(w/((y*c)/(z*c))))*d),-1,1)">
+					<pos x="5.5" y="4.75"/>
+					<in1 component_id="82"/>
+					<in2 component_id="2"/>
+					<in3 component_id="3"/>
+					<in4 component_id="99"/>
+					<in7 component_id="87"/>
+					<in8 component_id="88"/>
+				</object>
+			</c>
+			<c type="15">
+				<object id="87">
+					<pos x="5.5" y="4.25"/>
+					<n text="1000" value="1000"/>
+				</object>
+			</c>
+			<c type="34">
+				<object id="88" n="AFR Sensibility">
+					<pos x="5.5" y="3.75"/>
+					<v text="0.05" value="0.05"/>
+				</object>
+			</c>
+			<c type="10">
+				<object id="99" e="((14-(y*2))*(1-x))+((15-(y*5))*x)">
+					<pos x="4" y="4"/>
+					<in1 component_id="119"/>
+					<in2 component_id="121"/>
+				</object>
+			</c>
+			<c type="10">
+				<object id="112" e="x*clamp(1-y,0.1,1)">
+					<pos x="7" y="6.25"/>
+					<in1 component_id="96"/>
+					<in2 component_id="82"/>
+				</object>
+			</c>
+			<c type="10">
+				<object id="113" e="x*clamp(1+y,0.1,1)">
+					<pos x="7" y="5.25"/>
+					<in1 component_id="96"/>
+					<in2 component_id="82"/>
+				</object>
+			</c>
+			<c type="45">
+				<object id="119" e="clamp(x,0,100)*0.01">
+					<pos x="4" y="5"/>
+					<in1 component_id="4"/>
+				</object>
+			</c>
+			<c type="33">
+				<object id="120" n="Use default stoichiometric" v="true">
+					<pos x="1" y="3.25"/>
+				</object>
+			</c>
+			<c type="22">
+				<object id="121">
+					<pos x="2.75" y="3.5"/>
+					<in1 component_id="122"/>
+					<in2 component_id="118"/>
+					<in3 component_id="120"/>
+				</object>
+			</c>
+			<c type="15">
+				<object id="122">
+					<pos x="1" y="4.25"/>
+					<n text="0.2" value="0.2"/>
+				</object>
+			</c>
+		</components>
+		<components_bridge>
+			<c type="4">
+				<object id="22">
+					<pos x="2.5" y="6"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="29">
+					<pos x="8.5" y="6.75"/>
+					<in1 component_id="112"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="93">
+					<pos x="8.5" y="5.75"/>
+					<in1 component_id="113"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="96">
+					<pos x="5.5" y="7.5"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="117">
+					<pos x="4" y="3.5"/>
+					<in1 component_id="4"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="118">
+					<pos x="1" y="3.75"/>
+				</object>
+			</c>
+		</components_bridge>
+		<groups/>
+		<component_states>
+			<c0 id="2">
+				<pos x="4" y="6.5"/>
+				<in1 component_id="22"/>
+			</c0>
+			<c1 id="3" i="1">
+				<pos x="4" y="6"/>
+				<in1 component_id="22"/>
+			</c1>
+			<c2 id="4" i="2">
+				<pos x="4" y="5.5"/>
+				<in1 component_id="22"/>
+			</c2>
+			<c3 id="82" e="clamp(x+((1-(w/((y*c)/(z*c))))*d),-1,1)">
+				<pos x="5.5" y="4.75"/>
+				<in1 component_id="82"/>
+				<in2 component_id="2"/>
+				<in3 component_id="3"/>
+				<in4 component_id="99"/>
+				<in7 component_id="87"/>
+				<in8 component_id="88"/>
+			</c3>
+			<c4 id="87">
+				<pos x="5.5" y="4.25"/>
+				<n text="1000" value="1000"/>
+			</c4>
+			<c5 id="88" n="AFR Sensibility">
+				<pos x="5.5" y="3.75"/>
+				<v text="0.05" value="0.05"/>
+			</c5>
+			<c6 id="99" e="((14-(y*2))*(1-x))+((15-(y*5))*x)">
+				<pos x="4" y="4"/>
+				<in1 component_id="119"/>
+				<in2 component_id="121"/>
+			</c6>
+			<c7 id="112" e="x*clamp(1-y,0.1,1)">
+				<pos x="7" y="6.25"/>
+				<in1 component_id="96"/>
+				<in2 component_id="82"/>
+			</c7>
+			<c8 id="113" e="x*clamp(1+y,0.1,1)">
+				<pos x="7" y="5.25"/>
+				<in1 component_id="96"/>
+				<in2 component_id="82"/>
+			</c8>
+			<c9 id="119" e="clamp(x,0,100)*0.01">
+				<pos x="4" y="5"/>
+				<in1 component_id="4"/>
+			</c9>
+			<c10 id="120" n="Use default stoichiometric" v="true">
+				<pos x="1" y="3.25"/>
+			</c10>
+			<c11 id="121">
+				<pos x="2.75" y="3.5"/>
+				<in1 component_id="122"/>
+				<in2 component_id="118"/>
+				<in3 component_id="120"/>
+			</c11>
+			<c12 id="122">
+				<pos x="1" y="4.25"/>
+				<n text="0.2" value="0.2"/>
+			</c12>
+		</component_states>
+		<component_bridge_states>
+			<c0 id="22">
+				<pos x="2.5" y="6"/>
+			</c0>
+			<c1 id="29">
+				<pos x="8.5" y="6.75"/>
+				<in1 component_id="112"/>
+			</c1>
+			<c2 id="93">
+				<pos x="8.5" y="5.75"/>
+				<in1 component_id="113"/>
+			</c2>
+			<c3 id="96">
+				<pos x="5.5" y="7.5"/>
+			</c3>
+			<c4 id="117">
+				<pos x="4" y="3.5"/>
+				<in1 component_id="4"/>
+			</c4>
+			<c5 id="118">
+				<pos x="1" y="3.75"/>
+			</c5>
+		</component_bridge_states>
+		<group_states/>
+	</group>
+</microprocessor>
+

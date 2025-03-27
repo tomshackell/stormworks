@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<microprocessor name="Small Boat Stabilizer" description="No description set." width="3" length="2" id_counter="30" id_counter_node="6" sym7="26694" sym8="44584" sym9="43304" sym10="26916" sym11="9842" sym12="8226" sym13="8236" sym14="8192">
+	<nodes>
+		<n id="1" component_id="2">
+			<node label="Pitch" mode="1" type="1" description="Pitch reading,sensor arrow pointing forward"/>
+		</n>
+		<n id="2" component_id="4">
+			<node label="Roll" mode="1" type="1" description="Roll reading, sensor arrow pointing left">
+				<position z="1"/>
+			</node>
+		</n>
+		<n id="3" component_id="7">
+			<node label="Left rear fin" type="1" description="Output for left rear fin: +ve above -ve">
+				<position x="2"/>
+			</node>
+		</n>
+		<n id="4" component_id="10">
+			<node label="Right rear fin" type="1" description="Output for right rear fin: +ve above -ve ">
+				<position x="2" z="1"/>
+			</node>
+		</n>
+		<n id="5" component_id="20">
+			<node label="Left front fin" type="1" description="Output for left front fin: +ve above -ve">
+				<position x="1"/>
+			</node>
+		</n>
+		<n id="6" component_id="23">
+			<node label="Right front fin" type="1" description="Output for right front fin: +ve above -ve">
+				<position x="1" z="1"/>
+			</node>
+		</n>
+	</nodes>
+	<group>
+		<data type="1049481524">
+			<inputs/>
+			<outputs/>
+		</data>
+		<components>
+			<c type="34">
+				<object id="11" n="Pitch gain">
+					<pos x="-4"/>
+					<v text="25" value="25"/>
+				</object>
+			</c>
+			<c type="34">
+				<object id="12" n="Roll gain">
+					<pos x="-4" y="-1.75"/>
+					<v text="10" value="10"/>
+				</object>
+			</c>
+			<c type="10">
+				<object id="13" e="x*-y">
+					<pos x="-1.75" y="-1.5"/>
+					<in1 component_id="4"/>
+					<in2 component_id="12"/>
+				</object>
+			</c>
+			<c type="10">
+				<object id="17" e="x*-y">
+					<pos x="-1.75" y="-0.25"/>
+					<in1 component_id="2"/>
+					<in2 component_id="11"/>
+				</object>
+			</c>
+			<c type="10">
+				<object id="27" e="-x + y">
+					<pos x="-0.25" y="1.25"/>
+					<in1 component_id="17"/>
+					<in2 component_id="13"/>
+				</object>
+			</c>
+			<c type="10">
+				<object id="28" e="x + y">
+					<pos x="2.75" y="1.25"/>
+					<in1 component_id="17"/>
+					<in2 component_id="13"/>
+				</object>
+			</c>
+			<c type="10">
+				<object id="29" e="-x + -y">
+					<pos x="-0.25" y="-2.75"/>
+					<in1 component_id="17"/>
+					<in2 component_id="13"/>
+				</object>
+			</c>
+			<c type="10">
+				<object id="30" e="x + -y">
+					<pos x="2.5" y="-2.75"/>
+					<in1 component_id="17"/>
+					<in2 component_id="13"/>
+				</object>
+			</c>
+		</components>
+		<components_bridge>
+			<c type="2">
+				<object id="2">
+					<pos x="-4" y="0.75"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="4">
+					<pos x="-4" y="-1"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="7">
+					<pos x="3.75" y="-2.75"/>
+					<in1 component_id="30"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="10">
+					<pos x="4" y="1.75"/>
+					<in1 component_id="28"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="20">
+					<pos x="1" y="-2.75"/>
+					<in1 component_id="29"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="23">
+					<pos x="1" y="1.75"/>
+					<in1 component_id="27"/>
+				</object>
+			</c>
+		</components_bridge>
+		<groups/>
+		<component_states>
+			<c0 id="11" n="Pitch gain">
+				<pos x="-4"/>
+				<v text="25" value="25"/>
+			</c0>
+			<c1 id="12" n="Roll gain">
+				<pos x="-4" y="-1.75"/>
+				<v text="10" value="10"/>
+			</c1>
+			<c2 id="13" e="x*-y">
+				<pos x="-1.75" y="-1.5"/>
+				<in1 component_id="4"/>
+				<in2 component_id="12"/>
+			</c2>
+			<c3 id="17" e="x*-y">
+				<pos x="-1.75" y="-0.25"/>
+				<in1 component_id="2"/>
+				<in2 component_id="11"/>
+			</c3>
+			<c4 id="27" e="-x + y">
+				<pos x="-0.25" y="1.25"/>
+				<in1 component_id="17"/>
+				<in2 component_id="13"/>
+			</c4>
+			<c5 id="28" e="x + y">
+				<pos x="2.75" y="1.25"/>
+				<in1 component_id="17"/>
+				<in2 component_id="13"/>
+			</c5>
+			<c6 id="29" e="-x + -y">
+				<pos x="-0.25" y="-2.75"/>
+				<in1 component_id="17"/>
+				<in2 component_id="13"/>
+			</c6>
+			<c7 id="30" e="x + -y">
+				<pos x="2.5" y="-2.75"/>
+				<in1 component_id="17"/>
+				<in2 component_id="13"/>
+			</c7>
+		</component_states>
+		<component_bridge_states>
+			<c0 id="2">
+				<pos x="-4" y="0.75"/>
+			</c0>
+			<c1 id="4">
+				<pos x="-4" y="-1"/>
+			</c1>
+			<c2 id="7">
+				<pos x="3.75" y="-2.75"/>
+				<in1 component_id="30"/>
+			</c2>
+			<c3 id="10">
+				<pos x="4" y="1.75"/>
+				<in1 component_id="28"/>
+			</c3>
+			<c4 id="20">
+				<pos x="1" y="-2.75"/>
+				<in1 component_id="29"/>
+			</c4>
+			<c5 id="23">
+				<pos x="1" y="1.75"/>
+				<in1 component_id="27"/>
+			</c5>
+		</component_bridge_states>
+		<group_states/>
+	</group>
+</microprocessor>
+

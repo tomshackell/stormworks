@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<microprocessor name="Jet Controller" description="Used to control a jet engine" width="4" length="2" id_counter="48" id_counter_node="8" sym1="17036" sym2="8770" sym3="8770" sym4="11340" sym5="8416" sym6="8256" sym8="1058" sym9="532" sym10="628" sym11="596" sym12="1828" sym13="526">
+	<nodes>
+		<n id="1" component_id="1">
+			<node label="Run" mode="1" description="The input signal to be processed."/>
+		</n>
+		<n id="2" component_id="4">
+			<node label="Starter Motor" type="1" description="The input signal to be processed.">
+				<position z="1"/>
+			</node>
+		</n>
+		<n id="3" component_id="7">
+			<node label="Jet throttle" type="1" description="The input signal to be processed.">
+				<position x="1" z="1"/>
+			</node>
+		</n>
+		<n id="4" component_id="16">
+			<node label="Clutch" type="1" description="The input signal to be processed.">
+				<position x="1"/>
+			</node>
+		</n>
+		<n id="5" component_id="19">
+			<node label="Compressor" description="The input signal to be processed.">
+				<position x="2" z="1"/>
+			</node>
+		</n>
+		<n id="6" component_id="21">
+			<node label="Combustion RPS" mode="1" type="1" description="The input signal to be processed.">
+				<position x="2"/>
+			</node>
+		</n>
+		<n id="8" component_id="47">
+			<node label="Debug Video" type="6" description="The input signal to be processed.">
+				<position x="3" z="1"/>
+			</node>
+		</n>
+	</nodes>
+	<group>
+		<data>
+			<inputs/>
+			<outputs/>
+		</data>
+		<components>
+			<c type="15">
+				<object id="17">
+					<pos x="-3" y="-6.75"/>
+					<n text="0"/>
+				</object>
+			</c>
+			<c type="34">
+				<object id="23" n="Target RPS">
+					<pos x="-3" y="-1.25"/>
+					<v text="5" value="5"/>
+				</object>
+			</c>
+			<c type="34">
+				<object id="25" n="Engine started RPS">
+					<pos x="-3" y="-2.25"/>
+					<v text="4" value="4"/>
+				</object>
+			</c>
+			<c type="40">
+				<object id="32" count="12">
+					<pos x="0.5" y="-3.75"/>
+					<inc component_id="33"/>
+					<in1 component_id="23"/>
+					<in2 component_id="21"/>
+					<in3 component_id="25"/>
+					<in4 component_id="37"/>
+					<in5 component_id="39"/>
+					<in6 component_id="40"/>
+					<in7 component_id="41"/>
+					<in8 component_id="42"/>
+					<in9 component_id="43"/>
+					<in10 component_id="44"/>
+					<in11 component_id="48"/>
+					<in12/>
+				</object>
+			</c>
+			<c type="41">
+				<object id="33" count="1">
+					<pos x="-0.75" y="-0.75"/>
+					<in1 component_id="1"/>
+				</object>
+			</c>
+			<c type="29">
+				<object id="34">
+					<pos x="3.75" y="0.75"/>
+					<in1 component_id="38"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="35">
+					<pos x="3.75"/>
+					<in1 component_id="38"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="36" i="1">
+					<pos x="3.75" y="-0.75"/>
+					<in1 component_id="38"/>
+				</object>
+			</c>
+			<c type="34">
+				<object id="37" n="Starter throttle">
+					<pos x="-3" y="-2.75"/>
+					<v text="0.2" value="0.2"/>
+				</object>
+			</c>
+			<c type="56">
+				<object id="38" script='-- Author: Tom Shackell
+-- GitHub: &lt;GithubLink&gt;
+-- Workshop: &lt;WorkshopLink&gt;
+--
+-- Developed &amp; Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
+-- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
+--      By Nameous Changey
+-- Minimized Size: 750 (1065 with comment) chars
+
+o=nil
+v=math
+y=input
+x=output
+w=x.setNumber
+b=y.getNumber
+A={I=function(V,c)local c=c or{}return{h=c.h or 0,n=c.n or 0,e=c.e or 0,i=c.i or 0,r=c.r or 0,f=c.f or-(1/0),l=c.l or(1/0),s=0,p=0,m=V.m}end,m=function(a,G,C,k)local k=k or(1/60)local d=G-C
+local t=(a.p+d)*(1-(a.r/k))local B=d-a.s
+local E=a.h*d+a.n*t+a.e*B+a.i
+a.s=d
+a.p=t
+return v.min(v.max(E,a.f),a.l)end}R=1
+W=1
+K=2
+Q=3
+S=4
+L=5
+z=6
+N=7
+D=8
+Y=9
+J=10
+X=11
+P=1
+U=1
+T=2
+local _=o
+function onTick()local j=y.getBool(R)local H=b(W)local u=b(K)local M=b(Q)local O=b(S)local q=u&gt;M
+local F=j and not q and 1.0 or .0
+local g=0
+if j then
+if q then
+if not _ then
+_=A:I()end
+_.h=b(L)_.n=b(z)_.e=b(N)_.i=b(D)_.Z=b(Y)_.f=b(J)_.l=b(X)g=_:m(H,u)else
+g=O
+_=o
+end
+else
+_=o
+end
+x.setBool(P,j)w(U,F)w(T,g)end
+'>
+					<pos x="2" y="-1"/>
+					<in1 component_id="32"/>
+				</object>
+			</c>
+			<c type="34">
+				<object id="39" n="PID P">
+					<pos x="-3" y="-3.25"/>
+					<v text="2" value="2"/>
+				</object>
+			</c>
+			<c type="34">
+				<object id="40" n="PID I">
+					<pos x="-3" y="-3.75"/>
+					<v text="0.01" value="0.01"/>
+				</object>
+			</c>
+			<c type="34">
+				<object id="41" n="PID D">
+					<pos x="-3" y="-4.25"/>
+					<v text="0"/>
+				</object>
+			</c>
+			<c type="34">
+				<object id="42" n="PID Bias">
+					<pos x="-3" y="-4.75"/>
+					<v text="0"/>
+				</object>
+			</c>
+			<c type="34">
+				<object id="43" n="PID I Decay">
+					<pos x="-3" y="-5.25"/>
+					<v text="0.1" value="0.1"/>
+				</object>
+			</c>
+			<c type="34">
+				<object id="44" n="PID Min Output">
+					<pos x="-3" y="-5.75"/>
+					<v text="0.001" value="0.001"/>
+				</object>
+			</c>
+			<c type="34">
+				<object id="48" n="PID Max Output">
+					<pos x="-3" y="-6.25"/>
+					<v text="1" value="1"/>
+				</object>
+			</c>
+		</components>
+		<components_bridge>
+			<c>
+				<object id="1">
+					<pos x="-3" y="-0.75"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="4">
+					<pos x="5.5"/>
+					<in1 component_id="35"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="7">
+					<pos x="5.5" y="-0.75"/>
+					<in1 component_id="36"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="16">
+					<pos x="5.5" y="-6.75"/>
+					<in1 component_id="17"/>
+				</object>
+			</c>
+			<c type="1">
+				<object id="19">
+					<pos x="5.5" y="0.75"/>
+					<in1 component_id="34"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="21">
+					<pos x="-3" y="-1.75"/>
+				</object>
+			</c>
+			<c type="7">
+				<object id="47">
+					<pos x="3.75" y="-1.5"/>
+					<in1 component_id="38" node_index="1"/>
+				</object>
+			</c>
+		</components_bridge>
+		<groups/>
+		<component_states>
+			<c0 id="17">
+				<pos x="-3" y="-6.75"/>
+				<n text="0"/>
+			</c0>
+			<c1 id="23" n="Target RPS">
+				<pos x="-3" y="-1.25"/>
+				<v text="5" value="5"/>
+			</c1>
+			<c2 id="25" n="Engine started RPS">
+				<pos x="-3" y="-2.25"/>
+				<v text="4" value="4"/>
+			</c2>
+			<c3 id="32" count="12">
+				<pos x="0.5" y="-3.75"/>
+				<inc component_id="33"/>
+				<in1 component_id="23"/>
+				<in2 component_id="21"/>
+				<in3 component_id="25"/>
+				<in4 component_id="37"/>
+				<in5 component_id="39"/>
+				<in6 component_id="40"/>
+				<in7 component_id="41"/>
+				<in8 component_id="42"/>
+				<in9 component_id="43"/>
+				<in10 component_id="44"/>
+				<in11 component_id="48"/>
+				<in12/>
+			</c3>
+			<c4 id="33" count="1">
+				<pos x="-0.75" y="-0.75"/>
+				<in1 component_id="1"/>
+			</c4>
+			<c5 id="34">
+				<pos x="3.75" y="0.75"/>
+				<in1 component_id="38"/>
+			</c5>
+			<c6 id="35">
+				<pos x="3.75"/>
+				<in1 component_id="38"/>
+			</c6>
+			<c7 id="36" i="1">
+				<pos x="3.75" y="-0.75"/>
+				<in1 component_id="38"/>
+			</c7>
+			<c8 id="37" n="Starter throttle">
+				<pos x="-3" y="-2.75"/>
+				<v text="0.2" value="0.2"/>
+			</c8>
+			<c9 id="38" script='-- Author: Tom Shackell
+-- GitHub: &lt;GithubLink&gt;
+-- Workshop: &lt;WorkshopLink&gt;
+--
+-- Developed &amp; Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
+-- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
+--      By Nameous Changey
+-- Minimized Size: 750 (1065 with comment) chars
+
+o=nil
+v=math
+y=input
+x=output
+w=x.setNumber
+b=y.getNumber
+A={I=function(V,c)local c=c or{}return{h=c.h or 0,n=c.n or 0,e=c.e or 0,i=c.i or 0,r=c.r or 0,f=c.f or-(1/0),l=c.l or(1/0),s=0,p=0,m=V.m}end,m=function(a,G,C,k)local k=k or(1/60)local d=G-C
+local t=(a.p+d)*(1-(a.r/k))local B=d-a.s
+local E=a.h*d+a.n*t+a.e*B+a.i
+a.s=d
+a.p=t
+return v.min(v.max(E,a.f),a.l)end}R=1
+W=1
+K=2
+Q=3
+S=4
+L=5
+z=6
+N=7
+D=8
+Y=9
+J=10
+X=11
+P=1
+U=1
+T=2
+local _=o
+function onTick()local j=y.getBool(R)local H=b(W)local u=b(K)local M=b(Q)local O=b(S)local q=u&gt;M
+local F=j and not q and 1.0 or .0
+local g=0
+if j then
+if q then
+if not _ then
+_=A:I()end
+_.h=b(L)_.n=b(z)_.e=b(N)_.i=b(D)_.Z=b(Y)_.f=b(J)_.l=b(X)g=_:m(H,u)else
+g=O
+_=o
+end
+else
+_=o
+end
+x.setBool(P,j)w(U,F)w(T,g)end
+'>
+				<pos x="2" y="-1"/>
+				<in1 component_id="32"/>
+			</c9>
+			<c10 id="39" n="PID P">
+				<pos x="-3" y="-3.25"/>
+				<v text="2" value="2"/>
+			</c10>
+			<c11 id="40" n="PID I">
+				<pos x="-3" y="-3.75"/>
+				<v text="0.01" value="0.01"/>
+			</c11>
+			<c12 id="41" n="PID D">
+				<pos x="-3" y="-4.25"/>
+				<v text="0"/>
+			</c12>
+			<c13 id="42" n="PID Bias">
+				<pos x="-3" y="-4.75"/>
+				<v text="0"/>
+			</c13>
+			<c14 id="43" n="PID I Decay">
+				<pos x="-3" y="-5.25"/>
+				<v text="0.1" value="0.1"/>
+			</c14>
+			<c15 id="44" n="PID Min Output">
+				<pos x="-3" y="-5.75"/>
+				<v text="0.001" value="0.001"/>
+			</c15>
+			<c16 id="48" n="PID Max Output">
+				<pos x="-3" y="-6.25"/>
+				<v text="1" value="1"/>
+			</c16>
+		</component_states>
+		<component_bridge_states>
+			<c0 id="1">
+				<pos x="-3" y="-0.75"/>
+			</c0>
+			<c1 id="4">
+				<pos x="5.5"/>
+				<in1 component_id="35"/>
+			</c1>
+			<c2 id="7">
+				<pos x="5.5" y="-0.75"/>
+				<in1 component_id="36"/>
+			</c2>
+			<c3 id="16">
+				<pos x="5.5" y="-6.75"/>
+				<in1 component_id="17"/>
+			</c3>
+			<c4 id="19">
+				<pos x="5.5" y="0.75"/>
+				<in1 component_id="34"/>
+			</c4>
+			<c5 id="21">
+				<pos x="-3" y="-1.75"/>
+			</c5>
+			<c6 id="47">
+				<pos x="3.75" y="-1.5"/>
+				<in1 component_id="38" node_index="1"/>
+			</c6>
+		</component_bridge_states>
+		<group_states/>
+	</group>
+</microprocessor>
+

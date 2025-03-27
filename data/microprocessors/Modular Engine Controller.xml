@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<microprocessor name="Modular Engine Controller" description="No description set." width="3" length="3" id_counter="83" id_counter_node="13" sym1="31580" sym2="19140" sym3="27212" sym4="2052" sym5="28700" sym8="29268" sym9="21844" sym10="21844" sym11="25172" sym12="16468" sym13="16424" sym14="16384">
+	<nodes>
+		<n id="4" component_id="9">
+			<node label="Out Throttle" type="1" description="The output throttle signal">
+				<position x="2"/>
+			</node>
+		</n>
+		<n id="7" component_id="31">
+			<node label="Engine On" mode="1" description="Is the engine turned on"/>
+		</n>
+		<n id="8" component_id="34">
+			<node label="Starter Throttle &amp; Clutch" type="1" description="Controls the starter engine and clutch">
+				<position x="2" z="1"/>
+			</node>
+		</n>
+		<n id="9" component_id="36">
+			<node label="RPS" mode="1" type="1" description="RPS read from engine">
+				<position z="1"/>
+			</node>
+		</n>
+		<n id="11" component_id="73">
+			<node label="In Throttle" mode="1" type="1" description="Desired throttle setting from outside">
+				<position x="1"/>
+			</node>
+		</n>
+		<n id="12" component_id="76">
+			<node label="Target RPS" type="1" description="The target RPS to hold">
+				<position x="1" z="1"/>
+			</node>
+		</n>
+		<n id="13" component_id="80">
+			<node label="Supercharger Bleed Valve" type="1" description="Controls the bleed valve on the super charger">
+				<position z="2"/>
+			</node>
+		</n>
+	</nodes>
+	<group>
+		<data type="193367077">
+			<inputs/>
+			<outputs/>
+		</data>
+		<components>
+			<c type="1">
+				<object id="38">
+					<pos x="0.25" y="4.25"/>
+					<in1 component_id="54"/>
+					<in2 component_id="31"/>
+				</object>
+			</c>
+			<c type="22">
+				<object id="39">
+					<pos x="2.25" y="4.75"/>
+					<in1 component_id="40"/>
+					<in2 component_id="41"/>
+					<in3 component_id="38"/>
+				</object>
+			</c>
+			<c type="15">
+				<object id="40">
+					<pos x="1" y="5.75"/>
+					<n text="1" value="1"/>
+				</object>
+			</c>
+			<c type="15">
+				<object id="41">
+					<pos x="1" y="5.25"/>
+					<n text="0"/>
+				</object>
+			</c>
+			<c type="22">
+				<object id="42">
+					<pos x="2.25" y="3.5"/>
+					<in1 component_id="50"/>
+					<in2 component_id="49"/>
+					<in3 component_id="38"/>
+				</object>
+			</c>
+			<c type="15">
+				<object id="48">
+					<pos x="-0.75" y="0.75"/>
+					<n text="0"/>
+				</object>
+			</c>
+			<c type="22">
+				<object id="49">
+					<pos x="0.75" y="2.25"/>
+					<in1 component_id="64"/>
+					<in2 component_id="48"/>
+					<in3 component_id="31"/>
+				</object>
+			</c>
+			<c type="34">
+				<object id="50" n="Starter Throttle">
+					<pos x="0.75" y="3.25"/>
+					<v text="0.1" value="0.1"/>
+				</object>
+			</c>
+			<c type="24">
+				<object id="54">
+					<pos x="-1" y="4.75"/>
+					<in1 component_id="57"/>
+					<in2 component_id="62"/>
+				</object>
+			</c>
+			<c>
+				<object id="56">
+					<pos x="-3.5" y="3.75"/>
+					<in1 component_id="31"/>
+				</object>
+			</c>
+			<c type="1">
+				<object id="57">
+					<pos x="-2.25" y="5"/>
+					<in1 component_id="59"/>
+					<in2 component_id="56"/>
+				</object>
+			</c>
+			<c type="18">
+				<object id="59">
+					<pos x="-3.5" y="5"/>
+					<in1 component_id="36"/>
+					<in2 component_id="61"/>
+				</object>
+			</c>
+			<c type="34">
+				<object id="61" n="RPS Starter Off">
+					<pos x="-5.25" y="4.5"/>
+					<v text="5" value="5"/>
+				</object>
+			</c>
+			<c>
+				<object id="62">
+					<pos x="-2.25" y="4.25"/>
+					<in1 component_id="59"/>
+				</object>
+			</c>
+			<c type="34">
+				<object id="63" n="Min throttle">
+					<pos x="-3" y="2"/>
+					<v text="0.03" value="0.03"/>
+				</object>
+			</c>
+			<c type="10">
+				<object id="64" e="clamp(x, y, 1)">
+					<pos x="-0.75" y="1.25"/>
+					<in1 component_id="65"/>
+					<in2 component_id="63"/>
+				</object>
+			</c>
+			<c type="23">
+				<object id="65">
+					<pos x="-2.25" y="-0.5"/>
+					<in1 component_id="83"/>
+					<in2 component_id="36"/>
+					<in3 component_id="62"/>
+					<kp text="0.3" value="0.3"/>
+					<ki text="0.01" value="0.01"/>
+					<kd text="0.1" value="0.1"/>
+				</object>
+			</c>
+			<c type="45">
+				<object id="81" e="x*-0.1+0.5">
+					<pos x="3.75" y="3"/>
+					<in1 component_id="42"/>
+				</object>
+			</c>
+			<c type="34">
+				<object id="82" n="Max RPS">
+					<pos x="-5.25" y="-0.25"/>
+					<v text="12" value="12"/>
+				</object>
+			</c>
+			<c type="10">
+				<object id="83" e="5.6 + (y-5.6)*x" p1="340282346638528859811704183484516925440" p2="340282346638528859811704183484516925440" p3="340282346638528859811704183484516925440">
+					<pos x="-4"/>
+					<in1 component_id="73"/>
+					<in2 component_id="82"/>
+				</object>
+			</c>
+		</components>
+		<components_bridge>
+			<c type="3">
+				<object id="9">
+					<pos x="3.5" y="4"/>
+					<in1 component_id="42"/>
+				</object>
+			</c>
+			<c>
+				<object id="31">
+					<pos x="-5.25" y="3"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="34">
+					<pos x="3.5" y="5.25"/>
+					<in1 component_id="39"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="36">
+					<pos x="-5.25" y="5.25"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="73">
+					<pos x="-5.25" y="0.5"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="76">
+					<pos x="3.5" y="0.5"/>
+					<in1 component_id="83"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="80">
+					<pos x="5.25" y="3"/>
+					<in1 component_id="81"/>
+				</object>
+			</c>
+		</components_bridge>
+		<groups/>
+		<component_states>
+			<c0 id="38">
+				<pos x="0.25" y="4.25"/>
+				<in1 component_id="54"/>
+				<in2 component_id="31"/>
+			</c0>
+			<c1 id="39">
+				<pos x="2.25" y="4.75"/>
+				<in1 component_id="40"/>
+				<in2 component_id="41"/>
+				<in3 component_id="38"/>
+			</c1>
+			<c2 id="40">
+				<pos x="1" y="5.75"/>
+				<n text="1" value="1"/>
+			</c2>
+			<c3 id="41">
+				<pos x="1" y="5.25"/>
+				<n text="0"/>
+			</c3>
+			<c4 id="42">
+				<pos x="2.25" y="3.5"/>
+				<in1 component_id="50"/>
+				<in2 component_id="49"/>
+				<in3 component_id="38"/>
+			</c4>
+			<c5 id="48">
+				<pos x="-0.75" y="0.75"/>
+				<n text="0"/>
+			</c5>
+			<c6 id="49">
+				<pos x="0.75" y="2.25"/>
+				<in1 component_id="64"/>
+				<in2 component_id="48"/>
+				<in3 component_id="31"/>
+			</c6>
+			<c7 id="50" n="Starter Throttle">
+				<pos x="0.75" y="3.25"/>
+				<v text="0.1" value="0.1"/>
+			</c7>
+			<c8 id="54">
+				<pos x="-1" y="4.75"/>
+				<in1 component_id="57"/>
+				<in2 component_id="62"/>
+			</c8>
+			<c9 id="56">
+				<pos x="-3.5" y="3.75"/>
+				<in1 component_id="31"/>
+			</c9>
+			<c10 id="57">
+				<pos x="-2.25" y="5"/>
+				<in1 component_id="59"/>
+				<in2 component_id="56"/>
+			</c10>
+			<c11 id="59">
+				<pos x="-3.5" y="5"/>
+				<in1 component_id="36"/>
+				<in2 component_id="61"/>
+			</c11>
+			<c12 id="61" n="RPS Starter Off">
+				<pos x="-5.25" y="4.5"/>
+				<v text="5" value="5"/>
+			</c12>
+			<c13 id="62">
+				<pos x="-2.25" y="4.25"/>
+				<in1 component_id="59"/>
+			</c13>
+			<c14 id="63" n="Min throttle">
+				<pos x="-3" y="2"/>
+				<v text="0.03" value="0.03"/>
+			</c14>
+			<c15 id="64" e="clamp(x, y, 1)">
+				<pos x="-0.75" y="1.25"/>
+				<in1 component_id="65"/>
+				<in2 component_id="63"/>
+			</c15>
+			<c16 id="65">
+				<pos x="-2.25" y="-0.5"/>
+				<in1 component_id="83"/>
+				<in2 component_id="36"/>
+				<in3 component_id="62"/>
+				<kp text="0.3" value="0.3"/>
+				<ki text="0.01" value="0.01"/>
+				<kd text="0.1" value="0.1"/>
+			</c16>
+			<c17 id="81" e="x*-0.1+0.5">
+				<pos x="3.75" y="3"/>
+				<in1 component_id="42"/>
+			</c17>
+			<c18 id="82" n="Max RPS">
+				<pos x="-5.25" y="-0.25"/>
+				<v text="12" value="12"/>
+			</c18>
+			<c19 id="83" e="5.6 + (y-5.6)*x" p1="340282346638528859811704183484516925440" p2="340282346638528859811704183484516925440" p3="340282346638528859811704183484516925440">
+				<pos x="-4"/>
+				<in1 component_id="73"/>
+				<in2 component_id="82"/>
+			</c19>
+		</component_states>
+		<component_bridge_states>
+			<c0 id="9">
+				<pos x="3.5" y="4"/>
+				<in1 component_id="42"/>
+			</c0>
+			<c1 id="31">
+				<pos x="-5.25" y="3"/>
+			</c1>
+			<c2 id="34">
+				<pos x="3.5" y="5.25"/>
+				<in1 component_id="39"/>
+			</c2>
+			<c3 id="36">
+				<pos x="-5.25" y="5.25"/>
+			</c3>
+			<c4 id="73">
+				<pos x="-5.25" y="0.5"/>
+			</c4>
+			<c5 id="76">
+				<pos x="3.5" y="0.5"/>
+				<in1 component_id="83"/>
+			</c5>
+			<c6 id="80">
+				<pos x="5.25" y="3"/>
+				<in1 component_id="81"/>
+			</c6>
+		</component_bridge_states>
+		<group_states/>
+	</group>
+</microprocessor>
+

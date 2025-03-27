@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<microprocessor name="Jet Engine Tester" description="No description set." width="2" length="2" id_counter="18" id_counter_node="4" sym6="56130" sym7="20804" sym8="19268" sym9="23364" sym10="49220" sym11="16622">
+	<nodes>
+		<n id="1" component_id="2">
+			<node label="RPS" mode="1" type="1" description="The input signal to be processed."/>
+		</n>
+		<n id="2" component_id="4">
+			<node label="Generator Wattage" mode="1" type="1" description="The input signal to be processed.">
+				<position x="1"/>
+			</node>
+		</n>
+		<n id="3" component_id="6">
+			<node label="Fuel Level" mode="1" type="1" description="The input signal to be processed.">
+				<position z="1"/>
+			</node>
+		</n>
+		<n id="4" component_id="9">
+			<node label="Efficiency" type="1" description="The input signal to be processed.">
+				<position x="1" z="1"/>
+			</node>
+		</n>
+	</nodes>
+	<group>
+		<data type="193367077">
+			<inputs/>
+			<outputs/>
+		</data>
+		<components>
+			<c type="6">
+				<object id="10">
+					<pos x="1" y="1.75"/>
+					<in1 component_id="11"/>
+					<in2 component_id="17"/>
+				</object>
+			</c>
+			<c type="13">
+				<object id="11">
+					<pos x="1" y="0.5"/>
+					<in1 component_id="12"/>
+					<in3 component_id="10"/>
+					<r text="0"/>
+				</object>
+			</c>
+			<c type="17">
+				<object id="12">
+					<pos x="-0.5" y="0.75"/>
+					<in1 component_id="2"/>
+					<in2 component_id="13"/>
+				</object>
+			</c>
+			<c type="15">
+				<object id="13">
+					<pos x="-1.75" y="0.5"/>
+					<n text="1" value="1"/>
+				</object>
+			</c>
+			<c type="34">
+				<object id="14" n="max fuel level">
+					<pos x="-3" y="-0.25"/>
+					<v text="677.23" value="677.22998"/>
+				</object>
+			</c>
+			<c type="7">
+				<object id="15">
+					<pos x="1" y="-0.5"/>
+					<in1 component_id="14"/>
+					<in2 component_id="6"/>
+				</object>
+			</c>
+			<c type="9">
+				<object id="16">
+					<pos x="2.75" y="-0.25"/>
+					<in1 component_id="11"/>
+					<in2 component_id="15"/>
+				</object>
+			</c>
+			<c type="9">
+				<object id="17">
+					<pos x="-1.5" y="2"/>
+					<in1 component_id="4"/>
+					<in2 component_id="18"/>
+				</object>
+			</c>
+			<c type="15">
+				<object id="18">
+					<pos x="-3" y="2"/>
+					<n text="60" value="60"/>
+				</object>
+			</c>
+		</components>
+		<components_bridge>
+			<c type="2">
+				<object id="2">
+					<pos x="-3" y="1"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="4">
+					<pos x="-3" y="2.75"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="6">
+					<pos x="-3" y="-1"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="9">
+					<pos x="4.5"/>
+					<in1 component_id="16"/>
+				</object>
+			</c>
+		</components_bridge>
+		<groups/>
+		<component_states>
+			<c0 id="10">
+				<pos x="1" y="1.75"/>
+				<in1 component_id="11"/>
+				<in2 component_id="17"/>
+			</c0>
+			<c1 id="11">
+				<pos x="1" y="0.5"/>
+				<in1 component_id="12"/>
+				<in3 component_id="10"/>
+				<r text="0"/>
+			</c1>
+			<c2 id="12">
+				<pos x="-0.5" y="0.75"/>
+				<in1 component_id="2"/>
+				<in2 component_id="13"/>
+			</c2>
+			<c3 id="13">
+				<pos x="-1.75" y="0.5"/>
+				<n text="1" value="1"/>
+			</c3>
+			<c4 id="14" n="max fuel level">
+				<pos x="-3" y="-0.25"/>
+				<v text="677.23" value="677.22998"/>
+			</c4>
+			<c5 id="15">
+				<pos x="1" y="-0.5"/>
+				<in1 component_id="14"/>
+				<in2 component_id="6"/>
+			</c5>
+			<c6 id="16">
+				<pos x="2.75" y="-0.25"/>
+				<in1 component_id="11"/>
+				<in2 component_id="15"/>
+			</c6>
+			<c7 id="17">
+				<pos x="-1.5" y="2"/>
+				<in1 component_id="4"/>
+				<in2 component_id="18"/>
+			</c7>
+			<c8 id="18">
+				<pos x="-3" y="2"/>
+				<n text="60" value="60"/>
+			</c8>
+		</component_states>
+		<component_bridge_states>
+			<c0 id="2">
+				<pos x="-3" y="1"/>
+			</c0>
+			<c1 id="4">
+				<pos x="-3" y="2.75"/>
+			</c1>
+			<c2 id="6">
+				<pos x="-3" y="-1"/>
+			</c2>
+			<c3 id="9">
+				<pos x="4.5"/>
+				<in1 component_id="16"/>
+			</c3>
+		</component_bridge_states>
+		<group_states/>
+	</group>
+</microprocessor>
+

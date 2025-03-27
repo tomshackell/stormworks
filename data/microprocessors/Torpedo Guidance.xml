@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<microprocessor name="Torpedo Guidance" description="No description set." width="3" length="3" id_counter="26" id_counter_node="9" sym2="1024" sym3="1024" sym4="1024" sym5="3218" sym6="5290" sym7="5290" sym8="3346" sym9="2" sym10="2" sym11="7">
+	<nodes>
+		<n id="1" component_id="21">
+			<node label="Arm Warhead" description="The input signal to be processed."/>
+		</n>
+		<n id="2" component_id="3">
+			<node label="Sonar Composite" mode="1" type="5" description="The input signal to be processed.">
+				<position x="1"/>
+			</node>
+		</n>
+		<n id="3" component_id="5">
+			<node label="Sonar Ping" description="The input signal to be processed.">
+				<position z="1"/>
+			</node>
+		</n>
+		<n id="4" component_id="7">
+			<node label="Altitude" mode="1" type="1" description="The input signal to be processed.">
+				<position x="1" z="1"/>
+			</node>
+		</n>
+		<n id="5" component_id="10">
+			<node label="Dive Fins" type="1" description="The input signal to be processed.">
+				<position x="2"/>
+			</node>
+		</n>
+		<n id="6" component_id="13">
+			<node label="Steering Fins" type="1" description="The input signal to be processed.">
+				<position x="2" z="1"/>
+			</node>
+		</n>
+		<n id="7" component_id="15">
+			<node label="Sonar Activate" description="The input signal to be processed.">
+				<position z="2"/>
+			</node>
+		</n>
+		<n id="8" component_id="18">
+			<node label="Motor Throttle" type="1" description="The input signal to be processed.">
+				<position x="1" z="2"/>
+			</node>
+		</n>
+		<n id="9" component_id="20">
+			<node label="Hardpoint Data" mode="1" type="5" description="The input signal to be processed.">
+				<position x="2" z="2"/>
+			</node>
+		</n>
+	</nodes>
+	<group>
+		<data type="-16745220">
+			<inputs/>
+			<outputs/>
+		</data>
+		<components>
+			<c type="15">
+				<object id="22">
+					<pos x="-2.75" y="-1.25"/>
+					<n text="0.2" value="0.2"/>
+				</object>
+			</c>
+			<c type="23">
+				<object id="23">
+					<pos x="-0.25" y="2"/>
+					<in1 component_id="25"/>
+					<in2 component_id="7"/>
+					<kp text="1" value="1"/>
+					<ki text="0"/>
+					<kd text="0"/>
+				</object>
+			</c>
+			<c type="34">
+				<object id="25" n="Altitude">
+					<pos x="-2.75" y="2.5"/>
+					<v text="-2" value="-2"/>
+				</object>
+			</c>
+			<c type="16">
+				<object id="26">
+					<pos x="-2.75" y="1"/>
+				</object>
+			</c>
+		</components>
+		<components_bridge>
+			<c type="4">
+				<object id="3">
+					<pos x="-2.75" y="0.25"/>
+				</object>
+			</c>
+			<c type="1">
+				<object id="5">
+					<pos x="2" y="2.75"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="7">
+					<pos x="-2.75" y="1.75"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="10">
+					<pos x="2" y="0.5"/>
+					<in1 component_id="23"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="13">
+					<pos x="2" y="-0.25"/>
+				</object>
+			</c>
+			<c type="1">
+				<object id="15">
+					<pos x="2" y="2"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="18">
+					<pos x="2" y="-1.25"/>
+				</object>
+			</c>
+			<c type="4">
+				<object id="20">
+					<pos x="-2.75" y="-0.5"/>
+				</object>
+			</c>
+			<c type="1">
+				<object id="21">
+					<pos x="2" y="1.25"/>
+				</object>
+			</c>
+		</components_bridge>
+		<groups/>
+		<component_states>
+			<c0 id="22">
+				<pos x="-2.75" y="-1.25"/>
+				<n text="0.2" value="0.2"/>
+			</c0>
+			<c1 id="23">
+				<pos x="-0.25" y="2"/>
+				<in1 component_id="25"/>
+				<in2 component_id="7"/>
+				<kp text="1" value="1"/>
+				<ki text="0"/>
+				<kd text="0"/>
+			</c1>
+			<c2 id="25" n="Altitude">
+				<pos x="-2.75" y="2.5"/>
+				<v text="-2" value="-2"/>
+			</c2>
+			<c3 id="26">
+				<pos x="-2.75" y="1"/>
+			</c3>
+		</component_states>
+		<component_bridge_states>
+			<c0 id="3">
+				<pos x="-2.75" y="0.25"/>
+			</c0>
+			<c1 id="5">
+				<pos x="2" y="2.75"/>
+			</c1>
+			<c2 id="7">
+				<pos x="-2.75" y="1.75"/>
+			</c2>
+			<c3 id="10">
+				<pos x="2" y="0.5"/>
+				<in1 component_id="23"/>
+			</c3>
+			<c4 id="13">
+				<pos x="2" y="-0.25"/>
+			</c4>
+			<c5 id="15">
+				<pos x="2" y="2"/>
+			</c5>
+			<c6 id="18">
+				<pos x="2" y="-1.25"/>
+			</c6>
+			<c7 id="20">
+				<pos x="-2.75" y="-0.5"/>
+			</c7>
+			<c8 id="21">
+				<pos x="2" y="1.25"/>
+			</c8>
+		</component_bridge_states>
+		<group_states/>
+	</group>
+</microprocessor>
+

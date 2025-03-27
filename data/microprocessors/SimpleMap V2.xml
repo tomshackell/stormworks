@@ -1,0 +1,939 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<microprocessor name="Simple Map" width="5" length="3" id_counter="54" id_counter_node="14" sym4="2722" sym5="2722" sym6="7074" sym7="10914" sym8="10914" sym9="4394" sym10="54" sym11="34">
+	<nodes>
+		<n id="1" component_id="7">
+			<node label="Display out put" type="6">
+				<position x="1" z="1"/>
+			</node>
+		</n>
+		<n id="2" component_id="9">
+			<node label="GpsX" mode="1" type="1">
+				<position z="1"/>
+			</node>
+		</n>
+		<n id="3" component_id="11">
+			<node label="GpsY" mode="1" type="1">
+				<position x="1"/>
+			</node>
+		</n>
+		<n id="4" component_id="13">
+			<node label="Heading" mode="1" type="1"/>
+		</n>
+		<n id="5" component_id="17">
+			<node label="Touch" mode="1" type="5">
+				<position x="2"/>
+			</node>
+		</n>
+		<n id="6" component_id="18">
+			<node label="Transponder detector" mode="1" description="Attach to transponder detector">
+				<position x="2" z="1"/>
+			</node>
+		</n>
+		<n id="7" component_id="25">
+			<node label="Radar on/off" mode="1" description="Whether radar is on or not">
+				<position z="2"/>
+			</node>
+		</n>
+		<n id="8" component_id="27">
+			<node label="Radar angle" mode="1" type="1" description="Angle from radar">
+				<position x="1" z="2"/>
+			</node>
+		</n>
+		<n id="9" component_id="29">
+			<node label="Radar composite" mode="1" type="5" description="Composite signal from radar">
+				<position x="2" z="2"/>
+			</node>
+		</n>
+		<n id="11" component_id="38">
+			<node label="Keypad press" mode="1" description="The input signal to be processed.">
+				<position x="3" z="2"/>
+			</node>
+		</n>
+		<n id="12" component_id="40">
+			<node label="Keypad A" mode="1" type="1" description="The input signal to be processed.">
+				<position x="3" z="1"/>
+			</node>
+		</n>
+		<n id="13" component_id="42">
+			<node label="Keypad B" mode="1" type="1" description="The input signal to be processed.">
+				<position x="3"/>
+			</node>
+		</n>
+		<n id="14" component_id="48">
+			<node label="To AP" type="5" description="The input signal to be processed.">
+				<position x="4"/>
+			</node>
+		</n>
+	</nodes>
+	<group>
+		<data>
+			<inputs/>
+			<outputs/>
+		</data>
+		<components>
+			<c type="40">
+				<object id="15" count="7" offset="5">
+					<pos y="2"/>
+					<inc component_id="43"/>
+					<in1 component_id="9"/>
+					<in2 component_id="11"/>
+					<in3 component_id="40"/>
+					<in4 component_id="42"/>
+					<in5 component_id="50"/>
+					<in6 component_id="13"/>
+					<in7/>
+				</object>
+			</c>
+			<c type="41">
+				<object id="31" count="1" offset="8">
+					<pos x="-5.75" y="-1"/>
+					<inc component_id="29"/>
+					<in1 component_id="25"/>
+				</object>
+			</c>
+			<c type="40">
+				<object id="32" count="4" offset="24">
+					<pos x="-4" y="-1.5"/>
+					<inc component_id="31"/>
+					<in1 component_id="33"/>
+					<in2 component_id="27"/>
+					<in3 component_id="9"/>
+					<in4 component_id="11"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="33">
+					<pos x="3" y="0.25"/>
+					<in1 component_id="53"/>
+				</object>
+			</c>
+			<c type="56">
+				<object id="34" script="-- Draws the basic map with zoom, and any radar contacts.
+-- Author: Tom Shackell
+
+-- Numbers: 1 to 24, GPS X/Y/Z for all 8 contacts
+IN_ZOOM = 25
+IN_RADAR_ANGLE = 26
+IN_GPS_X = 27
+IN_GPS_Y = 28
+-- Bool: 1 to 8, contact is valid for all 8 contacts
+IB_RADAR_ON = 9
+
+EXPIRY_TICKS = 150      -- how many ticks for a contact to expire
+FADE_FACTOR = 0.75      -- how much a contact fades at full expiry time 
+
+
+zoom = 2                -- current zoom level
+gps = nil               -- current GPS coordinate to display the map at 
+ticks = 0               -- how many ticks have we seen 
+isRadarOn=false         -- whether the radar is on
+contacts = {}           -- stored radar contacts 
+nextContactID = 0       -- the next ID to use for a new radar contact
+
+function onTick()
+	zoom = input.getNumber(IN_ZOOM)
+    gps = {input.getNumber(IN_GPS_X), input.getNumber(IN_GPS_Y)}
+    isRadarOn = input.getBool(IB_RADAR_ON)
+	radarAngle = input.getNumber(IN_RADAR_ANGLE)
+
+    -- read the radar contacts from the input, each is created as a new contact
+	for i = 0,7 do
+		local active = input.getBool(i+1)
+		if active then
+			local x = input.getNumber(i*3+1)
+			local y = input.getNumber(i*3+2)
+			local z = input.getNumber(i*3+3)
+			contacts[nextContactID] = {posn={x,y,z}, time=ticks}
+			nextContactID = nextContactID + 1
+		end
+	end
+
+    -- if any existing contacts have expired then remove them
+	for id,contact in pairs(contacts) do
+		if ticks - contact.time &gt; EXPIRY_TICKS then
+			contacts[id] = nil
+		end
+	end
+	ticks = ticks + 1
+end
+
+function onDraw()
+	local sc = screen
+	local w,h = sc.getWidth(), sc.getHeight()
+
+    -- draw the base map, zoomed as appropriate
+    sc.drawMap(gps[1], gps[2], zoom)
+
+    -- if the radar is one then draw all the radar contacts onto the screen
+    if isRadarOn then
+        screen.setColor(255, 0, 0)
+		for _,con in pairs(contacts) do 
+			local px,py = map.mapToScreen(gps[1], gps[2], zoom, w, h, con.posn[1], con.posn[2])
+			local alpha = math.min(1 - ((con.time/EXPIRY_TICKS) - FADE_FACTOR)/(1 - FADE_FACTOR), 1)
+			screen.setColor(255, 0, 255, alpha*255)
+			screen.drawRectF(px,py,1,1)
+		end
+    end
+end
+">
+					<pos x="-2.5"/>
+					<in1 component_id="32"/>
+				</object>
+			</c>
+			<c type="41">
+				<object id="43" count="2" offset="1">
+					<pos x="-5" y="3.25"/>
+					<inc component_id="17"/>
+					<in1 component_id="38"/>
+					<in2 component_id="18"/>
+				</object>
+			</c>
+			<c type="34">
+				<object id="50" n="WP Switch Dist (nm)">
+					<pos x="-7" y="0.25"/>
+					<v text="0.05" value="0.05"/>
+				</object>
+			</c>
+			<c type="56">
+				<object id="53" script='-- Author: Tom Shackell
+-- GitHub: &lt;GithubLink&gt;
+-- Workshop: &lt;WorkshopLink&gt;
+--
+-- Developed &amp; Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
+-- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
+--      By Nameous Changey
+-- Minimized Size: 5861 (6178 with comment) chars
+cD=""
+cC="%.1fnm"
+
+b=255
+n=nil
+aq=pairs
+F=false
+Q=true
+s=screen
+G=math
+bh=input
+bl=output
+P=bl.setNumber
+ay=bh.getBool
+x=bh.getNumber
+an=G.min
+aG=G.abs
+bt=s.drawTextBox
+bv=s.drawLine
+bE=s.getHeight
+bD=s.getWidth
+az=string.format
+aV=G.sqrt
+bk=s.drawRect
+aO=s.drawRectF
+k=s.setColor
+local aD={}local aF=1
+local function bu(_,bO)if not _:Z()then
+return
+end
+k(50,50,50,b)if not bO then
+if _.aK then
+aO(_.l[1],_.l[2],_.l[3]-1,_.l[4]-1)k(b,b,b,b)else
+bk(_.l[1],_.l[2],_.l[3]-1,_.l[4]-1)end
+end
+_:aS()s.drawText(_.l[1]+2,_.l[2]+2,_.q)end
+M={ah=function(d,c,C,z,q,aT,U,Z,S,aS)local aL=function()return Q end
+aD[aF]={l={d,c,C,z},q=q or cD,aT=aT,U=U or aL,Z=Z or aL,S=S or bu,aS=aS or aL,ao=F,aK=F,bm=bu}aF=aF+1
+end,onTick=function(aQ,am,ab)bL=function(d,c,C,z)return am&gt;d and ab&gt;c and am&lt;d+C and ab&lt;c+z
+end
+for bi,_ in aq(aD)do
+_.aK=aQ and _:Z()and
+bL(_.l[1]+1,_.l[2]+1,_.l[3]-2,_.l[4]-2)if _.aK then
+if not _.aT or not _.ao then
+_:U()end
+_.ao=Q
+else
+_.ao=F
+end
+end
+end,onDraw=function()for bi,_ in aq(aD)do
+_:S(F)end
+end}local A=8
+local X=F
+local f=1
+local h=0
+local i={}local w=0
+local j={0,0}local function bq()return{y={0,0},R=F,aH=function(e)return aV((e.y[1]-j[1])^2+(e.y[2]-j[2])^2)/1852
+end}end
+local function bV(e,g)if g==f then
+e:bm(Q)end
+end
+local function bH(e,g)if g==h and(w//20)%2==0 then
+e.q=cD
+else
+local r=i[g]if r.R then
+e.q=az(cC,r:aH())else
+e.q="-------"
+end
+end
+e:bm()end
+local function bB(g,bK)local t=g+bK
+if t&lt;=0 or t&gt;A then
+return
+end
+local bR=i[t]i[t]=i[g]i[g]=bR
+if f==g then
+f=t
+elseif f==t then
+f=g
+end
+if h==g then
+h=t
+elseif h==t then
+h=g
+end
+end
+local function co(g)if f&gt;g then
+f=f-1
+end
+if h==g then
+h=0
+elseif h&gt;g then
+h=h-1
+end
+for a=g,A-1 do
+i[a]=i[a+1]end
+i[A]=bq()end
+L={bI=function()for a=1,A do
+i[a]=bq()local c=(a-1)*8
+local O=function(d,C,q,U,S)M.ah(d,c-1,C,9,q,Q,U,function()return X
+end,S,function()if a==f then
+k(b,b,0,b)end
+end)end
+local bn=function()f=a end
+local bS=function()h=(h==a)and 0 or a end
+O(14,8,"&gt;",bn,function(_)bV(_,a)end)O(21,8,a,bn,n)O(28,40,cD,bS,function(_)bH(_,a)end)O(67,8,"^",function()bB(a,-1)end,n)O(74,8,"v",function()bB(a,1)end,n)O(81,8,"x",function()co(a)end,n)end
+end,onTick=function(bF,aa)w=w+1
+if aa and h~=0 then
+i[h].y=aa
+i[h].R=Q
+if f&gt;A and h==1 then
+f=1
+end
+h=0
+end
+while f&lt;=A do
+local r=i[f]if r:aH()&lt;bF or not r.R then
+f=f+1
+else
+break
+end
+end
+end,cs=function(bN,B)local C,z=bD(),bE()j=bN
+local bw,bs=C/2,z/2
+local bo={}local au=0
+local aR=n
+for a=f,A do
+local r=i[a]if r.R then
+local aC,aI=map.mapToScreen(j[1],j[2],B,C,z,r.y[1],r.y[2])k(20,20,20,b)bv(bw,bs,aC,aI)bw,bs=aC,aI
+if a==f then
+aR=az(cC,r:aH())end
+au=au+1
+bo[au]={aC,aI}end
+end
+for bi,by in aq(bo)do
+k(0,0,b,b)aO(by[1],by[2],1,1)end
+if aR then
+k(5,5,5,b)bt(15,57,73,7,aR,0,0)end
+end,ca=function()if X then
+k(0,0,0,b)aO(14,0,74,64)k(50,50,50,b)bk(14,-1,74,64)end
+end,bG=function()X=not X
+end,cy=function()for a=f,A do
+if i[a].R then
+return i[a].y
+end
+end
+end}local N=n
+local aM=n
+local ce=100
+local w=0
+local aU=n
+local K={0,0}local br={bd=function(av,aA)return{aN={},aA=aA,Y=0,ac=av.ac,al=av.al,ak=av.ak}end,ac=function(e,cB)e.aN[e.Y]=cB
+e.Y=(e.Y+1)%e.aA
+end,al=function(e)local a=0
+return function()a=a+1
+return e.aN[a-1]end
+end,ak=function(e)e.aN={}e.Y=0
+end}local aJ=br:bd(50)local ax=br:bd(2500)local function aX(o)return aV(o.d*o.d+o.c*o.c)end
+local function bp(J,_)return{d=J.d+_.d,c=J.c+_.c}end
+local function aP(J,_)return{d=J.d-_.d,c=J.c-_.c}end
+local function aZ(o,I)return{d=o.d*I,c=o.c*I}end
+local function bx(cf,c_)local o=aP(c_,cf)return(450-(G.atan(o.c,o.d)*180/G.pi))%360
+end
+local function W(J,_)return 180-aG(180-aG(J-_)%360)end
+local function ci(v,T)local aE=aP(T,v)local D=aX(aE)if aG(D)&lt;.000001 then return end
+local ap=(v.p*v.p-T.p*T.p+D*D)/(2*D)local aW=v.p*v.p-ap*ap
+if aW&lt;0 then return end
+local cr=aV(aW)local at={d=aE.d/D,c=aE.c/D}local o={d=at.c,c=-at.d}function y(I)return bp(bp(v,aZ(at,ap)),aZ(o,cr*I))end
+return y(1),y(-1)end
+local function cp(ae)local m={0,0}local E={0,0}local u=0
+for be in ax:al()do
+local _={bx(ae,be[1]),bx(ae,be[2])}if u==0 then
+m=_
+else
+local ad={m[1]/u,m[2]/u}local b_=W(_[1],ad[1])local bf=W(_[2],ad[2])local bc=W(_[1],ad[2])local bC=W(_[2],ad[1])if an(b_,bf)&lt;an(bc,bC)then
+m={_[1]+m[1],_[2]+m[2]}E={E[1]+b_,E[2]+bf}else
+m={_[2]+m[1],_[1]+m[2]}E={E[1]+bC,E[2]+bc}end
+end
+u=u+1
+end
+if u==0 then return end
+if E[1]&lt;E[2]then
+return{bb=m[1]/u,ba=m[2]/u,ag=ae.p}else
+return{bb=m[2]/u,ba=m[1]/u,ag=ae.p}end
+end
+local function bM(H)for t in aJ:al()do
+local v,T=ci(t,H)if v then
+ax:ac({v,T})end
+end
+aJ:ac(H)return cp(H)end
+cz={onTick=function(aB,j)if aB then
+if N then
+local ag=50.1*(w-N)-178
+K={K[1]+ag,K[2]+1}local D=K[1]/K[2]local H={d=j[1],c=j[2],p=D}if not aM or aX(aP(aM,H))&gt;ce then
+aU=bM(H)aM=H
+K={0,0}end
+end
+N=w
+end
+w=w+1
+if N and w-N&gt;2000 then
+N=n
+aU=n
+aJ:ak()ax:ak()end
+return aU
+end}cw=3
+cm=4
+cx=6
+cA=7
+cv=8
+bW=9
+cc=10
+bg=11
+bY=1
+cb=2
+bJ=3
+bX=1
+cg=2
+cj=3
+ch=4
+bP=5
+cl=6
+bZ=1
+bA=1.05
+ai=20
+as=3
+local B=2
+local aY=0
+local j={0,0}local bj=n
+function onTick()j={x(cx),x(cA)}aY=-x(bg)*360
+local aQ=ay(bY)local am=x(cw)local ab=x(cm)M.onTick(aQ,am,ab)local bQ=x(cc)local aa=ay(cb)and{x(cv),x(bW)}or n
+L.onTick(bQ,aa)P(bX,B)P(ch,x(bg))P(bP,j[1])P(cl,j[2])local af=L.cy()bl.setBool(bZ,af~=n)if af then
+P(cg,af[1])P(cj,af[2])end
+local aB=ay(bJ)bj=cz.onTick(aB,j)end
+function onDraw()L.cs(j,B)ct(bj)L.ca()M.onDraw()end
+function ct(aj)local z=bE()local V=bD()/2
+local ar=z/2
+k(0,b,0,b)s.drawCircleF(V,ar,1)k(5,5,5,b)s.drawCircle(V,ar,ai)k(b,0,0,b)local aw=function(ck,bz,cd)local _=G.rad(ck)function I(p)return V+p*G.sin(_),ar-p*G.cos(_)end
+local bU,cq=I(bz)local bT,cu=I(bz+cd)bv(bU,cq,bT,cu)end
+aw(aY,ai-4,as)if aj then
+k(5,5,5,b)aw(aj.ba,ai+1,as)k(b,b,0,b)aw(aj.bb,ai+1,as)k(5,5,5,b)local cn=an(aj.ag/1852,999.9)local q=az(cC,cn)bt(V-20,2,40,5,q,0,0)end
+end
+M.ah(0,55,8,9,"-",F,function()B=B*bA end)M.ah(7,55,8,9,"+",F,function()B=B/bA end)M.ah(88,55,8,9,"w",Q,L.bG)L.bI()'>
+					<pos x="1.75" y="2.25"/>
+					<in1 component_id="15"/>
+					<in2 component_id="34" node_index="1"/>
+				</object>
+			</c>
+		</components>
+		<components_bridge>
+			<c type="7">
+				<object id="7">
+					<pos x="3.25" y="2.25"/>
+					<in1 component_id="53" node_index="1"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="9">
+					<pos x="-7" y="2.25"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="11">
+					<pos x="-7" y="1.75"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="13">
+					<pos x="-7" y="-0.25"/>
+				</object>
+			</c>
+			<c type="4">
+				<object id="17">
+					<pos x="-7" y="3.75"/>
+				</object>
+			</c>
+			<c>
+				<object id="18">
+					<pos x="-7" y="2.75"/>
+				</object>
+			</c>
+			<c>
+				<object id="25">
+					<pos x="-7" y="-1.5"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="27">
+					<pos x="-7" y="-2"/>
+				</object>
+			</c>
+			<c type="4">
+				<object id="29">
+					<pos x="-7" y="-1"/>
+				</object>
+			</c>
+			<c>
+				<object id="38">
+					<pos x="-7" y="3.25"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="40">
+					<pos x="-7" y="1.25"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="42">
+					<pos x="-7" y="0.75"/>
+				</object>
+			</c>
+			<c type="5">
+				<object id="48">
+					<pos x="3.25" y="3.25"/>
+					<in1 component_id="53"/>
+				</object>
+			</c>
+		</components_bridge>
+		<groups/>
+		<component_states>
+			<c0 id="15" count="7" offset="5">
+				<pos y="2"/>
+				<inc component_id="43"/>
+				<in1 component_id="9"/>
+				<in2 component_id="11"/>
+				<in3 component_id="40"/>
+				<in4 component_id="42"/>
+				<in5 component_id="50"/>
+				<in6 component_id="13"/>
+				<in7/>
+			</c0>
+			<c1 id="31" count="1" offset="8">
+				<pos x="-5.75" y="-1"/>
+				<inc component_id="29"/>
+				<in1 component_id="25"/>
+			</c1>
+			<c2 id="32" count="4" offset="24">
+				<pos x="-4" y="-1.5"/>
+				<inc component_id="31"/>
+				<in1 component_id="33"/>
+				<in2 component_id="27"/>
+				<in3 component_id="9"/>
+				<in4 component_id="11"/>
+			</c2>
+			<c3 id="33">
+				<pos x="3" y="0.25"/>
+				<in1 component_id="53"/>
+			</c3>
+			<c4 id="34" script="-- Draws the basic map with zoom, and any radar contacts.
+-- Author: Tom Shackell
+
+-- Numbers: 1 to 24, GPS X/Y/Z for all 8 contacts
+IN_ZOOM = 25
+IN_RADAR_ANGLE = 26
+IN_GPS_X = 27
+IN_GPS_Y = 28
+-- Bool: 1 to 8, contact is valid for all 8 contacts
+IB_RADAR_ON = 9
+
+EXPIRY_TICKS = 150      -- how many ticks for a contact to expire
+FADE_FACTOR = 0.75      -- how much a contact fades at full expiry time 
+
+
+zoom = 2                -- current zoom level
+gps = nil               -- current GPS coordinate to display the map at 
+ticks = 0               -- how many ticks have we seen 
+isRadarOn=false         -- whether the radar is on
+contacts = {}           -- stored radar contacts 
+nextContactID = 0       -- the next ID to use for a new radar contact
+
+function onTick()
+	zoom = input.getNumber(IN_ZOOM)
+    gps = {input.getNumber(IN_GPS_X), input.getNumber(IN_GPS_Y)}
+    isRadarOn = input.getBool(IB_RADAR_ON)
+	radarAngle = input.getNumber(IN_RADAR_ANGLE)
+
+    -- read the radar contacts from the input, each is created as a new contact
+	for i = 0,7 do
+		local active = input.getBool(i+1)
+		if active then
+			local x = input.getNumber(i*3+1)
+			local y = input.getNumber(i*3+2)
+			local z = input.getNumber(i*3+3)
+			contacts[nextContactID] = {posn={x,y,z}, time=ticks}
+			nextContactID = nextContactID + 1
+		end
+	end
+
+    -- if any existing contacts have expired then remove them
+	for id,contact in pairs(contacts) do
+		if ticks - contact.time &gt; EXPIRY_TICKS then
+			contacts[id] = nil
+		end
+	end
+	ticks = ticks + 1
+end
+
+function onDraw()
+	local sc = screen
+	local w,h = sc.getWidth(), sc.getHeight()
+
+    -- draw the base map, zoomed as appropriate
+    sc.drawMap(gps[1], gps[2], zoom)
+
+    -- if the radar is one then draw all the radar contacts onto the screen
+    if isRadarOn then
+        screen.setColor(255, 0, 0)
+		for _,con in pairs(contacts) do 
+			local px,py = map.mapToScreen(gps[1], gps[2], zoom, w, h, con.posn[1], con.posn[2])
+			local alpha = math.min(1 - ((con.time/EXPIRY_TICKS) - FADE_FACTOR)/(1 - FADE_FACTOR), 1)
+			screen.setColor(255, 0, 255, alpha*255)
+			screen.drawRectF(px,py,1,1)
+		end
+    end
+end
+">
+				<pos x="-2.5"/>
+				<in1 component_id="32"/>
+			</c4>
+			<c5 id="43" count="2" offset="1">
+				<pos x="-5" y="3.25"/>
+				<inc component_id="17"/>
+				<in1 component_id="38"/>
+				<in2 component_id="18"/>
+			</c5>
+			<c6 id="50" n="WP Switch Dist (nm)">
+				<pos x="-7" y="0.25"/>
+				<v text="0.05" value="0.05"/>
+			</c6>
+			<c7 id="53" script='-- Author: Tom Shackell
+-- GitHub: &lt;GithubLink&gt;
+-- Workshop: &lt;WorkshopLink&gt;
+--
+-- Developed &amp; Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
+-- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
+--      By Nameous Changey
+-- Minimized Size: 5861 (6178 with comment) chars
+cD=""
+cC="%.1fnm"
+
+b=255
+n=nil
+aq=pairs
+F=false
+Q=true
+s=screen
+G=math
+bh=input
+bl=output
+P=bl.setNumber
+ay=bh.getBool
+x=bh.getNumber
+an=G.min
+aG=G.abs
+bt=s.drawTextBox
+bv=s.drawLine
+bE=s.getHeight
+bD=s.getWidth
+az=string.format
+aV=G.sqrt
+bk=s.drawRect
+aO=s.drawRectF
+k=s.setColor
+local aD={}local aF=1
+local function bu(_,bO)if not _:Z()then
+return
+end
+k(50,50,50,b)if not bO then
+if _.aK then
+aO(_.l[1],_.l[2],_.l[3]-1,_.l[4]-1)k(b,b,b,b)else
+bk(_.l[1],_.l[2],_.l[3]-1,_.l[4]-1)end
+end
+_:aS()s.drawText(_.l[1]+2,_.l[2]+2,_.q)end
+M={ah=function(d,c,C,z,q,aT,U,Z,S,aS)local aL=function()return Q end
+aD[aF]={l={d,c,C,z},q=q or cD,aT=aT,U=U or aL,Z=Z or aL,S=S or bu,aS=aS or aL,ao=F,aK=F,bm=bu}aF=aF+1
+end,onTick=function(aQ,am,ab)bL=function(d,c,C,z)return am&gt;d and ab&gt;c and am&lt;d+C and ab&lt;c+z
+end
+for bi,_ in aq(aD)do
+_.aK=aQ and _:Z()and
+bL(_.l[1]+1,_.l[2]+1,_.l[3]-2,_.l[4]-2)if _.aK then
+if not _.aT or not _.ao then
+_:U()end
+_.ao=Q
+else
+_.ao=F
+end
+end
+end,onDraw=function()for bi,_ in aq(aD)do
+_:S(F)end
+end}local A=8
+local X=F
+local f=1
+local h=0
+local i={}local w=0
+local j={0,0}local function bq()return{y={0,0},R=F,aH=function(e)return aV((e.y[1]-j[1])^2+(e.y[2]-j[2])^2)/1852
+end}end
+local function bV(e,g)if g==f then
+e:bm(Q)end
+end
+local function bH(e,g)if g==h and(w//20)%2==0 then
+e.q=cD
+else
+local r=i[g]if r.R then
+e.q=az(cC,r:aH())else
+e.q="-------"
+end
+end
+e:bm()end
+local function bB(g,bK)local t=g+bK
+if t&lt;=0 or t&gt;A then
+return
+end
+local bR=i[t]i[t]=i[g]i[g]=bR
+if f==g then
+f=t
+elseif f==t then
+f=g
+end
+if h==g then
+h=t
+elseif h==t then
+h=g
+end
+end
+local function co(g)if f&gt;g then
+f=f-1
+end
+if h==g then
+h=0
+elseif h&gt;g then
+h=h-1
+end
+for a=g,A-1 do
+i[a]=i[a+1]end
+i[A]=bq()end
+L={bI=function()for a=1,A do
+i[a]=bq()local c=(a-1)*8
+local O=function(d,C,q,U,S)M.ah(d,c-1,C,9,q,Q,U,function()return X
+end,S,function()if a==f then
+k(b,b,0,b)end
+end)end
+local bn=function()f=a end
+local bS=function()h=(h==a)and 0 or a end
+O(14,8,"&gt;",bn,function(_)bV(_,a)end)O(21,8,a,bn,n)O(28,40,cD,bS,function(_)bH(_,a)end)O(67,8,"^",function()bB(a,-1)end,n)O(74,8,"v",function()bB(a,1)end,n)O(81,8,"x",function()co(a)end,n)end
+end,onTick=function(bF,aa)w=w+1
+if aa and h~=0 then
+i[h].y=aa
+i[h].R=Q
+if f&gt;A and h==1 then
+f=1
+end
+h=0
+end
+while f&lt;=A do
+local r=i[f]if r:aH()&lt;bF or not r.R then
+f=f+1
+else
+break
+end
+end
+end,cs=function(bN,B)local C,z=bD(),bE()j=bN
+local bw,bs=C/2,z/2
+local bo={}local au=0
+local aR=n
+for a=f,A do
+local r=i[a]if r.R then
+local aC,aI=map.mapToScreen(j[1],j[2],B,C,z,r.y[1],r.y[2])k(20,20,20,b)bv(bw,bs,aC,aI)bw,bs=aC,aI
+if a==f then
+aR=az(cC,r:aH())end
+au=au+1
+bo[au]={aC,aI}end
+end
+for bi,by in aq(bo)do
+k(0,0,b,b)aO(by[1],by[2],1,1)end
+if aR then
+k(5,5,5,b)bt(15,57,73,7,aR,0,0)end
+end,ca=function()if X then
+k(0,0,0,b)aO(14,0,74,64)k(50,50,50,b)bk(14,-1,74,64)end
+end,bG=function()X=not X
+end,cy=function()for a=f,A do
+if i[a].R then
+return i[a].y
+end
+end
+end}local N=n
+local aM=n
+local ce=100
+local w=0
+local aU=n
+local K={0,0}local br={bd=function(av,aA)return{aN={},aA=aA,Y=0,ac=av.ac,al=av.al,ak=av.ak}end,ac=function(e,cB)e.aN[e.Y]=cB
+e.Y=(e.Y+1)%e.aA
+end,al=function(e)local a=0
+return function()a=a+1
+return e.aN[a-1]end
+end,ak=function(e)e.aN={}e.Y=0
+end}local aJ=br:bd(50)local ax=br:bd(2500)local function aX(o)return aV(o.d*o.d+o.c*o.c)end
+local function bp(J,_)return{d=J.d+_.d,c=J.c+_.c}end
+local function aP(J,_)return{d=J.d-_.d,c=J.c-_.c}end
+local function aZ(o,I)return{d=o.d*I,c=o.c*I}end
+local function bx(cf,c_)local o=aP(c_,cf)return(450-(G.atan(o.c,o.d)*180/G.pi))%360
+end
+local function W(J,_)return 180-aG(180-aG(J-_)%360)end
+local function ci(v,T)local aE=aP(T,v)local D=aX(aE)if aG(D)&lt;.000001 then return end
+local ap=(v.p*v.p-T.p*T.p+D*D)/(2*D)local aW=v.p*v.p-ap*ap
+if aW&lt;0 then return end
+local cr=aV(aW)local at={d=aE.d/D,c=aE.c/D}local o={d=at.c,c=-at.d}function y(I)return bp(bp(v,aZ(at,ap)),aZ(o,cr*I))end
+return y(1),y(-1)end
+local function cp(ae)local m={0,0}local E={0,0}local u=0
+for be in ax:al()do
+local _={bx(ae,be[1]),bx(ae,be[2])}if u==0 then
+m=_
+else
+local ad={m[1]/u,m[2]/u}local b_=W(_[1],ad[1])local bf=W(_[2],ad[2])local bc=W(_[1],ad[2])local bC=W(_[2],ad[1])if an(b_,bf)&lt;an(bc,bC)then
+m={_[1]+m[1],_[2]+m[2]}E={E[1]+b_,E[2]+bf}else
+m={_[2]+m[1],_[1]+m[2]}E={E[1]+bC,E[2]+bc}end
+end
+u=u+1
+end
+if u==0 then return end
+if E[1]&lt;E[2]then
+return{bb=m[1]/u,ba=m[2]/u,ag=ae.p}else
+return{bb=m[2]/u,ba=m[1]/u,ag=ae.p}end
+end
+local function bM(H)for t in aJ:al()do
+local v,T=ci(t,H)if v then
+ax:ac({v,T})end
+end
+aJ:ac(H)return cp(H)end
+cz={onTick=function(aB,j)if aB then
+if N then
+local ag=50.1*(w-N)-178
+K={K[1]+ag,K[2]+1}local D=K[1]/K[2]local H={d=j[1],c=j[2],p=D}if not aM or aX(aP(aM,H))&gt;ce then
+aU=bM(H)aM=H
+K={0,0}end
+end
+N=w
+end
+w=w+1
+if N and w-N&gt;2000 then
+N=n
+aU=n
+aJ:ak()ax:ak()end
+return aU
+end}cw=3
+cm=4
+cx=6
+cA=7
+cv=8
+bW=9
+cc=10
+bg=11
+bY=1
+cb=2
+bJ=3
+bX=1
+cg=2
+cj=3
+ch=4
+bP=5
+cl=6
+bZ=1
+bA=1.05
+ai=20
+as=3
+local B=2
+local aY=0
+local j={0,0}local bj=n
+function onTick()j={x(cx),x(cA)}aY=-x(bg)*360
+local aQ=ay(bY)local am=x(cw)local ab=x(cm)M.onTick(aQ,am,ab)local bQ=x(cc)local aa=ay(cb)and{x(cv),x(bW)}or n
+L.onTick(bQ,aa)P(bX,B)P(ch,x(bg))P(bP,j[1])P(cl,j[2])local af=L.cy()bl.setBool(bZ,af~=n)if af then
+P(cg,af[1])P(cj,af[2])end
+local aB=ay(bJ)bj=cz.onTick(aB,j)end
+function onDraw()L.cs(j,B)ct(bj)L.ca()M.onDraw()end
+function ct(aj)local z=bE()local V=bD()/2
+local ar=z/2
+k(0,b,0,b)s.drawCircleF(V,ar,1)k(5,5,5,b)s.drawCircle(V,ar,ai)k(b,0,0,b)local aw=function(ck,bz,cd)local _=G.rad(ck)function I(p)return V+p*G.sin(_),ar-p*G.cos(_)end
+local bU,cq=I(bz)local bT,cu=I(bz+cd)bv(bU,cq,bT,cu)end
+aw(aY,ai-4,as)if aj then
+k(5,5,5,b)aw(aj.ba,ai+1,as)k(b,b,0,b)aw(aj.bb,ai+1,as)k(5,5,5,b)local cn=an(aj.ag/1852,999.9)local q=az(cC,cn)bt(V-20,2,40,5,q,0,0)end
+end
+M.ah(0,55,8,9,"-",F,function()B=B*bA end)M.ah(7,55,8,9,"+",F,function()B=B/bA end)M.ah(88,55,8,9,"w",Q,L.bG)L.bI()'>
+				<pos x="1.75" y="2.25"/>
+				<in1 component_id="15"/>
+				<in2 component_id="34" node_index="1"/>
+			</c7>
+		</component_states>
+		<component_bridge_states>
+			<c0 id="7">
+				<pos x="3.25" y="2.25"/>
+				<in1 component_id="53" node_index="1"/>
+			</c0>
+			<c1 id="9">
+				<pos x="-7" y="2.25"/>
+			</c1>
+			<c2 id="11">
+				<pos x="-7" y="1.75"/>
+			</c2>
+			<c3 id="13">
+				<pos x="-7" y="-0.25"/>
+			</c3>
+			<c4 id="17">
+				<pos x="-7" y="3.75"/>
+			</c4>
+			<c5 id="18">
+				<pos x="-7" y="2.75"/>
+			</c5>
+			<c6 id="25">
+				<pos x="-7" y="-1.5"/>
+			</c6>
+			<c7 id="27">
+				<pos x="-7" y="-2"/>
+			</c7>
+			<c8 id="29">
+				<pos x="-7" y="-1"/>
+			</c8>
+			<c9 id="38">
+				<pos x="-7" y="3.25"/>
+			</c9>
+			<c10 id="40">
+				<pos x="-7" y="1.25"/>
+			</c10>
+			<c11 id="42">
+				<pos x="-7" y="0.75"/>
+			</c11>
+			<c12 id="48">
+				<pos x="3.25" y="3.25"/>
+				<in1 component_id="53"/>
+			</c12>
+		</component_bridge_states>
+		<group_states/>
+	</group>
+</microprocessor>
+

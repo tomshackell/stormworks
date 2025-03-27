@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<microprocessor name="Fuel Flow Meter" description="No description set." width="2" length="1" id_counter="14" id_counter_node="3" sym1="20770" sym2="43666" sym3="35474" sym4="35094" sym5="18" sym6="4" sym8="8738" sym9="4434" sym10="5970" sym11="5462" sym12="4610" sym13="4110">
+	<nodes>
+		<n id="1" component_id="2">
+			<node label="Fuel Level (liters)" mode="1" type="1" description="The input signal to be processed."/>
+		</n>
+		<n id="2" component_id="5">
+			<node label="Fuel Flow (liters/min)" type="1" description="The input signal to be processed.">
+				<position x="1"/>
+			</node>
+		</n>
+	</nodes>
+	<group>
+		<data type="193367077">
+			<inputs/>
+			<outputs/>
+		</data>
+		<components>
+			<c type="40">
+				<object id="6" count="2">
+					<pos x="-1" y="1.25"/>
+					<in1 component_id="2"/>
+					<in2 component_id="8"/>
+				</object>
+			</c>
+			<c type="56">
+				<object id="7" script="
+l=nil
+s=input.getNumber
+o={n=function(w)return{h={},c=0,m=0,f=0,e=0,j=w.j}end,j=function(_,k,d,a)local a=a or 1
+if d&lt;=_.m then
+for q=d,_.m-1 do
+local b=_.h[q]_.f=_.f-(b.p*b.a)_.e=_.e-b.a
+_.h[q]=l
+end
+_.c=d&gt;0 and _.c%d or 0
+end
+local b=_.h[_.c]local x=b and(b.p*b.a)or 0
+_.h[_.c]={p=k,a=a}_.f=_.f+(k*a)-x
+_.e=_.e+a-(b and b.a or 0)_.c=_.c+1
+if _.c&gt;=d then
+_.c=0
+end
+return _.e&gt;0 and _.f/_.e or 0
+end}local r=60
+local g=l
+local t=o:n()function onTick()local i=s(1)local d=math.floor(s(2)*r)if g then
+if i&gt;g then
+g=i
+t=o:n()else
+local u=(g-i)*r
+local v=t:j(u,d)output.setNumber(1,v*60)end
+end
+g=i
+end
+">
+					<pos x="0.25" y="1.5"/>
+					<in1 component_id="6"/>
+				</object>
+			</c>
+			<c type="34">
+				<object id="8" n="Buffer Length (s)">
+					<pos x="-2.5" y="1"/>
+					<v text="90" value="90"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="9">
+					<pos x="1.5" y="1.75"/>
+					<in1 component_id="7"/>
+				</object>
+			</c>
+			<c type="34">
+				<object id="10" n="Multiplier">
+					<pos x="-2.5" y="0.25"/>
+					<v text="1" value="1"/>
+				</object>
+			</c>
+			<c type="8">
+				<object id="11">
+					<pos x="2.75" y="1.5"/>
+					<in1 component_id="9"/>
+					<in2 component_id="10"/>
+				</object>
+			</c>
+		</components>
+		<components_bridge>
+			<c type="2">
+				<object id="2">
+					<pos x="-2.5" y="1.75"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="5">
+					<pos x="4" y="1.75"/>
+					<in1 component_id="11"/>
+				</object>
+			</c>
+		</components_bridge>
+		<groups/>
+		<component_states>
+			<c0 id="6" count="2">
+				<pos x="-1" y="1.25"/>
+				<in1 component_id="2"/>
+				<in2 component_id="8"/>
+			</c0>
+			<c1 id="7" script="
+l=nil
+s=input.getNumber
+o={n=function(w)return{h={},c=0,m=0,f=0,e=0,j=w.j}end,j=function(_,k,d,a)local a=a or 1
+if d&lt;=_.m then
+for q=d,_.m-1 do
+local b=_.h[q]_.f=_.f-(b.p*b.a)_.e=_.e-b.a
+_.h[q]=l
+end
+_.c=d&gt;0 and _.c%d or 0
+end
+local b=_.h[_.c]local x=b and(b.p*b.a)or 0
+_.h[_.c]={p=k,a=a}_.f=_.f+(k*a)-x
+_.e=_.e+a-(b and b.a or 0)_.c=_.c+1
+if _.c&gt;=d then
+_.c=0
+end
+return _.e&gt;0 and _.f/_.e or 0
+end}local r=60
+local g=l
+local t=o:n()function onTick()local i=s(1)local d=math.floor(s(2)*r)if g then
+if i&gt;g then
+g=i
+t=o:n()else
+local u=(g-i)*r
+local v=t:j(u,d)output.setNumber(1,v*60)end
+end
+g=i
+end
+">
+				<pos x="0.25" y="1.5"/>
+				<in1 component_id="6"/>
+			</c1>
+			<c2 id="8" n="Buffer Length (s)">
+				<pos x="-2.5" y="1"/>
+				<v text="90" value="90"/>
+			</c2>
+			<c3 id="9">
+				<pos x="1.5" y="1.75"/>
+				<in1 component_id="7"/>
+			</c3>
+			<c4 id="10" n="Multiplier">
+				<pos x="-2.5" y="0.25"/>
+				<v text="1" value="1"/>
+			</c4>
+			<c5 id="11">
+				<pos x="2.75" y="1.5"/>
+				<in1 component_id="9"/>
+				<in2 component_id="10"/>
+			</c5>
+		</component_states>
+		<component_bridge_states>
+			<c0 id="2">
+				<pos x="-2.5" y="1.75"/>
+			</c0>
+			<c1 id="5">
+				<pos x="4" y="1.75"/>
+				<in1 component_id="11"/>
+			</c1>
+		</component_bridge_states>
+		<group_states/>
+	</group>
+</microprocessor>
+

@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<microprocessor name="Ship AP" description="Autopilot for a ship" width="2" length="3" id_counter="58" id_counter_node="17" sym1="1008" sym2="2040" sym3="384" sym5="580" sym6="580" sym7="3708" sym8="4676" sym9="4676" sym10="4648" sym11="3600">
+	<nodes>
+		<n id="1" component_id="1">
+			<node label="Heading AP On/Off" mode="1" description="The input signal to be processed.">
+				<position x="1"/>
+			</node>
+		</n>
+		<n id="2" component_id="3">
+			<node label="Steering In" mode="1" type="1" description="The input signal to be processed.">
+				<position z="1"/>
+			</node>
+		</n>
+		<n id="3" component_id="6">
+			<node label="Steering Out" type="1" description="The input signal to be processed.">
+				<position x="1" z="1"/>
+			</node>
+		</n>
+		<n id="14" component_id="35">
+			<node label="From SimpleMap" mode="1" type="5" description="B1=Current WP Valid,N1=Zoom,N2=WpX,N3=WpY,N4=compass,N5=GpsX,N6=GpsY"/>
+		</n>
+		<n id="16" component_id="48">
+			<node label="AP Turned Off" description="The AP has just gone from on to off">
+				<position z="2"/>
+			</node>
+		</n>
+		<n id="17" component_id="55">
+			<node label="AP is on" description="Whether the AP is on or not">
+				<position x="1" z="2"/>
+			</node>
+		</n>
+	</nodes>
+	<group>
+		<data>
+			<inputs/>
+			<outputs/>
+		</data>
+		<components>
+			<c type="22">
+				<object id="26">
+					<pos x="3" y="-1.25"/>
+					<in1 component_id="42"/>
+					<in2 component_id="3"/>
+					<in3 component_id="58"/>
+				</object>
+			</c>
+			<c type="23">
+				<object id="30">
+					<pos x="0.25" y="-0.75"/>
+					<in1 component_id="41"/>
+					<in2 component_id="38"/>
+					<in3 component_id="58"/>
+					<kp text="0.1" value="0.1"/>
+					<ki text="0"/>
+					<kd text="0"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="32">
+					<pos x="-2.25" y="-0.5"/>
+					<in1 component_id="33"/>
+				</object>
+			</c>
+			<c type="56">
+				<object id="33" script="wasActive = false
+isActive = false
+lastAPPush = false
+
+function onTick()
+	local valid = input.getBool(1)
+	local apPush = input.getBool(2)	
+	if valid then 
+		if apPush and not lastAPPush then 
+			isActive = not isActive 
+		end			
+		local wp = {input.getNumber(2),input.getNumber(3)}
+		local compass = input.getNumber(4)*-360
+		local gps = {input.getNumber(5),input.getNumber(6)}
+		local turn = turnTo(wp, gps, compass)
+		output.setNumber(1, turn)			
+	else	
+		output.setNumber(1, 0)
+		isActive = false
+	end
+	output.setBool(1, isActive)
+	output.setBool(2, not valid and wasActive)
+	wasActive = isActive
+	lastAPPush = apPush
+end
+
+function turnTo(tgt, gps, heading)
+    local h = clampBearing(heading)
+    local t = clampBearing(math.atan(tgt[1]-gps[1],tgt[2]-gps[2])*180/math.pi)
+    local pDist = t&gt;h and t-h or (360-h)+t
+    local nDist = t&gt;h and (360-t)+h or h-t
+    if nDist &lt; pDist then return -nDist else return pDist end
+end
+
+function clampBearing(b) return ((b%360)+360)%360 end
+
+">
+					<pos x="-3.5" y="-0.75"/>
+					<in1 component_id="57"/>
+				</object>
+			</c>
+			<c type="15">
+				<object id="38">
+					<pos x="-2" y="-1.25"/>
+					<n text="0"/>
+				</object>
+			</c>
+			<c type="34">
+				<object id="40" n="AP Steering gain">
+					<pos x="-6" y="0.5"/>
+					<v text="0.1" value="0.1"/>
+				</object>
+			</c>
+			<c type="8">
+				<object id="41">
+					<pos x="-1" y="-0.25"/>
+					<in1 component_id="40"/>
+					<in2 component_id="32"/>
+				</object>
+			</c>
+			<c type="10">
+				<object id="42" e="clamp(x,-y,y)">
+					<pos x="1.75" y="0.25"/>
+					<in1 component_id="30"/>
+					<in2 component_id="43"/>
+				</object>
+			</c>
+			<c type="34">
+				<object id="43" n="AP steering clamp">
+					<pos x="-6" y="1"/>
+					<v text="0.3" value="0.3"/>
+				</object>
+			</c>
+			<c type="29">
+				<object id="50" i="1">
+					<pos x="-2" y="-3.5"/>
+					<in1 component_id="33"/>
+				</object>
+			</c>
+			<c type="26">
+				<object id="51" ct="0">
+					<pos x="-0.75" y="-3.5"/>
+					<in1 component_id="50"/>
+				</object>
+			</c>
+			<c type="41">
+				<object id="57" count="1" offset="1">
+					<pos x="-4.75" y="-0.75"/>
+					<inc component_id="35"/>
+					<in1 component_id="1"/>
+				</object>
+			</c>
+			<c type="29">
+				<object id="58">
+					<pos x="-2" y="-2.25"/>
+					<in1 component_id="33"/>
+				</object>
+			</c>
+		</components>
+		<components_bridge>
+			<c>
+				<object id="1">
+					<pos x="-6" y="-1"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="3">
+					<pos x="-6" y="-2"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="6">
+					<pos x="4.25" y="-0.75"/>
+					<in1 component_id="26"/>
+				</object>
+			</c>
+			<c type="4">
+				<object id="35">
+					<pos x="-6" y="-0.5"/>
+				</object>
+			</c>
+			<c type="1">
+				<object id="48">
+					<pos x="0.5" y="-3.5"/>
+					<in1 component_id="51"/>
+				</object>
+			</c>
+			<c type="1">
+				<object id="55">
+					<pos x="0.5" y="-2.5"/>
+					<in1 component_id="58"/>
+				</object>
+			</c>
+		</components_bridge>
+		<groups/>
+		<component_states>
+			<c0 id="26">
+				<pos x="3" y="-1.25"/>
+				<in1 component_id="42"/>
+				<in2 component_id="3"/>
+				<in3 component_id="58"/>
+			</c0>
+			<c1 id="30">
+				<pos x="0.25" y="-0.75"/>
+				<in1 component_id="41"/>
+				<in2 component_id="38"/>
+				<in3 component_id="58"/>
+				<kp text="0.1" value="0.1"/>
+				<ki text="0"/>
+				<kd text="0"/>
+			</c1>
+			<c2 id="32">
+				<pos x="-2.25" y="-0.5"/>
+				<in1 component_id="33"/>
+			</c2>
+			<c3 id="33" script="wasActive = false
+isActive = false
+lastAPPush = false
+
+function onTick()
+	local valid = input.getBool(1)
+	local apPush = input.getBool(2)	
+	if valid then 
+		if apPush and not lastAPPush then 
+			isActive = not isActive 
+		end			
+		local wp = {input.getNumber(2),input.getNumber(3)}
+		local compass = input.getNumber(4)*-360
+		local gps = {input.getNumber(5),input.getNumber(6)}
+		local turn = turnTo(wp, gps, compass)
+		output.setNumber(1, turn)			
+	else	
+		output.setNumber(1, 0)
+		isActive = false
+	end
+	output.setBool(1, isActive)
+	output.setBool(2, not valid and wasActive)
+	wasActive = isActive
+	lastAPPush = apPush
+end
+
+function turnTo(tgt, gps, heading)
+    local h = clampBearing(heading)
+    local t = clampBearing(math.atan(tgt[1]-gps[1],tgt[2]-gps[2])*180/math.pi)
+    local pDist = t&gt;h and t-h or (360-h)+t
+    local nDist = t&gt;h and (360-t)+h or h-t
+    if nDist &lt; pDist then return -nDist else return pDist end
+end
+
+function clampBearing(b) return ((b%360)+360)%360 end
+
+">
+				<pos x="-3.5" y="-0.75"/>
+				<in1 component_id="57"/>
+			</c3>
+			<c4 id="38">
+				<pos x="-2" y="-1.25"/>
+				<n text="0"/>
+			</c4>
+			<c5 id="40" n="AP Steering gain">
+				<pos x="-6" y="0.5"/>
+				<v text="0.1" value="0.1"/>
+			</c5>
+			<c6 id="41">
+				<pos x="-1" y="-0.25"/>
+				<in1 component_id="40"/>
+				<in2 component_id="32"/>
+			</c6>
+			<c7 id="42" e="clamp(x,-y,y)">
+				<pos x="1.75" y="0.25"/>
+				<in1 component_id="30"/>
+				<in2 component_id="43"/>
+			</c7>
+			<c8 id="43" n="AP steering clamp">
+				<pos x="-6" y="1"/>
+				<v text="0.3" value="0.3"/>
+			</c8>
+			<c9 id="50" i="1">
+				<pos x="-2" y="-3.5"/>
+				<in1 component_id="33"/>
+			</c9>
+			<c10 id="51" ct="0">
+				<pos x="-0.75" y="-3.5"/>
+				<in1 component_id="50"/>
+			</c10>
+			<c11 id="57" count="1" offset="1">
+				<pos x="-4.75" y="-0.75"/>
+				<inc component_id="35"/>
+				<in1 component_id="1"/>
+			</c11>
+			<c12 id="58">
+				<pos x="-2" y="-2.25"/>
+				<in1 component_id="33"/>
+			</c12>
+		</component_states>
+		<component_bridge_states>
+			<c0 id="1">
+				<pos x="-6" y="-1"/>
+			</c0>
+			<c1 id="3">
+				<pos x="-6" y="-2"/>
+			</c1>
+			<c2 id="6">
+				<pos x="4.25" y="-0.75"/>
+				<in1 component_id="26"/>
+			</c2>
+			<c3 id="35">
+				<pos x="-6" y="-0.5"/>
+			</c3>
+			<c4 id="48">
+				<pos x="0.5" y="-3.5"/>
+				<in1 component_id="51"/>
+			</c4>
+			<c5 id="55">
+				<pos x="0.5" y="-2.5"/>
+				<in1 component_id="58"/>
+			</c5>
+		</component_bridge_states>
+		<group_states/>
+	</group>
+</microprocessor>
+

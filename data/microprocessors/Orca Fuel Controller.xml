@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<microprocessor name="Orca Fuel Controller" description="No description set." width="6" length="3" id_counter="56" id_counter_node="17" sym4="4642" sym5="2386" sym6="2902" sym7="2818" sym8="2054" sym11="17956" sym12="12586" sym13="13898" sym14="4">
+	<nodes>
+		<n id="1" component_id="2">
+			<node label="Left Pump Controls In" mode="1" type="5" description="The input signal to be processed."/>
+		</n>
+		<n id="2" component_id="4">
+			<node label="Right Pump Controls Out" mode="1" type="5" description="The input signal to be processed.">
+				<position z="1"/>
+			</node>
+		</n>
+		<n id="3" component_id="6">
+			<node label="Left Level" mode="1" type="1" description="The input signal to be processed.">
+				<position x="2"/>
+			</node>
+		</n>
+		<n id="4" component_id="8">
+			<node label="Right Level" mode="1" type="1" description="The input signal to be processed.">
+				<position x="2" z="1"/>
+			</node>
+		</n>
+		<n id="5" component_id="10">
+			<node label="Pump On/Off" description="The input signal to be processed.">
+				<position z="2"/>
+			</node>
+		</n>
+		<n id="6" component_id="14">
+			<node label="Left Pump Controls Out" type="5" description="The input signal to be processed.">
+				<position x="1"/>
+			</node>
+		</n>
+		<n id="7" component_id="16">
+			<node label="Right Pump Controls Out" type="5" description="The input signal to be processed.">
+				<position x="1" z="1"/>
+			</node>
+		</n>
+		<n id="8" component_id="18">
+			<node label="Ext Port In Valve" description="The input signal to be processed.">
+				<position x="4" z="2"/>
+			</node>
+		</n>
+		<n id="9" component_id="20">
+			<node label="Ext Port Out Valve" description="The input signal to be processed.">
+				<position x="5" z="2"/>
+			</node>
+		</n>
+		<n id="10" component_id="22">
+			<node label="Left Tank In Valve" description="The input signal to be processed.">
+				<position x="4"/>
+			</node>
+		</n>
+		<n id="11" component_id="25">
+			<node label="Left Tank Out Valve" description="The input signal to be processed.">
+				<position x="5"/>
+			</node>
+		</n>
+		<n id="12" component_id="26">
+			<node label="Right Tank In Valve" description="The input signal to be processed.">
+				<position x="4" z="1"/>
+			</node>
+		</n>
+		<n id="13" component_id="28">
+			<node label="Right Tank Out Valve" description="The input signal to be processed.">
+				<position x="5" z="1"/>
+			</node>
+		</n>
+		<n id="14" component_id="30">
+			<node label="Left Tank Capacity" mode="1" type="1" description="The input signal to be processed.">
+				<position x="3"/>
+			</node>
+		</n>
+		<n id="15" component_id="32">
+			<node label="Right Tank Capacity" mode="1" type="1" description="The input signal to be processed.">
+				<position x="3" z="1"/>
+			</node>
+		</n>
+		<n id="16" component_id="35">
+			<node label="Total Fuel" type="1" description="The input signal to be processed.">
+				<position x="1" z="2"/>
+			</node>
+		</n>
+		<n id="17" component_id="38">
+			<node label="Total Capacity" type="1" description="The input signal to be processed.">
+				<position x="2" z="2"/>
+			</node>
+		</n>
+	</nodes>
+	<group>
+		<data>
+			<inputs/>
+			<outputs/>
+		</data>
+		<components>
+			<c type="41">
+				<object id="41" count="2" offset="2">
+					<pos x="-5.25" y="4.5"/>
+					<inc component_id="2"/>
+					<in1 component_id="42"/>
+					<in2 component_id="43"/>
+				</object>
+			</c>
+			<c type="29">
+				<object id="42">
+					<pos x="-6.5" y="4.5"/>
+					<in1 component_id="4"/>
+				</object>
+			</c>
+			<c type="29">
+				<object id="43" i="1">
+					<pos x="-6.5" y="4"/>
+					<in1 component_id="4"/>
+				</object>
+			</c>
+			<c type="40">
+				<object id="45" count="2">
+					<pos x="-4" y="4"/>
+					<inc component_id="41"/>
+					<in1 component_id="6"/>
+					<in2 component_id="8"/>
+				</object>
+			</c>
+			<c type="56">
+				<object id="47" script="FUEL_UNEVEN = 5.0
+
+function onTick()
+    local leftFuel = input.getNumber(1)
+    local rightFuel = input.getNumber(2)
+    local leftPumpIn, leftPumpOut = input.getBool(1), input.getBool(2)
+    local rightPumpIn, rightPumpOut = input.getBool(3), input.getBool(4)
+
+    local pumpIn = (leftPumpIn or rightPumpIn) and not (leftPumpOut or rightPumpOut)
+    local pumpOut = (leftPumpOut or rightPumpOut) and not (leftPumpIn or rightPumpIn)
+    local leftLow = (rightFuel - leftFuel) &gt; FUEL_UNEVEN
+    local rightLow = (leftFuel - rightFuel) &gt; FUEL_UNEVEN
+
+    --------------------+------------------------------
+    --  PI  PO  LL  RL  |   P   LI  LO  RI  RO
+    --------------------+------------------------------
+    --                  |
+    --              T   |   T   T           T
+    --          T       |   T       T   T
+    --      T           |   T   T       T
+    --      T       T   |   T   T
+    --      T   T       |   T           T
+    --  T               |   T       T       T
+    --  T           T   |   T   T           T
+    --  T       T       |   T       T   T
+
+    local pumpOnOff = pumpIn or pumpOut or leftLow or rightLow
+    local leftInValve = rightLow or (pumpOut and not leftLow)
+    local leftOutValve = (leftLow and not pumpOut) or (pumpIn and not rightLow)
+    local rightInValve = leftLow or (pumpOut and not rightLow)
+    local rightOutValve = (rightLow and not pumpOut) or (pumpIn and not leftLow)
+
+    output.setNumber(1, leftFuel + rightFuel)
+    output.setBool(1, pumpIn or pumpOut)
+    output.setBool(2, pumpOnOff)
+    output.setBool(3, pumpIn)
+    output.setBool(4, pumpOut)
+    output.setBool(5, leftInValve)
+    output.setBool(6, leftOutValve)
+    output.setBool(7, rightInValve)
+    output.setBool(8, rightOutValve)
+end">
+					<pos x="-2.75" y="4"/>
+					<in1 component_id="45"/>
+				</object>
+			</c>
+			<c type="29">
+				<object id="48" i="1">
+					<pos x="-1.25" y="3.75"/>
+					<in1 component_id="47"/>
+				</object>
+			</c>
+			<c type="6">
+				<object id="49">
+					<pos x="-3.75" y="-0.25"/>
+					<in1 component_id="6"/>
+					<in2 component_id="8"/>
+				</object>
+			</c>
+			<c type="6">
+				<object id="50">
+					<pos x="-3.75" y="-1"/>
+					<in1 component_id="30"/>
+					<in2 component_id="32"/>
+				</object>
+			</c>
+			<c type="29">
+				<object id="51" i="2">
+					<pos x="-1.25" y="3.25"/>
+					<in1 component_id="47"/>
+				</object>
+			</c>
+			<c type="29">
+				<object id="52" i="3">
+					<pos x="-1.25" y="2.75"/>
+					<in1 component_id="47"/>
+				</object>
+			</c>
+			<c type="29">
+				<object id="53" i="4">
+					<pos x="-1.25" y="2.25"/>
+					<in1 component_id="47"/>
+				</object>
+			</c>
+			<c type="29">
+				<object id="54" i="5">
+					<pos x="-1.25" y="1.75"/>
+					<in1 component_id="47"/>
+				</object>
+			</c>
+			<c type="29">
+				<object id="55" i="6">
+					<pos x="-1.25" y="1.25"/>
+					<in1 component_id="47"/>
+				</object>
+			</c>
+			<c type="29">
+				<object id="56" i="7">
+					<pos x="-1.25" y="0.75"/>
+					<in1 component_id="47"/>
+				</object>
+			</c>
+		</components>
+		<components_bridge>
+			<c type="4">
+				<object id="2">
+					<pos x="-8" y="5.25"/>
+				</object>
+			</c>
+			<c type="4">
+				<object id="4">
+					<pos x="-8" y="4.25"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="6">
+					<pos x="-8" y="2.25"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="8">
+					<pos x="-8" y="1.75"/>
+				</object>
+			</c>
+			<c type="1">
+				<object id="10">
+					<pos y="3.75"/>
+					<in1 component_id="48"/>
+				</object>
+			</c>
+			<c type="5">
+				<object id="14">
+					<pos y="5.25"/>
+					<in1 component_id="47"/>
+				</object>
+			</c>
+			<c type="5">
+				<object id="16">
+					<pos y="4.75"/>
+					<in1 component_id="47"/>
+				</object>
+			</c>
+			<c type="1">
+				<object id="18">
+					<pos y="3.25"/>
+					<in1 component_id="51"/>
+				</object>
+			</c>
+			<c type="1">
+				<object id="20">
+					<pos y="2.75"/>
+					<in1 component_id="52"/>
+				</object>
+			</c>
+			<c type="1">
+				<object id="22">
+					<pos y="2.25"/>
+					<in1 component_id="53"/>
+				</object>
+			</c>
+			<c type="1">
+				<object id="25">
+					<pos y="1.75"/>
+					<in1 component_id="54"/>
+				</object>
+			</c>
+			<c type="1">
+				<object id="26">
+					<pos y="1.25"/>
+					<in1 component_id="55"/>
+				</object>
+			</c>
+			<c type="1">
+				<object id="28">
+					<pos y="0.75"/>
+					<in1 component_id="56"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="30">
+					<pos x="-8" y="1.25"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="32">
+					<pos x="-8" y="0.75"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="35">
+					<in1 component_id="49"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="38">
+					<pos y="-0.75"/>
+					<in1 component_id="50"/>
+				</object>
+			</c>
+		</components_bridge>
+		<groups/>
+		<component_states>
+			<c0 id="41" count="2" offset="2">
+				<pos x="-5.25" y="4.5"/>
+				<inc component_id="2"/>
+				<in1 component_id="42"/>
+				<in2 component_id="43"/>
+			</c0>
+			<c1 id="42">
+				<pos x="-6.5" y="4.5"/>
+				<in1 component_id="4"/>
+			</c1>
+			<c2 id="43" i="1">
+				<pos x="-6.5" y="4"/>
+				<in1 component_id="4"/>
+			</c2>
+			<c3 id="45" count="2">
+				<pos x="-4" y="4"/>
+				<inc component_id="41"/>
+				<in1 component_id="6"/>
+				<in2 component_id="8"/>
+			</c3>
+			<c4 id="47" script="FUEL_UNEVEN = 5.0
+
+function onTick()
+    local leftFuel = input.getNumber(1)
+    local rightFuel = input.getNumber(2)
+    local leftPumpIn, leftPumpOut = input.getBool(1), input.getBool(2)
+    local rightPumpIn, rightPumpOut = input.getBool(3), input.getBool(4)
+
+    local pumpIn = (leftPumpIn or rightPumpIn) and not (leftPumpOut or rightPumpOut)
+    local pumpOut = (leftPumpOut or rightPumpOut) and not (leftPumpIn or rightPumpIn)
+    local leftLow = (rightFuel - leftFuel) &gt; FUEL_UNEVEN
+    local rightLow = (leftFuel - rightFuel) &gt; FUEL_UNEVEN
+
+    --------------------+------------------------------
+    --  PI  PO  LL  RL  |   P   LI  LO  RI  RO
+    --------------------+------------------------------
+    --                  |
+    --              T   |   T   T           T
+    --          T       |   T       T   T
+    --      T           |   T   T       T
+    --      T       T   |   T   T
+    --      T   T       |   T           T
+    --  T               |   T       T       T
+    --  T           T   |   T   T           T
+    --  T       T       |   T       T   T
+
+    local pumpOnOff = pumpIn or pumpOut or leftLow or rightLow
+    local leftInValve = rightLow or (pumpOut and not leftLow)
+    local leftOutValve = (leftLow and not pumpOut) or (pumpIn and not rightLow)
+    local rightInValve = leftLow or (pumpOut and not rightLow)
+    local rightOutValve = (rightLow and not pumpOut) or (pumpIn and not leftLow)
+
+    output.setNumber(1, leftFuel + rightFuel)
+    output.setBool(1, pumpIn or pumpOut)
+    output.setBool(2, pumpOnOff)
+    output.setBool(3, pumpIn)
+    output.setBool(4, pumpOut)
+    output.setBool(5, leftInValve)
+    output.setBool(6, leftOutValve)
+    output.setBool(7, rightInValve)
+    output.setBool(8, rightOutValve)
+end">
+				<pos x="-2.75" y="4"/>
+				<in1 component_id="45"/>
+			</c4>
+			<c5 id="48" i="1">
+				<pos x="-1.25" y="3.75"/>
+				<in1 component_id="47"/>
+			</c5>
+			<c6 id="49">
+				<pos x="-3.75" y="-0.25"/>
+				<in1 component_id="6"/>
+				<in2 component_id="8"/>
+			</c6>
+			<c7 id="50">
+				<pos x="-3.75" y="-1"/>
+				<in1 component_id="30"/>
+				<in2 component_id="32"/>
+			</c7>
+			<c8 id="51" i="2">
+				<pos x="-1.25" y="3.25"/>
+				<in1 component_id="47"/>
+			</c8>
+			<c9 id="52" i="3">
+				<pos x="-1.25" y="2.75"/>
+				<in1 component_id="47"/>
+			</c9>
+			<c10 id="53" i="4">
+				<pos x="-1.25" y="2.25"/>
+				<in1 component_id="47"/>
+			</c10>
+			<c11 id="54" i="5">
+				<pos x="-1.25" y="1.75"/>
+				<in1 component_id="47"/>
+			</c11>
+			<c12 id="55" i="6">
+				<pos x="-1.25" y="1.25"/>
+				<in1 component_id="47"/>
+			</c12>
+			<c13 id="56" i="7">
+				<pos x="-1.25" y="0.75"/>
+				<in1 component_id="47"/>
+			</c13>
+		</component_states>
+		<component_bridge_states>
+			<c0 id="2">
+				<pos x="-8" y="5.25"/>
+			</c0>
+			<c1 id="4">
+				<pos x="-8" y="4.25"/>
+			</c1>
+			<c2 id="6">
+				<pos x="-8" y="2.25"/>
+			</c2>
+			<c3 id="8">
+				<pos x="-8" y="1.75"/>
+			</c3>
+			<c4 id="10">
+				<pos y="3.75"/>
+				<in1 component_id="48"/>
+			</c4>
+			<c5 id="14">
+				<pos y="5.25"/>
+				<in1 component_id="47"/>
+			</c5>
+			<c6 id="16">
+				<pos y="4.75"/>
+				<in1 component_id="47"/>
+			</c6>
+			<c7 id="18">
+				<pos y="3.25"/>
+				<in1 component_id="51"/>
+			</c7>
+			<c8 id="20">
+				<pos y="2.75"/>
+				<in1 component_id="52"/>
+			</c8>
+			<c9 id="22">
+				<pos y="2.25"/>
+				<in1 component_id="53"/>
+			</c9>
+			<c10 id="25">
+				<pos y="1.75"/>
+				<in1 component_id="54"/>
+			</c10>
+			<c11 id="26">
+				<pos y="1.25"/>
+				<in1 component_id="55"/>
+			</c11>
+			<c12 id="28">
+				<pos y="0.75"/>
+				<in1 component_id="56"/>
+			</c12>
+			<c13 id="30">
+				<pos x="-8" y="1.25"/>
+			</c13>
+			<c14 id="32">
+				<pos x="-8" y="0.75"/>
+			</c14>
+			<c15 id="35">
+				<in1 component_id="49"/>
+			</c15>
+			<c16 id="38">
+				<pos y="-0.75"/>
+				<in1 component_id="50"/>
+			</c16>
+		</component_bridge_states>
+		<group_states/>
+	</group>
+</microprocessor>
+

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<microprocessor name="BBBB2C" description="No description set." width="5" length="1" id_counter="8" id_counter_node="5" sym2="824" sym3="136" sym4="144" sym5="160" sym6="792" sym9="26214" sym10="43690" sym11="26214" sym12="43690" sym13="26214">
+	<nodes>
+		<n id="1" component_id="5">
+			<node label="Output" type="5" description="The input signal to be processed.">
+				<position x="4"/>
+			</node>
+		</n>
+		<n id="2" component_id="3">
+			<node label="CH1" mode="1" description="The input signal to be processed."/>
+		</n>
+		<n id="3" component_id="4">
+			<node label="CH2" mode="1" description="The input signal to be processed.">
+				<position x="1"/>
+			</node>
+		</n>
+		<n id="4" component_id="6">
+			<node label="CH3" mode="1" description="The input signal to be processed.">
+				<position x="2"/>
+			</node>
+		</n>
+		<n id="5" component_id="7">
+			<node label="CH4" mode="1" description="The input signal to be processed.">
+				<position x="3"/>
+			</node>
+		</n>
+	</nodes>
+	<group>
+		<data>
+			<inputs/>
+			<outputs/>
+		</data>
+		<components>
+			<c type="41">
+				<object id="8" count="4">
+					<pos x="-0.25" y="-0.25"/>
+					<in1 component_id="3"/>
+					<in2 component_id="4"/>
+					<in3 component_id="6"/>
+					<in4 component_id="7"/>
+				</object>
+			</c>
+		</components>
+		<components_bridge>
+			<c>
+				<object id="3">
+					<pos x="-2" y="1.25"/>
+				</object>
+			</c>
+			<c>
+				<object id="4">
+					<pos x="-2" y="0.5"/>
+				</object>
+			</c>
+			<c type="5">
+				<object id="5">
+					<pos x="1.5" y="0.75"/>
+					<in1 component_id="8"/>
+				</object>
+			</c>
+			<c>
+				<object id="6">
+					<pos x="-2" y="-0.25"/>
+				</object>
+			</c>
+			<c>
+				<object id="7">
+					<pos x="-2" y="-1"/>
+				</object>
+			</c>
+		</components_bridge>
+		<groups/>
+		<component_states>
+			<c0 id="8" count="4">
+				<pos x="-0.25" y="-0.25"/>
+				<in1 component_id="3"/>
+				<in2 component_id="4"/>
+				<in3 component_id="6"/>
+				<in4 component_id="7"/>
+			</c0>
+		</component_states>
+		<component_bridge_states>
+			<c0 id="3">
+				<pos x="-2" y="1.25"/>
+			</c0>
+			<c1 id="4">
+				<pos x="-2" y="0.5"/>
+			</c1>
+			<c2 id="5">
+				<pos x="1.5" y="0.75"/>
+				<in1 component_id="8"/>
+			</c2>
+			<c3 id="6">
+				<pos x="-2" y="-0.25"/>
+			</c3>
+			<c4 id="7">
+				<pos x="-2" y="-1"/>
+			</c4>
+		</component_bridge_states>
+		<group_states/>
+	</group>
+</microprocessor>
+

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<microprocessor name="Fuel Use Meter" description="No description set." width="2" length="1" id_counter="9" id_counter_node="2" sym3="1124" sym4="650" sym5="3658" sym6="2602" sym7="1226" sym10="17474" sym11="8866" sym12="11942" sym13="10914" sym14="9390">
+	<nodes>
+		<n id="1" component_id="2">
+			<node label="Input Fuel Level" mode="1" type="1" description="The input signal to be processed."/>
+		</n>
+		<n id="2" component_id="5">
+			<node label="Fuel Use Rate (l/min)" type="1" description="The input signal to be processed.">
+				<position x="1"/>
+			</node>
+		</n>
+	</nodes>
+	<group>
+		<data>
+			<inputs/>
+			<outputs/>
+		</data>
+		<components>
+			<c type="34">
+				<object id="6" n="Moving average samples">
+					<pos x="-2.5" y="-0.25"/>
+					<v text="5" value="5"/>
+				</object>
+			</c>
+			<c type="40">
+				<object id="7" count="2">
+					<pos x="-1"/>
+					<in1 component_id="2"/>
+					<in2 component_id="6"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="8">
+					<pos x="1.5" y="0.5"/>
+					<in1 component_id="9"/>
+				</object>
+			</c>
+			<c type="56">
+				<object id="9" script='-- Author: Tom Shackell
+-- GitHub: &lt;GithubLink&gt;
+-- Workshop: &lt;WorkshopLink&gt;
+--
+-- Developed &amp; Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
+-- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
+--      By Nameous Changey
+-- Minimized Size: 634 (949 with comment) chars
+
+l=nil
+q=input.getNumber
+t={B=function(v)return{g={},c=0,j=0,e=0,d=0,m=v.m}end,m=function(_,s,f,a)local a=a or 1
+if f&lt;=_.j then
+for n=f,_.j-1 do
+local b=_.g[n]_.e=_.e-(b.p*b.a)_.d=_.d-b.a
+_.g[n]=l
+end
+_.c=f&gt;0 and _.c%f or 0
+end
+local b=_.g[_.c]local z=b and(b.p*b.a)or 0
+_.g[_.c]={p=s,a=a}_.e=_.e+(s*a)-z
+_.d=_.d+a-(b and b.a or 0)_.c=_.c+1
+if _.c&gt;=f then
+_.c=0
+end
+return _.d&gt;0 and _.e/_.d or 0
+end}function A(y)return math.floor(y+.5)end
+w=60*60
+h=0
+i=l
+o=0
+u=t:B()function onTick()local k=q(1)local j=A(q(2))local r=0
+if k~=i then
+if i~=l then
+local C=i-k
+local x=(h-o)/w
+r=u:m(C/x,j)end
+i=k
+o=h
+end
+output.setNumber(1,r)h=h+1
+end
+'>
+					<pos x="0.25" y="0.25"/>
+					<in1 component_id="7"/>
+				</object>
+			</c>
+		</components>
+		<components_bridge>
+			<c type="2">
+				<object id="2">
+					<pos x="-2.5" y="0.25"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="5">
+					<pos x="2.75" y="0.5"/>
+					<in1 component_id="8"/>
+				</object>
+			</c>
+		</components_bridge>
+		<groups/>
+		<component_states>
+			<c0 id="6" n="Moving average samples">
+				<pos x="-2.5" y="-0.25"/>
+				<v text="5" value="5"/>
+			</c0>
+			<c1 id="7" count="2">
+				<pos x="-1"/>
+				<in1 component_id="2"/>
+				<in2 component_id="6"/>
+			</c1>
+			<c2 id="8">
+				<pos x="1.5" y="0.5"/>
+				<in1 component_id="9"/>
+			</c2>
+			<c3 id="9" script='-- Author: Tom Shackell
+-- GitHub: &lt;GithubLink&gt;
+-- Workshop: &lt;WorkshopLink&gt;
+--
+-- Developed &amp; Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
+-- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
+--      By Nameous Changey
+-- Minimized Size: 634 (949 with comment) chars
+
+l=nil
+q=input.getNumber
+t={B=function(v)return{g={},c=0,j=0,e=0,d=0,m=v.m}end,m=function(_,s,f,a)local a=a or 1
+if f&lt;=_.j then
+for n=f,_.j-1 do
+local b=_.g[n]_.e=_.e-(b.p*b.a)_.d=_.d-b.a
+_.g[n]=l
+end
+_.c=f&gt;0 and _.c%f or 0
+end
+local b=_.g[_.c]local z=b and(b.p*b.a)or 0
+_.g[_.c]={p=s,a=a}_.e=_.e+(s*a)-z
+_.d=_.d+a-(b and b.a or 0)_.c=_.c+1
+if _.c&gt;=f then
+_.c=0
+end
+return _.d&gt;0 and _.e/_.d or 0
+end}function A(y)return math.floor(y+.5)end
+w=60*60
+h=0
+i=l
+o=0
+u=t:B()function onTick()local k=q(1)local j=A(q(2))local r=0
+if k~=i then
+if i~=l then
+local C=i-k
+local x=(h-o)/w
+r=u:m(C/x,j)end
+i=k
+o=h
+end
+output.setNumber(1,r)h=h+1
+end
+'>
+				<pos x="0.25" y="0.25"/>
+				<in1 component_id="7"/>
+			</c3>
+		</component_states>
+		<component_bridge_states>
+			<c0 id="2">
+				<pos x="-2.5" y="0.25"/>
+			</c0>
+			<c1 id="5">
+				<pos x="2.75" y="0.5"/>
+				<in1 component_id="8"/>
+			</c1>
+		</component_bridge_states>
+		<group_states/>
+	</group>
+</microprocessor>
+

@@ -1,0 +1,1171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<microprocessor name="Simple Map" width="5" length="3" id_counter="52" id_counter_node="14" sym4="2722" sym5="2722" sym6="7074" sym7="10914" sym8="10914" sym9="4394" sym10="54" sym11="34">
+	<nodes>
+		<n id="1" component_id="7">
+			<node label="Display out put" type="6">
+				<position x="1" z="1"/>
+			</node>
+		</n>
+		<n id="2" component_id="9">
+			<node label="GpsX" mode="1" type="1">
+				<position z="1"/>
+			</node>
+		</n>
+		<n id="3" component_id="11">
+			<node label="GpsY" mode="1" type="1">
+				<position x="1"/>
+			</node>
+		</n>
+		<n id="4" component_id="13">
+			<node label="Heading" mode="1" type="1"/>
+		</n>
+		<n id="5" component_id="17">
+			<node label="Touch" mode="1" type="5">
+				<position x="2"/>
+			</node>
+		</n>
+		<n id="6" component_id="18">
+			<node label="Transponder detector" mode="1" description="Attach to transponder detector">
+				<position x="2" z="1"/>
+			</node>
+		</n>
+		<n id="7" component_id="25">
+			<node label="Radar on/off" mode="1" description="Whether radar is on or not">
+				<position z="2"/>
+			</node>
+		</n>
+		<n id="8" component_id="27">
+			<node label="Radar angle" mode="1" type="1" description="Angle from radar">
+				<position x="1" z="2"/>
+			</node>
+		</n>
+		<n id="9" component_id="29">
+			<node label="Radar composite" mode="1" type="5" description="Composite signal from radar">
+				<position x="2" z="2"/>
+			</node>
+		</n>
+		<n id="11" component_id="38">
+			<node label="Keypad press" mode="1" description="The input signal to be processed.">
+				<position x="3" z="2"/>
+			</node>
+		</n>
+		<n id="12" component_id="40">
+			<node label="Keypad A" mode="1" type="1" description="The input signal to be processed.">
+				<position x="3" z="1"/>
+			</node>
+		</n>
+		<n id="13" component_id="42">
+			<node label="Keypad B" mode="1" type="1" description="The input signal to be processed.">
+				<position x="3"/>
+			</node>
+		</n>
+		<n id="14" component_id="48">
+			<node label="To AP" type="5" description="The input signal to be processed.">
+				<position x="4"/>
+			</node>
+		</n>
+	</nodes>
+	<group>
+		<data>
+			<inputs/>
+			<outputs/>
+		</data>
+		<components>
+			<c type="56">
+				<object id="14" script='-- Map UI
+
+-- Author: Tom Shackell
+-- GitHub: &lt;GithubLink&gt;
+-- Workshop: &lt;WorkshopLink&gt;
+--
+-- Developed &amp; Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
+-- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
+--      By Nameous Changey
+-- Minimized Size: 2382 (2699 with comment) chars
+ar=""
+
+v=255
+Y=pairs
+y=nil
+f=true
+j=false
+I=screen
+U=input
+S=output
+t=S.setNumber
+W=S.setBool
+Q=U.getBool
+m=U.getNumber
+aa=I.setColor
+s=2
+X=1.05
+x=j
+a=1
+l=0
+J=0
+k=8
+c={}P={}N=1
+function i(A,g,E,G,q,C,O,h,K,D)local M=function()return f end
+P[N]={e={A,g,E,G},q=q or ar,C=C,O=O or M,h=h or M,K=K or F,D=D or M,H=j,L=j}N=N+1
+end
+function ap(_,d)if d==a then F(_,f)end
+end
+function am(_,d)if d==l and(J//20)%2==0 then
+_.q=ar
+else
+if not c[d].w then
+_.q="-------"
+else
+local an=Z(d)_.q=string.format("%.1fnm",an)end
+end
+F(_)end
+function ab(d,ag)local p=d+ag
+if p&gt;=1 and p&lt;=k then
+local ad=c[p]c[p]=c[d]c[d]=ad
+if a==d then
+a=p
+elseif a==p then
+a=d
+end
+end
+end
+function ak(d)if a&gt;d then
+a=a-1
+end
+for b=d,k-1 do c[b]=c[b+1]end
+c[k]={u={0,0},w=j}end
+function F(_,ao)if not _:h()then return end
+local n=I
+B(50,50,50)if not ao then
+if _.L then
+n.drawRectF(_.e[1],_.e[2],_.e[3]-1,_.e[4]-1)B(v,v,v)else
+n.drawRect(_.e[1],_.e[2],_.e[3]-1,_.e[4]-1)end
+end
+_:D()n.drawText(_.e[1]+2,_.e[2]+2,_.q)end
+i(0,55,8,9,"-",j,function()s=s*X end)i(7,55,8,9,"+",j,function()s=s/X end)i(88,55,8,9,"w",f,function()x=not x end)for b=1,k do
+local g=(b-1)*8
+c[b]={u={0,0},w=j}local h=function()return x end
+local o=function()if b==a then aa(v,v,0)end end
+i(14,g-1,8,9,"&gt;",f,function()a=b end,h,function(_)ap(_,b)end,o)i(21,g-1,8,9,b,f,function()a=b end,h,y,o)i(28,g-1,40,9,ar,f,function()l=b end,h,function(_)am(_,b)end,o)i(67,g-1,8,9,"^",f,function()ab(b,-1)end,h,y,o)i(74,g-1,8,9,"v",f,function()ab(b,1)end,h,y,o)i(81,g-1,8,9,"x",f,function()ak(b)end,h,y,o)end
+function onTick()T=m(3)R=m(4)al=Q(1)z={m(6),m(7)}ai={m(8),m(9)}local aj=m(10)ah=Q(2)for V,_ in Y(P)do
+_.L=_:h()and af(_.e[1]+1,_.e[2]+1,_.e[3]-2,_.e[4]-2)if _.L then
+if not _.C or not _.H then _:O()end
+_.H=f
+else
+_.H=j
+end
+end
+if ah and l~=0 then
+c[l].u=ai
+c[l].w=f
+if a&gt;k and l==1 then a=1 end
+l=0
+end
+while a&lt;=k do
+if Z(a)&lt;aj or not c[a].w then
+a=a+1
+else
+break
+end
+end
+local r=1
+for V=1,k do W(r,j)end
+for b=a,k do
+if c[b].w then
+W(r,f)t(r*2,c[b].u[1])t(r*2+1,c[b].u[2])r=r+1
+end
+end
+t(1,s)t(20,z[1])t(21,z[2])J=J+1
+end
+function af(A,g,E,G)return al and T&gt;A and R&gt;g and T&lt;A+E and R&lt;g+G
+end
+function onDraw()local n=I
+if x then
+B(0,0,0)n.drawRectF(14,0,74,64)B(50,50,50)n.drawRect(14,-1,74,64)end
+for V,_ in Y(P)do _:K()end
+end
+function B(ae,aq,_)aa(ae,aq,_)end
+function Z(d)local ac=c[d].u
+return math.sqrt((ac[1]-z[1])^2+(ac[2]-z[2])^2)/1852
+end
+'>
+					<pos x="3" y="0.25"/>
+					<in1 component_id="15"/>
+					<in2 component_id="24" node_index="1"/>
+				</object>
+			</c>
+			<c type="40">
+				<object id="15" count="5" offset="5">
+					<pos x="-2.25" y="-1"/>
+					<inc component_id="43"/>
+					<in1 component_id="9"/>
+					<in2 component_id="11"/>
+					<in3 component_id="40"/>
+					<in4 component_id="42"/>
+					<in5 component_id="50"/>
+				</object>
+			</c>
+			<c type="41">
+				<object id="19" count="1">
+					<pos x="-5.75" y="1.25"/>
+					<in1 component_id="18"/>
+				</object>
+			</c>
+			<c type="40">
+				<object id="20" count="2">
+					<pos x="-4.5" y="1"/>
+					<inc component_id="19"/>
+					<in1 component_id="9"/>
+					<in2 component_id="11"/>
+				</object>
+			</c>
+			<c type="56">
+				<object id="21" script="-- The trilateration of the transmitter beacon
+
+lastBeep = nil
+lastObs = nil
+minObsDist = 100
+ticks = 0
+answer = nil
+distAcc = {0,0}
+
+function onTick()
+    local beep = input.getBool(1)
+    local gps_x = input.getNumber(1)
+    local gps_y = input.getNumber(2)
+    if beep then
+        if lastBeep then
+            -- see: https://www.reddit.com/r/Stormworks/comments/jcaygi/comment/g9bo480/
+            local dist = 50.1 * (ticks - lastBeep) - 178
+            distAcc = {distAcc[1] + dist, distAcc[2] + 1}
+            local d = distAcc[1]/distAcc[2]
+            output.setNumber(3, d)
+            local obs = {x=gps_x, y=gps_y, r=d}
+            if not lastObs or vlen(vsub(lastObs, obs)) &gt; minObsDist then
+                answer = observe(obs)
+                lastObs = obs
+                distAcc = {0,0}
+            end
+        end
+        lastBeep = ticks
+    end
+    output.setBool(1, answer ~= nil)
+    if answer then
+        output.setNumber(1, answer.bestGuess)
+        output.setNumber(2, answer.altGuess)
+        output.setNumber(3, answer.distance)
+    end
+    ticks = ticks + 1
+    if lastBeep and ticks - lastBeep &gt; 2000 then -- about 100km, 33 seconds
+        lastBeep = nil
+        answer = nil
+        observes = RingBuff:new()
+        trilats = RingBuff:new()
+    end
+end
+
+RingBuff = {
+    new = function(cls, sz)
+        return {
+            items={},
+            sz=sz,
+            idx=0,
+            write=cls.write,
+            iter=cls.iter,
+        }
+    end,
+    write = function(self, value)
+        self.items[self.idx] = value
+        self.idx = (self.idx + 1) % self.sz
+    end,
+    iter = function(self)
+        local i = 0
+        return function()
+            i = i + 1
+            return self.items[i-1]
+        end
+    end
+}
+observes = RingBuff:new(100)
+trilats = RingBuff:new(10000)
+
+function observe(obs)
+    for other in observes:iter() do
+        local p0,p1 = trilaterate(other, obs)
+        if p0 then
+            trilats:write({ p0, p1 })
+        end
+    end
+    observes:write(obs)
+    return makeGuess(obs)
+end
+
+function trilaterate(p0, p1)
+    local t = vsub(p1, p0)
+    local d = vlen(t)
+    if math.abs(d) &lt; 0.000001 then return end
+    local j = (p0.r*p0.r - p1.r*p1.r + d*d) / (2*d)
+    local k2 = p0.r*p0.r - j*j
+    if k2 &lt; 0 then return end
+    local k = math.sqrt(k2)
+    local u = {x=t.x/d, y=t.y/d}
+    local v = {x=u.y, y=-u.x}
+    function posn(f) return vadd(vadd(p0, vmul(u, j)), vmul(v, k*f)) end
+    return posn(1), posn(-1)
+end
+
+function makeGuess(here)
+    local sums = {0, 0}
+    local errs = {0, 0}
+    local n = 0
+    for tri in trilats:iter() do
+        local b = { vbear(here, tri[1]), vbear(here, tri[2]) }
+        if n == 0 then
+            sums = b
+        else
+            local s = { sums[1]/n, sums[2]/n }
+            local e11 = angdiff(b[1], s[1])
+            local e22 = angdiff(b[2], s[2])
+            local e12 = angdiff(b[1], s[2])
+            local e21 = angdiff(b[2], s[1])
+            if math.min(e11, e22) &lt; math.min(e12, e21) then
+                sums = { b[1] + sums[1], b[2] + sums[2] }
+                errs = { errs[1] + e11, errs[2] + e22 }
+            else
+                sums = { b[2] + sums[1], b[1] + sums[2] }
+                errs = { errs[1] + e21, errs[2] + e12 }
+            end
+        end
+        n = n + 1
+    end
+    if n == 0 then return end
+    if errs[1] &lt; errs[2] then
+        return { bestGuess=sums[1]/n, altGuess=sums[2]/n, distance=here.r }
+    else
+        return { bestGuess=sums[2]/n, altGuess=sums[1]/n, distance=here.r }
+    end
+end
+function vlen(v) return math.sqrt(v.x*v.x + v.y*v.y) end
+function vadd(a, b) return { x=a.x+b.x, y=a.y+b.y } end
+function vsub(a, b) return { x=a.x-b.x, y=a.y-b.y } end
+function vmul(v, f) return { x=v.x*f, y=v.y*f } end
+function vbear(from, to)
+    local v = vsub(to, from)
+    return (450 - (math.atan(v.y, v.x) * 180 / math.pi)) % 360
+end
+function angdiff(a, b) return 180 - math.abs(180 - math.abs(a - b) % 360) end
+">
+					<pos x="-3.25" y="1.25"/>
+					<in1 component_id="20"/>
+				</object>
+			</c>
+			<c type="40">
+				<object id="23" count="1" offset="3">
+					<pos x="-1.75" y="0.75"/>
+					<inc component_id="21"/>
+					<in1 component_id="13"/>
+				</object>
+			</c>
+			<c type="56">
+				<object id="24" script='-- Draw the trilateration output to the map screen
+
+radius = 20
+tickLength = 3
+
+function onTick()
+    isActive = input.getBool(1)
+    guessBearing = input.getNumber(1)
+    altBearing = input.getNumber(2)
+    distance = input.getNumber(3)
+    heading = -input.getNumber(4)*360
+end
+
+function onDraw()
+    local h = screen.getHeight()
+    local cx = screen.getWidth()/2                  
+    local cy = h/2                    
+    
+    screen.setColor(0,255,0)
+    screen.drawCircleF(cx, cy, 1)
+    
+    screen.setColor(5, 5, 5)
+    screen.drawCircle(cx, cy, radius)
+    
+    screen.setColor(255, 0, 0)
+    drawTick(cx, cy, heading, radius - 4, tickLength)
+    if isActive then
+    	screen.setColor(5, 5, 5)
+    	drawTick(cx, cy, altBearing, radius + 1, tickLength)
+    	screen.setColor(255, 255, 0)
+    	drawTick(cx, cy, guessBearing, radius + 1, tickLength)
+    	screen.setColor(5, 5, 5)
+    	local nm = math.min(distance / 1852, 999.9)
+    	local text = string.format("%.1fnm", nm)
+    	screen.drawTextBox(cx - 20, h - 6, 40, 5, text, 0, 0)
+    end
+end
+
+function drawTick(cx, cy, bearing, beginRadius, length)
+	local b = math.rad(bearing)
+	function f(r) 
+		return cx + r*math.sin(b), cy - r*math.cos(b)
+	end 
+	local x0, y0 = f(beginRadius)
+	local x1, y1 = f(beginRadius + length)
+	screen.drawLine(x0, y0, x1, y1)
+end'>
+					<pos x="1.5" y="-0.75"/>
+					<in1 component_id="23"/>
+					<in2 component_id="34" node_index="1"/>
+				</object>
+			</c>
+			<c type="41">
+				<object id="31" count="1" offset="8">
+					<pos x="-5.75" y="-3.75"/>
+					<inc component_id="29"/>
+					<in1 component_id="25"/>
+				</object>
+			</c>
+			<c type="40">
+				<object id="32" count="4" offset="24">
+					<pos x="-2.25" y="-2.75"/>
+					<inc component_id="31"/>
+					<in1 component_id="33"/>
+					<in2 component_id="27"/>
+					<in3 component_id="9"/>
+					<in4 component_id="11"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="33">
+					<pos x="1" y="-3.25"/>
+					<in1 component_id="14"/>
+				</object>
+			</c>
+			<c type="56">
+				<object id="34" script="-- Draw radar contacts onto the map
+
+contacts={}
+nextContactID=0
+isRadarOn=false
+zoom=1
+radarAngle=0
+gps = nil
+ticks = 0
+expiryTicks = 150
+fadeFactor = 0.75
+waypoints = {}
+
+function onTick()
+	isRadarOn = input.getBool(9)
+	zoom = input.getNumber(25)
+	radarAngle = input.getNumber(26)
+    gps = {input.getNumber(27), input.getNumber(28)}
+	for i = 0,7 do
+		local active = input.getBool(i+1)
+		if active then
+			local x = input.getNumber(i*3+1)
+			local y = input.getNumber(i*3+2)
+			local z = input.getNumber(i*3+3)
+			contacts[nextContactID] = {posn={x,y,z}, time=ticks}
+			nextContactID = nextContactID + 1
+		end
+	end
+	for id,contact in pairs(contacts) do
+		if ticks - contact.time &gt; expiryTicks then
+			contacts[id] = nil
+		end
+	end
+	ticks = ticks + 1
+end
+
+function onDraw()
+	w = screen.getWidth()
+	h = screen.getHeight()
+    if isRadarOn then
+        screen.setColor(255, 0, 0)
+		for _,con in pairs(contacts) do 
+			local px,py = map.mapToScreen(gps[1], gps[2], zoom, w, h, con.posn[1], con.posn[2])
+			local alpha = math.min(1 - ((con.time/expiryTicks) - fadeFactor)/(1 - fadeFactor), 1)
+			screen.setColor(255, 0, 255, alpha*255)
+			screen.drawRectF(px,py,1,1)
+		end 
+    end
+end">
+					<pos x="0.25" y="-1"/>
+					<in1 component_id="32"/>
+					<in2 component_id="51" node_index="1"/>
+				</object>
+			</c>
+			<c type="41">
+				<object id="43" count="1" offset="1">
+					<pos x="-4"/>
+					<inc component_id="17"/>
+					<in1 component_id="38"/>
+				</object>
+			</c>
+			<c type="40">
+				<object id="49" count="3" offset="3">
+					<pos x="-1" y="-5"/>
+					<inc component_id="14"/>
+					<in1 component_id="13"/>
+					<in2 component_id="9"/>
+					<in3 component_id="11"/>
+				</object>
+			</c>
+			<c type="34">
+				<object id="50" n="WP Switch Dist (nm)">
+					<pos x="-7" y="-3.25"/>
+					<v text="0.05" value="0.05"/>
+				</object>
+			</c>
+			<c type="56">
+				<object id="51" script='-- Draw the map &amp; waypoints, with zoom
+
+zoom=1
+gps = nil
+waypoints = {}
+ticks = 0
+
+function onTick()
+	zoom = input.getNumber(1)
+    gps = {input.getNumber(20), input.getNumber(21)}
+	waypoints = {}
+	for i = 0,7 do
+		local active = input.getBool(i+1)
+		if active then
+			waypoints[i+1] = {input.getNumber(i*2+2), input.getNumber(i*2+3)}
+		end
+	end
+	ticks = ticks + 1
+end
+
+function onDraw()
+	local sc=screen
+	local w,h = sc.getWidth(), sc.getHeight()
+	
+	sc.drawMap(gps[1], gps[2], zoom)
+    
+    local lx,ly = w/2,h/2
+    for _,wp in pairs(waypoints) do 
+    	if wp then
+    		local px,py = map.mapToScreen(gps[1], gps[2], zoom, w, h, wp[1], wp[2])
+    		sc.setColor(20,20,20)
+    		sc.drawLine(lx,ly,px,py)
+    		sc.setColor(0,0,255)
+    		sc.drawRectF(px,py,1,1)
+    		lx,ly = px,py
+    	end
+    end
+	if waypoints[1] then
+		local dist = string.format("%.1fnm", distNM(gps, waypoints[1]))
+		sc.setColor(5,5,5)
+		sc.drawTextBox(15,57,73,7,dist,0,0)
+	end
+end
+
+function distNM(a,b) return math.sqrt((a[1]-b[1])^2+(a[2]-b[2])^2) / 1852 end
+'>
+					<pos x="-1" y="-0.75"/>
+					<in1 component_id="14"/>
+				</object>
+			</c>
+			<c type="34">
+				<object id="52" n="REM: Trilateration">
+					<pos x="-3.25" y="2"/>
+					<v text="0"/>
+				</object>
+			</c>
+		</components>
+		<components_bridge>
+			<c type="7">
+				<object id="7">
+					<pos x="4.25" y="0.25"/>
+					<in1 component_id="14" node_index="1"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="9">
+					<pos x="-7" y="-1.25"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="11">
+					<pos x="-7" y="-1.75"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="13">
+					<pos x="-7" y="0.75"/>
+				</object>
+			</c>
+			<c type="4">
+				<object id="17">
+					<pos x="-7"/>
+				</object>
+			</c>
+			<c>
+				<object id="18">
+					<pos x="-7" y="1.25"/>
+				</object>
+			</c>
+			<c>
+				<object id="25">
+					<pos x="-7" y="-4.25"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="27">
+					<pos x="-7" y="-4.75"/>
+				</object>
+			</c>
+			<c type="4">
+				<object id="29">
+					<pos x="-7" y="-3.75"/>
+				</object>
+			</c>
+			<c>
+				<object id="38">
+					<pos x="-7" y="-0.5"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="40">
+					<pos x="-7" y="-2.25"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="42">
+					<pos x="-7" y="-2.75"/>
+				</object>
+			</c>
+			<c type="5">
+				<object id="48">
+					<pos x="4.25" y="-4.25"/>
+					<in1 component_id="49"/>
+				</object>
+			</c>
+		</components_bridge>
+		<groups/>
+		<component_states>
+			<c0 id="14" script='-- Map UI
+
+-- Author: Tom Shackell
+-- GitHub: &lt;GithubLink&gt;
+-- Workshop: &lt;WorkshopLink&gt;
+--
+-- Developed &amp; Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
+-- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
+--      By Nameous Changey
+-- Minimized Size: 2382 (2699 with comment) chars
+ar=""
+
+v=255
+Y=pairs
+y=nil
+f=true
+j=false
+I=screen
+U=input
+S=output
+t=S.setNumber
+W=S.setBool
+Q=U.getBool
+m=U.getNumber
+aa=I.setColor
+s=2
+X=1.05
+x=j
+a=1
+l=0
+J=0
+k=8
+c={}P={}N=1
+function i(A,g,E,G,q,C,O,h,K,D)local M=function()return f end
+P[N]={e={A,g,E,G},q=q or ar,C=C,O=O or M,h=h or M,K=K or F,D=D or M,H=j,L=j}N=N+1
+end
+function ap(_,d)if d==a then F(_,f)end
+end
+function am(_,d)if d==l and(J//20)%2==0 then
+_.q=ar
+else
+if not c[d].w then
+_.q="-------"
+else
+local an=Z(d)_.q=string.format("%.1fnm",an)end
+end
+F(_)end
+function ab(d,ag)local p=d+ag
+if p&gt;=1 and p&lt;=k then
+local ad=c[p]c[p]=c[d]c[d]=ad
+if a==d then
+a=p
+elseif a==p then
+a=d
+end
+end
+end
+function ak(d)if a&gt;d then
+a=a-1
+end
+for b=d,k-1 do c[b]=c[b+1]end
+c[k]={u={0,0},w=j}end
+function F(_,ao)if not _:h()then return end
+local n=I
+B(50,50,50)if not ao then
+if _.L then
+n.drawRectF(_.e[1],_.e[2],_.e[3]-1,_.e[4]-1)B(v,v,v)else
+n.drawRect(_.e[1],_.e[2],_.e[3]-1,_.e[4]-1)end
+end
+_:D()n.drawText(_.e[1]+2,_.e[2]+2,_.q)end
+i(0,55,8,9,"-",j,function()s=s*X end)i(7,55,8,9,"+",j,function()s=s/X end)i(88,55,8,9,"w",f,function()x=not x end)for b=1,k do
+local g=(b-1)*8
+c[b]={u={0,0},w=j}local h=function()return x end
+local o=function()if b==a then aa(v,v,0)end end
+i(14,g-1,8,9,"&gt;",f,function()a=b end,h,function(_)ap(_,b)end,o)i(21,g-1,8,9,b,f,function()a=b end,h,y,o)i(28,g-1,40,9,ar,f,function()l=b end,h,function(_)am(_,b)end,o)i(67,g-1,8,9,"^",f,function()ab(b,-1)end,h,y,o)i(74,g-1,8,9,"v",f,function()ab(b,1)end,h,y,o)i(81,g-1,8,9,"x",f,function()ak(b)end,h,y,o)end
+function onTick()T=m(3)R=m(4)al=Q(1)z={m(6),m(7)}ai={m(8),m(9)}local aj=m(10)ah=Q(2)for V,_ in Y(P)do
+_.L=_:h()and af(_.e[1]+1,_.e[2]+1,_.e[3]-2,_.e[4]-2)if _.L then
+if not _.C or not _.H then _:O()end
+_.H=f
+else
+_.H=j
+end
+end
+if ah and l~=0 then
+c[l].u=ai
+c[l].w=f
+if a&gt;k and l==1 then a=1 end
+l=0
+end
+while a&lt;=k do
+if Z(a)&lt;aj or not c[a].w then
+a=a+1
+else
+break
+end
+end
+local r=1
+for V=1,k do W(r,j)end
+for b=a,k do
+if c[b].w then
+W(r,f)t(r*2,c[b].u[1])t(r*2+1,c[b].u[2])r=r+1
+end
+end
+t(1,s)t(20,z[1])t(21,z[2])J=J+1
+end
+function af(A,g,E,G)return al and T&gt;A and R&gt;g and T&lt;A+E and R&lt;g+G
+end
+function onDraw()local n=I
+if x then
+B(0,0,0)n.drawRectF(14,0,74,64)B(50,50,50)n.drawRect(14,-1,74,64)end
+for V,_ in Y(P)do _:K()end
+end
+function B(ae,aq,_)aa(ae,aq,_)end
+function Z(d)local ac=c[d].u
+return math.sqrt((ac[1]-z[1])^2+(ac[2]-z[2])^2)/1852
+end
+'>
+				<pos x="3" y="0.25"/>
+				<in1 component_id="15"/>
+				<in2 component_id="24" node_index="1"/>
+			</c0>
+			<c1 id="15" count="5" offset="5">
+				<pos x="-2.25" y="-1"/>
+				<inc component_id="43"/>
+				<in1 component_id="9"/>
+				<in2 component_id="11"/>
+				<in3 component_id="40"/>
+				<in4 component_id="42"/>
+				<in5 component_id="50"/>
+			</c1>
+			<c2 id="19" count="1">
+				<pos x="-5.75" y="1.25"/>
+				<in1 component_id="18"/>
+			</c2>
+			<c3 id="20" count="2">
+				<pos x="-4.5" y="1"/>
+				<inc component_id="19"/>
+				<in1 component_id="9"/>
+				<in2 component_id="11"/>
+			</c3>
+			<c4 id="21" script="-- The trilateration of the transmitter beacon
+
+lastBeep = nil
+lastObs = nil
+minObsDist = 100
+ticks = 0
+answer = nil
+distAcc = {0,0}
+
+function onTick()
+    local beep = input.getBool(1)
+    local gps_x = input.getNumber(1)
+    local gps_y = input.getNumber(2)
+    if beep then
+        if lastBeep then
+            -- see: https://www.reddit.com/r/Stormworks/comments/jcaygi/comment/g9bo480/
+            local dist = 50.1 * (ticks - lastBeep) - 178
+            distAcc = {distAcc[1] + dist, distAcc[2] + 1}
+            local d = distAcc[1]/distAcc[2]
+            output.setNumber(3, d)
+            local obs = {x=gps_x, y=gps_y, r=d}
+            if not lastObs or vlen(vsub(lastObs, obs)) &gt; minObsDist then
+                answer = observe(obs)
+                lastObs = obs
+                distAcc = {0,0}
+            end
+        end
+        lastBeep = ticks
+    end
+    output.setBool(1, answer ~= nil)
+    if answer then
+        output.setNumber(1, answer.bestGuess)
+        output.setNumber(2, answer.altGuess)
+        output.setNumber(3, answer.distance)
+    end
+    ticks = ticks + 1
+    if lastBeep and ticks - lastBeep &gt; 2000 then -- about 100km, 33 seconds
+        lastBeep = nil
+        answer = nil
+        observes = RingBuff:new()
+        trilats = RingBuff:new()
+    end
+end
+
+RingBuff = {
+    new = function(cls, sz)
+        return {
+            items={},
+            sz=sz,
+            idx=0,
+            write=cls.write,
+            iter=cls.iter,
+        }
+    end,
+    write = function(self, value)
+        self.items[self.idx] = value
+        self.idx = (self.idx + 1) % self.sz
+    end,
+    iter = function(self)
+        local i = 0
+        return function()
+            i = i + 1
+            return self.items[i-1]
+        end
+    end
+}
+observes = RingBuff:new(100)
+trilats = RingBuff:new(10000)
+
+function observe(obs)
+    for other in observes:iter() do
+        local p0,p1 = trilaterate(other, obs)
+        if p0 then
+            trilats:write({ p0, p1 })
+        end
+    end
+    observes:write(obs)
+    return makeGuess(obs)
+end
+
+function trilaterate(p0, p1)
+    local t = vsub(p1, p0)
+    local d = vlen(t)
+    if math.abs(d) &lt; 0.000001 then return end
+    local j = (p0.r*p0.r - p1.r*p1.r + d*d) / (2*d)
+    local k2 = p0.r*p0.r - j*j
+    if k2 &lt; 0 then return end
+    local k = math.sqrt(k2)
+    local u = {x=t.x/d, y=t.y/d}
+    local v = {x=u.y, y=-u.x}
+    function posn(f) return vadd(vadd(p0, vmul(u, j)), vmul(v, k*f)) end
+    return posn(1), posn(-1)
+end
+
+function makeGuess(here)
+    local sums = {0, 0}
+    local errs = {0, 0}
+    local n = 0
+    for tri in trilats:iter() do
+        local b = { vbear(here, tri[1]), vbear(here, tri[2]) }
+        if n == 0 then
+            sums = b
+        else
+            local s = { sums[1]/n, sums[2]/n }
+            local e11 = angdiff(b[1], s[1])
+            local e22 = angdiff(b[2], s[2])
+            local e12 = angdiff(b[1], s[2])
+            local e21 = angdiff(b[2], s[1])
+            if math.min(e11, e22) &lt; math.min(e12, e21) then
+                sums = { b[1] + sums[1], b[2] + sums[2] }
+                errs = { errs[1] + e11, errs[2] + e22 }
+            else
+                sums = { b[2] + sums[1], b[1] + sums[2] }
+                errs = { errs[1] + e21, errs[2] + e12 }
+            end
+        end
+        n = n + 1
+    end
+    if n == 0 then return end
+    if errs[1] &lt; errs[2] then
+        return { bestGuess=sums[1]/n, altGuess=sums[2]/n, distance=here.r }
+    else
+        return { bestGuess=sums[2]/n, altGuess=sums[1]/n, distance=here.r }
+    end
+end
+function vlen(v) return math.sqrt(v.x*v.x + v.y*v.y) end
+function vadd(a, b) return { x=a.x+b.x, y=a.y+b.y } end
+function vsub(a, b) return { x=a.x-b.x, y=a.y-b.y } end
+function vmul(v, f) return { x=v.x*f, y=v.y*f } end
+function vbear(from, to)
+    local v = vsub(to, from)
+    return (450 - (math.atan(v.y, v.x) * 180 / math.pi)) % 360
+end
+function angdiff(a, b) return 180 - math.abs(180 - math.abs(a - b) % 360) end
+">
+				<pos x="-3.25" y="1.25"/>
+				<in1 component_id="20"/>
+			</c4>
+			<c5 id="23" count="1" offset="3">
+				<pos x="-1.75" y="0.75"/>
+				<inc component_id="21"/>
+				<in1 component_id="13"/>
+			</c5>
+			<c6 id="24" script='-- Draw the trilateration output to the map screen
+
+radius = 20
+tickLength = 3
+
+function onTick()
+    isActive = input.getBool(1)
+    guessBearing = input.getNumber(1)
+    altBearing = input.getNumber(2)
+    distance = input.getNumber(3)
+    heading = -input.getNumber(4)*360
+end
+
+function onDraw()
+    local h = screen.getHeight()
+    local cx = screen.getWidth()/2                  
+    local cy = h/2                    
+    
+    screen.setColor(0,255,0)
+    screen.drawCircleF(cx, cy, 1)
+    
+    screen.setColor(5, 5, 5)
+    screen.drawCircle(cx, cy, radius)
+    
+    screen.setColor(255, 0, 0)
+    drawTick(cx, cy, heading, radius - 4, tickLength)
+    if isActive then
+    	screen.setColor(5, 5, 5)
+    	drawTick(cx, cy, altBearing, radius + 1, tickLength)
+    	screen.setColor(255, 255, 0)
+    	drawTick(cx, cy, guessBearing, radius + 1, tickLength)
+    	screen.setColor(5, 5, 5)
+    	local nm = math.min(distance / 1852, 999.9)
+    	local text = string.format("%.1fnm", nm)
+    	screen.drawTextBox(cx - 20, h - 6, 40, 5, text, 0, 0)
+    end
+end
+
+function drawTick(cx, cy, bearing, beginRadius, length)
+	local b = math.rad(bearing)
+	function f(r) 
+		return cx + r*math.sin(b), cy - r*math.cos(b)
+	end 
+	local x0, y0 = f(beginRadius)
+	local x1, y1 = f(beginRadius + length)
+	screen.drawLine(x0, y0, x1, y1)
+end'>
+				<pos x="1.5" y="-0.75"/>
+				<in1 component_id="23"/>
+				<in2 component_id="34" node_index="1"/>
+			</c6>
+			<c7 id="31" count="1" offset="8">
+				<pos x="-5.75" y="-3.75"/>
+				<inc component_id="29"/>
+				<in1 component_id="25"/>
+			</c7>
+			<c8 id="32" count="4" offset="24">
+				<pos x="-2.25" y="-2.75"/>
+				<inc component_id="31"/>
+				<in1 component_id="33"/>
+				<in2 component_id="27"/>
+				<in3 component_id="9"/>
+				<in4 component_id="11"/>
+			</c8>
+			<c9 id="33">
+				<pos x="1" y="-3.25"/>
+				<in1 component_id="14"/>
+			</c9>
+			<c10 id="34" script="-- Draw radar contacts onto the map
+
+contacts={}
+nextContactID=0
+isRadarOn=false
+zoom=1
+radarAngle=0
+gps = nil
+ticks = 0
+expiryTicks = 150
+fadeFactor = 0.75
+waypoints = {}
+
+function onTick()
+	isRadarOn = input.getBool(9)
+	zoom = input.getNumber(25)
+	radarAngle = input.getNumber(26)
+    gps = {input.getNumber(27), input.getNumber(28)}
+	for i = 0,7 do
+		local active = input.getBool(i+1)
+		if active then
+			local x = input.getNumber(i*3+1)
+			local y = input.getNumber(i*3+2)
+			local z = input.getNumber(i*3+3)
+			contacts[nextContactID] = {posn={x,y,z}, time=ticks}
+			nextContactID = nextContactID + 1
+		end
+	end
+	for id,contact in pairs(contacts) do
+		if ticks - contact.time &gt; expiryTicks then
+			contacts[id] = nil
+		end
+	end
+	ticks = ticks + 1
+end
+
+function onDraw()
+	w = screen.getWidth()
+	h = screen.getHeight()
+    if isRadarOn then
+        screen.setColor(255, 0, 0)
+		for _,con in pairs(contacts) do 
+			local px,py = map.mapToScreen(gps[1], gps[2], zoom, w, h, con.posn[1], con.posn[2])
+			local alpha = math.min(1 - ((con.time/expiryTicks) - fadeFactor)/(1 - fadeFactor), 1)
+			screen.setColor(255, 0, 255, alpha*255)
+			screen.drawRectF(px,py,1,1)
+		end 
+    end
+end">
+				<pos x="0.25" y="-1"/>
+				<in1 component_id="32"/>
+				<in2 component_id="51" node_index="1"/>
+			</c10>
+			<c11 id="43" count="1" offset="1">
+				<pos x="-4"/>
+				<inc component_id="17"/>
+				<in1 component_id="38"/>
+			</c11>
+			<c12 id="49" count="3" offset="3">
+				<pos x="-1" y="-5"/>
+				<inc component_id="14"/>
+				<in1 component_id="13"/>
+				<in2 component_id="9"/>
+				<in3 component_id="11"/>
+			</c12>
+			<c13 id="50" n="WP Switch Dist (nm)">
+				<pos x="-7" y="-3.25"/>
+				<v text="0.05" value="0.05"/>
+			</c13>
+			<c14 id="51" script='-- Draw the map &amp; waypoints, with zoom
+
+zoom=1
+gps = nil
+waypoints = {}
+ticks = 0
+
+function onTick()
+	zoom = input.getNumber(1)
+    gps = {input.getNumber(20), input.getNumber(21)}
+	waypoints = {}
+	for i = 0,7 do
+		local active = input.getBool(i+1)
+		if active then
+			waypoints[i+1] = {input.getNumber(i*2+2), input.getNumber(i*2+3)}
+		end
+	end
+	ticks = ticks + 1
+end
+
+function onDraw()
+	local sc=screen
+	local w,h = sc.getWidth(), sc.getHeight()
+	
+	sc.drawMap(gps[1], gps[2], zoom)
+    
+    local lx,ly = w/2,h/2
+    for _,wp in pairs(waypoints) do 
+    	if wp then
+    		local px,py = map.mapToScreen(gps[1], gps[2], zoom, w, h, wp[1], wp[2])
+    		sc.setColor(20,20,20)
+    		sc.drawLine(lx,ly,px,py)
+    		sc.setColor(0,0,255)
+    		sc.drawRectF(px,py,1,1)
+    		lx,ly = px,py
+    	end
+    end
+	if waypoints[1] then
+		local dist = string.format("%.1fnm", distNM(gps, waypoints[1]))
+		sc.setColor(5,5,5)
+		sc.drawTextBox(15,57,73,7,dist,0,0)
+	end
+end
+
+function distNM(a,b) return math.sqrt((a[1]-b[1])^2+(a[2]-b[2])^2) / 1852 end
+'>
+				<pos x="-1" y="-0.75"/>
+				<in1 component_id="14"/>
+			</c14>
+			<c15 id="52" n="REM: Trilateration">
+				<pos x="-3.25" y="2"/>
+				<v text="0"/>
+			</c15>
+		</component_states>
+		<component_bridge_states>
+			<c0 id="7">
+				<pos x="4.25" y="0.25"/>
+				<in1 component_id="14" node_index="1"/>
+			</c0>
+			<c1 id="9">
+				<pos x="-7" y="-1.25"/>
+			</c1>
+			<c2 id="11">
+				<pos x="-7" y="-1.75"/>
+			</c2>
+			<c3 id="13">
+				<pos x="-7" y="0.75"/>
+			</c3>
+			<c4 id="17">
+				<pos x="-7"/>
+			</c4>
+			<c5 id="18">
+				<pos x="-7" y="1.25"/>
+			</c5>
+			<c6 id="25">
+				<pos x="-7" y="-4.25"/>
+			</c6>
+			<c7 id="27">
+				<pos x="-7" y="-4.75"/>
+			</c7>
+			<c8 id="29">
+				<pos x="-7" y="-3.75"/>
+			</c8>
+			<c9 id="38">
+				<pos x="-7" y="-0.5"/>
+			</c9>
+			<c10 id="40">
+				<pos x="-7" y="-2.25"/>
+			</c10>
+			<c11 id="42">
+				<pos x="-7" y="-2.75"/>
+			</c11>
+			<c12 id="48">
+				<pos x="4.25" y="-4.25"/>
+				<in1 component_id="49"/>
+			</c12>
+		</component_bridge_states>
+		<group_states/>
+	</group>
+</microprocessor>
+

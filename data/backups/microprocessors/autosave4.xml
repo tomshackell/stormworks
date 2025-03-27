@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<microprocessor name="Moving Average" description="No description set." width="2" length="1" id_counter="9" id_counter_node="2" sym2="1536" sym3="2122" sym4="3758" sym5="2730" sym6="3748" sym10="4386" sym11="10914" sym12="10922" sym13="10516">
+	<nodes>
+		<n id="1" component_id="2">
+			<node label="Input" mode="1" type="1" description="The input signal to be processed."/>
+		</n>
+		<n id="2" component_id="5">
+			<node label="Output" type="1" description="The input signal to be processed.">
+				<position x="1"/>
+			</node>
+		</n>
+	</nodes>
+	<group>
+		<data>
+			<inputs/>
+			<outputs/>
+		</data>
+		<components>
+			<c type="40">
+				<object id="6" count="2">
+					<pos x="-1.5"/>
+					<in1 component_id="2"/>
+					<in2 component_id="9"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="7">
+					<pos x="1" y="0.5"/>
+					<in1 component_id="8"/>
+				</object>
+			</c>
+			<c type="56">
+				<object id="8" script="MovingAverage = {
+    new = function(cls) 
+        return { 
+            ringBuffer={}, -- The ring buffer we use for calculation
+            insertPoint=0, -- Where to insert next item in ring buffer
+            bufferLength=0, -- number of valid values in the ring buffer
+            totalWeightedValues=0, -- Running total of ring buffer: update after each value
+            totalWeights=0,
+            update=cls.update
+        } 
+    end,
+    update = function(self, newValue, maxBufferSize, weight)
+        local weight = weight or 1
+
+        -- adjust size of buffer if required
+    	if maxBufferSize &lt;= self.bufferLength then
+    		for i = maxBufferSize, self.bufferLength - 1 do
+                local old = self.ringBuffer[i]
+    			self.totalWeightedValues = self.totalWeightedValues - (old.value * old.weight)
+                self.totalWeights = self.totalWeights - old.weight
+    			self.ringBuffer[i] = nil
+    		end
+    		self.insertPoint = maxBufferSize &gt; 0 and self.insertPoint % maxBufferSize or 0
+    	end
+    	
+    	-- add new value into buffer and update totals
+        local old = self.ringBuffer[self.insertPoint]
+    	local oldValue = old and (old.value * old.weight) or 0
+    	self.ringBuffer[self.insertPoint] = {value=newValue, weight=weight}
+    	self.totalWeightedValues = self.totalWeightedValues + (newValue * weight) - oldValue
+        self.totalWeights = self.totalWeights + weight - (old and old.weight or 0)
+    	self.insertPoint = self.insertPoint + 1
+    	if self.insertPoint &gt;= maxBufferSize then
+    		self.insertPoint = 0
+    	end
+    	return self.totalWeights &gt; 0 and self.totalWeightedValues / self.totalWeights or 0
+    end
+}
+
+
+movingAverage = MovingAverage:new()
+
+
+function onTick()
+	local value = input.getNumber(1)	
+	local bufferSize = math.floor(input.getNumber(2) * 60 + 0.5)
+	local average = movingAverage:update(value, bufferSize, 1)
+	output.setNumber(1, average)	
+end
+">
+					<pos x="-0.25" y="0.25"/>
+					<in1 component_id="6"/>
+				</object>
+			</c>
+			<c type="34">
+				<object id="9" n="Buffer Size (seconds)">
+					<pos x="-2.75" y="-0.25"/>
+					<v text="10" value="10"/>
+				</object>
+			</c>
+		</components>
+		<components_bridge>
+			<c type="2">
+				<object id="2">
+					<pos x="-2.75" y="0.25"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="5">
+					<pos x="2.25" y="0.5"/>
+					<in1 component_id="7"/>
+				</object>
+			</c>
+		</components_bridge>
+		<groups/>
+		<component_states>
+			<c0 id="6" count="2">
+				<pos x="-1.5"/>
+				<in1 component_id="2"/>
+				<in2 component_id="9"/>
+			</c0>
+			<c1 id="7">
+				<pos x="1" y="0.5"/>
+				<in1 component_id="8"/>
+			</c1>
+			<c2 id="8" script="MovingAverage = {
+    new = function(cls) 
+        return { 
+            ringBuffer={}, -- The ring buffer we use for calculation
+            insertPoint=0, -- Where to insert next item in ring buffer
+            bufferLength=0, -- number of valid values in the ring buffer
+            totalWeightedValues=0, -- Running total of ring buffer: update after each value
+            totalWeights=0,
+            update=cls.update
+        } 
+    end,
+    update = function(self, newValue, maxBufferSize, weight)
+        local weight = weight or 1
+
+        -- adjust size of buffer if required
+    	if maxBufferSize &lt;= self.bufferLength then
+    		for i = maxBufferSize, self.bufferLength - 1 do
+                local old = self.ringBuffer[i]
+    			self.totalWeightedValues = self.totalWeightedValues - (old.value * old.weight)
+                self.totalWeights = self.totalWeights - old.weight
+    			self.ringBuffer[i] = nil
+    		end
+    		self.insertPoint = maxBufferSize &gt; 0 and self.insertPoint % maxBufferSize or 0
+    	end
+    	
+    	-- add new value into buffer and update totals
+        local old = self.ringBuffer[self.insertPoint]
+    	local oldValue = old and (old.value * old.weight) or 0
+    	self.ringBuffer[self.insertPoint] = {value=newValue, weight=weight}
+    	self.totalWeightedValues = self.totalWeightedValues + (newValue * weight) - oldValue
+        self.totalWeights = self.totalWeights + weight - (old and old.weight or 0)
+    	self.insertPoint = self.insertPoint + 1
+    	if self.insertPoint &gt;= maxBufferSize then
+    		self.insertPoint = 0
+    	end
+    	return self.totalWeights &gt; 0 and self.totalWeightedValues / self.totalWeights or 0
+    end
+}
+
+
+movingAverage = MovingAverage:new()
+
+
+function onTick()
+	local value = input.getNumber(1)	
+	local bufferSize = math.floor(input.getNumber(2) * 60 + 0.5)
+	local average = movingAverage:update(value, bufferSize, 1)
+	output.setNumber(1, average)	
+end
+">
+				<pos x="-0.25" y="0.25"/>
+				<in1 component_id="6"/>
+			</c2>
+			<c3 id="9" n="Buffer Size (seconds)">
+				<pos x="-2.75" y="-0.25"/>
+				<v text="10" value="10"/>
+			</c3>
+		</component_states>
+		<component_bridge_states>
+			<c0 id="2">
+				<pos x="-2.75" y="0.25"/>
+			</c0>
+			<c1 id="5">
+				<pos x="2.25" y="0.5"/>
+				<in1 component_id="7"/>
+			</c1>
+		</component_bridge_states>
+		<group_states/>
+	</group>
+</microprocessor>
+
