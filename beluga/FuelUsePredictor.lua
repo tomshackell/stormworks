@@ -1,10 +1,12 @@
 
+--[[
+
+]]
+
+
 INFINITY = 1/0
 NAN = -(0/0)
 
--- Determined experimentally (taking a lot of time)
--- https://docs.google.com/spreadsheets/d/11z5Qx_K_VeQlq-J0thArYUsRatual4QL6PVy6doMo9s/edit?gid=1527351813#gid=1527351813
---[[
 OLD_FUEL_USE_PREDICTORS = {
     -- fuelUse(fuelValve) = a * fuelValve + b
     { rps=5.6, a=86.9, b=0 },
@@ -15,10 +17,10 @@ OLD_FUEL_USE_PREDICTORS = {
     { rps=16, a=257, b=-2.21 }
 }
 
-function predict(rps, fuelValve)
+function oldPredict(rps, fuelValve)
     -- find the two closest predictors to the provided RPS
     local firstBest, secondBest = { dist = INFINITY }, { dist = INFINITY }
-    for _, predict in pairs(FUEL_USE_PREDICTORS) do
+    for _, predict in pairs(OLD_FUEL_USE_PREDICTORS) do
         local dist = math.abs(rps - predict.rps)
         if dist < firstBest.dist then
             secondBest = firstBest
@@ -39,8 +41,9 @@ function predict(rps, fuelValve)
     -- then linearly interpolate between them based on rps
     return lerp(rps, firstBest.predict.rps, firstFuelUse, secondBest.predict.rps, secondFuelUse)
 end
-]]
 
+-- Determined experimentally (taking a lot of time)
+-- https://docs.google.com/spreadsheets/d/11z5Qx_K_VeQlq-J0thArYUsRatual4QL6PVy6doMo9s/edit?gid=1527351813#gid=1527351813
 FUEL_USE_PREDICTORS = {
     { throttle=0.036, d=8.81, c=-2.45, b=0.302, a=-9.64e-03 },
     { throttle=0.045, d=9.88, c=-2.68, b=0.342, a=-0.011 },
