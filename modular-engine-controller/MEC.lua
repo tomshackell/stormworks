@@ -15,9 +15,6 @@ rpsPID = PID:new({ kp = 0.1, ki = 0.001, minOut = MIN_THROTTLE, maxOut = 1 })
 isRunning = false
 afrDelta = 0
 
-fuelUseMovAvg = MovingAverage:new()
-lastFuelVol = nil
-
 -- See https://www.reddit.com/r/Stormworks/comments/xdgmn2/tips_for_modular_engines/
 function onTick()
     local engineOn = input.getBool(1)
@@ -31,7 +28,7 @@ function onTick()
     rpsPID.kp = input.getNumber(8)
     rpsPID.ki = input.getNumber(9)
     rpsPID.kd = input.getNumber(10)
-    local fuelUseBufLen = round(input.getNumber(11) * TICKS_PER_SECOND)
+    local numCylinders = input.getNumber(11)
 
     if rps >= RUNNING_RPS then
         isRunning = true
@@ -66,12 +63,7 @@ function onTick()
     local superBleed = 0.5 - outThrottle * 0.1
 
     -- calculate fuel use rate
-    local fuelUseRate = 0
-    if lastFuelVol ~= nil then
-        local rate = (lastFuelVol - cylinderFuelVol) * TICKS_PER_SECOND * 60
-        fuelUseRate = fuelUseMovAvg:update(rate, fuelUseBufLen)
-    end
-    lastFuelVol = cylinderFuelVol
+    local fuelUseRate = cylinderFuelVol * numCylinders * TICKS_PER_SECOND * 60
 
     output.setNumber(1, outAir)
     output.setNumber(2, outFuel)

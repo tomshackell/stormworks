@@ -102,81 +102,58 @@
 -- Developed &amp; Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
 -- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
 --      By Nameous Changey
--- Minimized Size: 1699 (2016 with comment) chars
+-- Minimized Size: 1189 (1506 with comment) chars
 
-j=.1
+d=.1
 R=false
-y=nil
-I=math
-O=input
-h=output
-d=h.setNumber
-a=O.getNumber
-V=I.max
-ah=I.min
-function al(o)return I.floor(o+.5)end
-function n(o,w,G)return ah(V(o,w),G)end
-function Z(o,w,Y,G,am)return(o-w)/(G-w)*(am-Y)+Y end
-aD={B=function(K,e)local e=e or{}return{x=e.x or 0,v=e.v or 0,J=e.J or 0,P=e.P or 0,C=e.C or-(1/0),z=e.z or(1/0),ab=e.ab or 1.0,an=y,ag=0,X=0,g=K.g}end,g=function(_,l,H)local l=l*_.ab
-local p=l-H
-local aj=_.X+p
-local aw=p-_.ag
-local A=_.x*p+_.v*aj+_.J*aw+_.P
-_.ag=p
-local h=ah(V(A,_.C),_.z)if h==A or p*A&lt;=0 then
-_.X=aj
+K=math
+Q=input
+e=output
+c=e.setNumber
+a=Q.getNumber
+G=K.max
+F=K.min
+function g(t,l,y)return F(G(t,l),y)end
+function N(t,l,T,y,Y)return(t-l)/(y-l)*(Y-T)+T end
+W={ai=function(ad,b)local b=b or{}return{n=b.n or 0,m=b.m or 0,v=b.v or 0,D=b.D or 0,x=b.x or-(1/0),z=b.z or(1/0),J=b.J or 1.0,ah=nil,I=0,L=0,o=ad.o}end,o=function(_,i,B)local i=i*_.J
+local f=i-B
+local H=_.L+f
+local ac=f-_.I
+local w=_.n*f+_.m*H+_.v*ac+_.D
+_.I=f
+local e=F(G(w,_.x),_.z)if e==w or f*w&lt;=0 then
+_.L=H
 end
-_.an={l=l,H=H,h=h}return h
-end}az={B=function(K)return{u={},f=0,aa=0,m=0,i=0,g=K.g}end,g=function(_,T,q,b)local b=b or 1
-if q&lt;=_.aa then
-for U=q,_.aa-1 do
-local c=_.u[U]_.m=_.m-(c.af*c.b)_.i=_.i-c.b
-_.u[U]=y
+_.ah={i=i,B=B,e=e}return e
+end}C=.2
+aj=.05
+ap=d
+al=5
+X=3
+ak=.03
+ao=d
+an=60
+j=W:ai({n=d,m=.001,x=ak,z=1})q=R
+k=0
+function onTick()local O=Q.getBool(1)local V=a(1)local A=a(2)local M=a(3)local r=a(4)local am=g(a(5),0,1)local aa=a(6)local Z=a(7)j.n=a(8)j.m=a(9)j.v=a(10)local ab=a(11)if r&gt;=al then
+q=true
+elseif r&lt;=X then
+q=R
 end
-_.f=q&gt;0 and _.f%q or 0
-end
-local c=_.u[_.f]local ao=c and(c.af*c.b)or 0
-_.u[_.f]={af=T,b=b}_.m=_.m+(T*b)-ao
-_.i=_.i+b-(c and c.b or 0)_.f=_.f+1
-if _.f&gt;=q then
-_.f=0
-end
-return _.i&gt;0 and _.m/_.i or 0
-end}W=.2
-at=.05
-aH=j
-au=5
-ax=3
-av=.03
-ap=j
-ai=60
-r=aD:B({x=j,v=.001,C=av,z=1})N=R
-t=0
-aE=az:B()M=y
-function onTick()local Q=O.getBool(1)local aA=a(1)local s=a(2)local ak=a(3)local L=a(4)local aC=n(a(5),0,1)local ar=a(6)local aB=a(7)r.x=a(8)r.v=a(9)r.J=a(10)local as=al(a(11)*ai)if L&gt;=au then
-N=true
-elseif L&lt;=ax then
-N=R
-end
-local k,F,S,ae=0,0,0,0
-local E,D=0,0
-local ac=Q and not N
-if Q then
-F=Z(aC,0,ar,1,aB)if ac then
-k=ap
+local h,p,S,E=0,0,0,0
+local u,s=0,0
+local P=O and not q
+if O then
+p=N(am,0,aa,1,Z)if P then
+h=ao
 else
-k=r:g(F,L)end
-local aG=n(ak,0,100)*.01
-E=Z(aG,0,14-W*2,1,15-W*5)D=s==0 and 0 or aA/s
-t=n(t+((1-(E/D))*at),-1,1)S=k*n(1-t,j,1)ae=k*n(1+t,j,1)end
-local aq=ac and 1 or 0
-local ay=.5-k*j
-local ad=0
-if M~=y then
-local aF=(M-s)*ai*60
-ad=aE:g(aF,as)end
-M=s
-d(1,S)d(2,ae)d(3,ay)d(4,aq)d(5,F)d(6,ak)d(7,E)d(8,D)d(9,ad)end
+h=j:o(p,r)end
+local af=g(M,0,100)*.01
+u=N(af,0,14-C*2,1,15-C*5)s=A==0 and 0 or(V*1000)/(A*1000)k=g(k+((1-(u/s))*aj),-1,1)S=h*g(1-k,d,1)E=h*g(1+k,d,1)end
+local U=P and 1 or 0
+local ae=.5-h*d
+local ag=A*ab*an*60
+c(1,S)c(2,E)c(3,ae)c(4,U)c(5,p)c(6,M)c(7,u)c(8,s)c(9,ag)end
 '>
 					<pos x="-1.25" y="5.5"/>
 					<in1 component_id="96"/>
@@ -267,9 +244,9 @@ d(1,S)d(2,ae)d(3,ay)d(4,aq)d(5,F)d(6,ak)d(7,E)d(8,D)d(9,ad)end
 				</object>
 			</c>
 			<c type="34">
-				<object id="117" n="Fuel Use MovAvg Buffer Len (s)">
+				<object id="117" n="Number of cylinders">
 					<pos x="-5.25" y="1.5"/>
-					<v text="5" value="5"/>
+					<v text="4" value="4"/>
 				</object>
 			</c>
 		</components>
@@ -371,81 +348,58 @@ d(1,S)d(2,ae)d(3,ay)d(4,aq)d(5,F)d(6,ak)d(7,E)d(8,D)d(9,ad)end
 -- Developed &amp; Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
 -- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
 --      By Nameous Changey
--- Minimized Size: 1699 (2016 with comment) chars
+-- Minimized Size: 1189 (1506 with comment) chars
 
-j=.1
+d=.1
 R=false
-y=nil
-I=math
-O=input
-h=output
-d=h.setNumber
-a=O.getNumber
-V=I.max
-ah=I.min
-function al(o)return I.floor(o+.5)end
-function n(o,w,G)return ah(V(o,w),G)end
-function Z(o,w,Y,G,am)return(o-w)/(G-w)*(am-Y)+Y end
-aD={B=function(K,e)local e=e or{}return{x=e.x or 0,v=e.v or 0,J=e.J or 0,P=e.P or 0,C=e.C or-(1/0),z=e.z or(1/0),ab=e.ab or 1.0,an=y,ag=0,X=0,g=K.g}end,g=function(_,l,H)local l=l*_.ab
-local p=l-H
-local aj=_.X+p
-local aw=p-_.ag
-local A=_.x*p+_.v*aj+_.J*aw+_.P
-_.ag=p
-local h=ah(V(A,_.C),_.z)if h==A or p*A&lt;=0 then
-_.X=aj
+K=math
+Q=input
+e=output
+c=e.setNumber
+a=Q.getNumber
+G=K.max
+F=K.min
+function g(t,l,y)return F(G(t,l),y)end
+function N(t,l,T,y,Y)return(t-l)/(y-l)*(Y-T)+T end
+W={ai=function(ad,b)local b=b or{}return{n=b.n or 0,m=b.m or 0,v=b.v or 0,D=b.D or 0,x=b.x or-(1/0),z=b.z or(1/0),J=b.J or 1.0,ah=nil,I=0,L=0,o=ad.o}end,o=function(_,i,B)local i=i*_.J
+local f=i-B
+local H=_.L+f
+local ac=f-_.I
+local w=_.n*f+_.m*H+_.v*ac+_.D
+_.I=f
+local e=F(G(w,_.x),_.z)if e==w or f*w&lt;=0 then
+_.L=H
 end
-_.an={l=l,H=H,h=h}return h
-end}az={B=function(K)return{u={},f=0,aa=0,m=0,i=0,g=K.g}end,g=function(_,T,q,b)local b=b or 1
-if q&lt;=_.aa then
-for U=q,_.aa-1 do
-local c=_.u[U]_.m=_.m-(c.af*c.b)_.i=_.i-c.b
-_.u[U]=y
+_.ah={i=i,B=B,e=e}return e
+end}C=.2
+aj=.05
+ap=d
+al=5
+X=3
+ak=.03
+ao=d
+an=60
+j=W:ai({n=d,m=.001,x=ak,z=1})q=R
+k=0
+function onTick()local O=Q.getBool(1)local V=a(1)local A=a(2)local M=a(3)local r=a(4)local am=g(a(5),0,1)local aa=a(6)local Z=a(7)j.n=a(8)j.m=a(9)j.v=a(10)local ab=a(11)if r&gt;=al then
+q=true
+elseif r&lt;=X then
+q=R
 end
-_.f=q&gt;0 and _.f%q or 0
-end
-local c=_.u[_.f]local ao=c and(c.af*c.b)or 0
-_.u[_.f]={af=T,b=b}_.m=_.m+(T*b)-ao
-_.i=_.i+b-(c and c.b or 0)_.f=_.f+1
-if _.f&gt;=q then
-_.f=0
-end
-return _.i&gt;0 and _.m/_.i or 0
-end}W=.2
-at=.05
-aH=j
-au=5
-ax=3
-av=.03
-ap=j
-ai=60
-r=aD:B({x=j,v=.001,C=av,z=1})N=R
-t=0
-aE=az:B()M=y
-function onTick()local Q=O.getBool(1)local aA=a(1)local s=a(2)local ak=a(3)local L=a(4)local aC=n(a(5),0,1)local ar=a(6)local aB=a(7)r.x=a(8)r.v=a(9)r.J=a(10)local as=al(a(11)*ai)if L&gt;=au then
-N=true
-elseif L&lt;=ax then
-N=R
-end
-local k,F,S,ae=0,0,0,0
-local E,D=0,0
-local ac=Q and not N
-if Q then
-F=Z(aC,0,ar,1,aB)if ac then
-k=ap
+local h,p,S,E=0,0,0,0
+local u,s=0,0
+local P=O and not q
+if O then
+p=N(am,0,aa,1,Z)if P then
+h=ao
 else
-k=r:g(F,L)end
-local aG=n(ak,0,100)*.01
-E=Z(aG,0,14-W*2,1,15-W*5)D=s==0 and 0 or aA/s
-t=n(t+((1-(E/D))*at),-1,1)S=k*n(1-t,j,1)ae=k*n(1+t,j,1)end
-local aq=ac and 1 or 0
-local ay=.5-k*j
-local ad=0
-if M~=y then
-local aF=(M-s)*ai*60
-ad=aE:g(aF,as)end
-M=s
-d(1,S)d(2,ae)d(3,ay)d(4,aq)d(5,F)d(6,ak)d(7,E)d(8,D)d(9,ad)end
+h=j:o(p,r)end
+local af=g(M,0,100)*.01
+u=N(af,0,14-C*2,1,15-C*5)s=A==0 and 0 or(V*1000)/(A*1000)k=g(k+((1-(u/s))*aj),-1,1)S=h*g(1-k,d,1)E=h*g(1+k,d,1)end
+local U=P and 1 or 0
+local ae=.5-h*d
+local ag=A*ab*an*60
+c(1,S)c(2,E)c(3,ae)c(4,U)c(5,p)c(6,M)c(7,u)c(8,s)c(9,ag)end
 '>
 				<pos x="-1.25" y="5.5"/>
 				<in1 component_id="96"/>
@@ -506,9 +460,9 @@ d(1,S)d(2,ae)d(3,ay)d(4,aq)d(5,F)d(6,ak)d(7,E)d(8,D)d(9,ad)end
 				<pos x="0.5" y="0.5"/>
 				<in1 component_id="98"/>
 			</c18>
-			<c19 id="117" n="Fuel Use MovAvg Buffer Len (s)">
+			<c19 id="117" n="Number of cylinders">
 				<pos x="-5.25" y="1.5"/>
-				<v text="5" value="5"/>
+				<v text="4" value="4"/>
 			</c19>
 		</component_states>
 		<component_bridge_states>
