@@ -1,213 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<microprocessor name="Phys Sensor Test" description="No description set." width="4" length="2" id_counter="22" id_counter_node="7" sym1="9060" sym2="5172" sym3="4692" sym4="12580" sym5="5636" sym6="4110" sym7="960" sym8="1024" sym9="30289" sym10="17745" sym11="9523" sym12="4117" sym13="24597" sym14="19">
+<microprocessor name="Radar Jitter Test" description="No description set." width="4" length="2" id_counter="5" id_counter_node="3" sym6="21058" sym7="18724" sym8="18724" sym9="39684" sym10="2340" sym11="2318">
 	<nodes>
 		<n id="1" component_id="2">
 			<node label="Physics Sensor" mode="1" type="5" description="The input signal to be processed."/>
 		</n>
 		<n id="2" component_id="4">
-			<node label="In X" mode="1" type="1" description="The input signal to be processed.">
-				<position x="1"/>
-			</node>
-		</n>
-		<n id="3" component_id="6">
-			<node label="In Y" mode="1" type="1" description="The input signal to be processed.">
-				<position x="2"/>
-			</node>
-		</n>
-		<n id="4" component_id="9">
-			<node label="Out X" type="1" description="The input signal to be processed.">
+			<node label="Radar Composite" mode="1" type="5" description="The input signal to be processed.">
 				<position z="1"/>
 			</node>
 		</n>
-		<n id="5" component_id="12">
-			<node label="Out Y" type="1" description="The input signal to be processed.">
-				<position x="1" z="1"/>
-			</node>
-		</n>
-		<n id="6" component_id="15">
-			<node label="Out Z" type="1" description="The input signal to be processed.">
-				<position x="2" z="1"/>
-			</node>
-		</n>
-		<n id="7" component_id="22">
-			<node label="In Z" mode="1" type="1" description="The input signal to be processed.">
-				<position x="3"/>
+		<n id="3" component_id="5">
+			<node label="Input" mode="1" description="The input signal to be processed.">
+				<position x="1"/>
 			</node>
 		</n>
 	</nodes>
 	<group>
-		<data type="1891155738">
+		<data>
 			<inputs/>
 			<outputs/>
 		</data>
-		<components>
-			<c type="40">
-				<object id="16" count="3" offset="19">
-					<pos x="-1"/>
-					<inc component_id="2"/>
-					<in1 component_id="4"/>
-					<in2 component_id="6"/>
-					<in3 component_id="22"/>
-				</object>
-			</c>
-			<c type="31">
-				<object id="17">
-					<pos x="1.75" y="0.5"/>
-					<in1 component_id="20"/>
-				</object>
-			</c>
-			<c type="31">
-				<object id="18" i="1">
-					<pos x="1.75"/>
-					<in1 component_id="20"/>
-				</object>
-			</c>
-			<c type="31">
-				<object id="19" i="2">
-					<pos x="1.75" y="-0.5"/>
-					<in1 component_id="20"/>
-				</object>
-			</c>
-			<c type="56">
-				<object id="20" script='-- Author: &lt;Authorname&gt; (Please change this in user settings, Ctrl+Comma)
--- GitHub: &lt;GithubLink&gt;
--- Workshop: &lt;WorkshopLink&gt;
---
--- Developed &amp; Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
--- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
---      By Nameous Changey
--- Minimized Size: 654 (1019 with comment) chars
-
-f=.5
-y=math
-s=output.setNumber
-e=input.getNumber
-v=y.sin
-p=y.cos
-function t(_,d)return{a=_.a+d.a,b=_.b+d.b,c=_.c+d.c}end
-function x(_,q)return{a=_.a*q,b=_.b*q,c=_.c*q}end
-function A(_,d)return{a=_.b*d.c-_.c*d.b,b=_.c*d.a-_.a*d.c,c=_.a*d.b-_.b*d.a}end
-function E(i,l,m)local n,j=p(i*f),v(i*f)local h,k=p(l*f),v(l*f)local o,g=p(m*f),v(m*f)return{D=n*h*o+j*k*g,a=j*h*o-n*k*g,b=n*k*o+j*h*g,c=n*h*g-j*k*o}end
-function F(r,w)local z=x(A(r,w),2)return t(t(w,x(z,r.D)),A(r,z))end
-function onTick()local G={a=e(1),b=e(2),c=e(3)}local l=-e(4)local i=-e(5)local m=e(6)local B={a=e(20),b=e(21),c=e(22)}local C=E(i,l,m)local u=t(F(C,B),G)s(1,u.a)s(2,u.b)s(3,u.c)end
-'>
-					<pos x="0.25" y="-0.25"/>
-					<in1 component_id="16"/>
-				</object>
-			</c>
-		</components>
+		<components/>
 		<components_bridge>
 			<c type="4">
-				<object id="2">
-					<pos x="-2.5" y="0.75"/>
-				</object>
+				<object id="2"/>
 			</c>
-			<c type="2">
-				<object id="4">
-					<pos x="-2.5" y="0.25"/>
-				</object>
+			<c type="4">
+				<object id="4"/>
 			</c>
-			<c type="2">
-				<object id="6">
-					<pos x="-2.5" y="-0.25"/>
-				</object>
-			</c>
-			<c type="3">
-				<object id="9">
-					<pos x="3" y="0.5"/>
-					<in1 component_id="17"/>
-				</object>
-			</c>
-			<c type="3">
-				<object id="12">
-					<pos x="3" y="-0.5"/>
-					<in1 component_id="19"/>
-				</object>
-			</c>
-			<c type="3">
-				<object id="15">
-					<pos x="3"/>
-					<in1 component_id="18"/>
-				</object>
-			</c>
-			<c type="2">
-				<object id="22">
-					<pos x="-2.5" y="-0.75"/>
-				</object>
+			<c>
+				<object id="5"/>
 			</c>
 		</components_bridge>
 		<groups/>
-		<component_states>
-			<c0 id="16" count="3" offset="19">
-				<pos x="-1"/>
-				<inc component_id="2"/>
-				<in1 component_id="4"/>
-				<in2 component_id="6"/>
-				<in3 component_id="22"/>
-			</c0>
-			<c1 id="17">
-				<pos x="1.75" y="0.5"/>
-				<in1 component_id="20"/>
-			</c1>
-			<c2 id="18" i="1">
-				<pos x="1.75"/>
-				<in1 component_id="20"/>
-			</c2>
-			<c3 id="19" i="2">
-				<pos x="1.75" y="-0.5"/>
-				<in1 component_id="20"/>
-			</c3>
-			<c4 id="20" script='-- Author: &lt;Authorname&gt; (Please change this in user settings, Ctrl+Comma)
--- GitHub: &lt;GithubLink&gt;
--- Workshop: &lt;WorkshopLink&gt;
---
--- Developed &amp; Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
--- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
---      By Nameous Changey
--- Minimized Size: 654 (1019 with comment) chars
-
-f=.5
-y=math
-s=output.setNumber
-e=input.getNumber
-v=y.sin
-p=y.cos
-function t(_,d)return{a=_.a+d.a,b=_.b+d.b,c=_.c+d.c}end
-function x(_,q)return{a=_.a*q,b=_.b*q,c=_.c*q}end
-function A(_,d)return{a=_.b*d.c-_.c*d.b,b=_.c*d.a-_.a*d.c,c=_.a*d.b-_.b*d.a}end
-function E(i,l,m)local n,j=p(i*f),v(i*f)local h,k=p(l*f),v(l*f)local o,g=p(m*f),v(m*f)return{D=n*h*o+j*k*g,a=j*h*o-n*k*g,b=n*k*o+j*h*g,c=n*h*g-j*k*o}end
-function F(r,w)local z=x(A(r,w),2)return t(t(w,x(z,r.D)),A(r,z))end
-function onTick()local G={a=e(1),b=e(2),c=e(3)}local l=-e(4)local i=-e(5)local m=e(6)local B={a=e(20),b=e(21),c=e(22)}local C=E(i,l,m)local u=t(F(C,B),G)s(1,u.a)s(2,u.b)s(3,u.c)end
-'>
-				<pos x="0.25" y="-0.25"/>
-				<in1 component_id="16"/>
-			</c4>
-		</component_states>
+		<component_states/>
 		<component_bridge_states>
-			<c0 id="2">
-				<pos x="-2.5" y="0.75"/>
-			</c0>
-			<c1 id="4">
-				<pos x="-2.5" y="0.25"/>
-			</c1>
-			<c2 id="6">
-				<pos x="-2.5" y="-0.25"/>
-			</c2>
-			<c3 id="9">
-				<pos x="3" y="0.5"/>
-				<in1 component_id="17"/>
-			</c3>
-			<c4 id="12">
-				<pos x="3" y="-0.5"/>
-				<in1 component_id="19"/>
-			</c4>
-			<c5 id="15">
-				<pos x="3"/>
-				<in1 component_id="18"/>
-			</c5>
-			<c6 id="22">
-				<pos x="-2.5" y="-0.75"/>
-			</c6>
+			<c0 id="2"/>
+			<c1 id="4"/>
+			<c2 id="5"/>
 		</component_bridge_states>
 		<group_states/>
 	</group>

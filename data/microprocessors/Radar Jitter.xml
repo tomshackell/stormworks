@@ -44,34 +44,33 @@
 -- Developed &amp; Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
 -- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
 --      By Nameous Changey
--- Minimized Size: 908 (1273 with comment) chars
+-- Minimized Size: 1057 (1424 with comment) chars
 
-a=255
-t=math
-y=input
 m=screen
-z=m.drawRectF
-v=m.setColor
-_=y.getNumber
-d=t.sin
-f=t.cos
-function p(c,g,b)return{c=c,g=g,b=b}end
-function T(u,s)return{c=u.c-s.c,g=u.g-s.g,b=u.b-s.b}end
-function H(Q)return Q*t.pi*2 end
-function S(D,E,x)local h,k=f(D),d(D)local n,e=f(E),d(E)local j,i=f(x),d(x)return{{n*j,k*e*j-h*i,h*e*j+k*i},{n*i,k*e*i+h*j,h*e*i-k*j},{-e,k*n,h*n}}end
-w=0
-o=nil
-G={}L=1
-function onTick()o=M()local q=p(_(28),0,_(29))local L=_(30)U(o,q)w=w+1
+z=math
+K=input
+_=K.getNumber
+j=z.sin
+i=z.cos
+function s(a,d,b)return{a=a,d=d,b=b}end
+function R(v,t)return{a=v.a+t.a,d=v.d+t.d,b=v.b+t.b}end
+function A(W)return W*z.pi*2 end
+function S(G,I,E)local g,h=i(G),j(G)local o,k=i(I),j(I)local l,f=i(E),j(E)return{{o*l,h*k*l-g*f,g*k*l+h*f},{o*f,h*k*f+g*l,g*k*f-h*l},{-k,h*o,g*o}}end
+function N(w,r)return M(function(e)return w[e][1]*r.a+w[e][2]*r.d+w[e][3]*r.b end)end
+function M(u)return{a=u(1),d=u(2),b=u(3)}end
+J=0
+c=nil
+B={}y=1
+function onTick()c=P()local H=s(_(28),0,_(29))y=_(30)T(c,H)J=J+1
 end
-function onDraw()local J,C=m.getWidth(),m.getHeight()v(a,a,a,a)z(0,0,J,C)for W,l in ipairs(G)do
-local N,Z=map.mapToScreen(0,0,L,J,C,l.c,l.b)v(a,0,a,a)z(N,V,1,1)end
+function onDraw()local Y,O=m.getWidth(),m.getHeight()m.drawMap(c.n.a,c.n.b,y)for Z,p in ipairs(B)do
+local L,ab=map.mapToScreen(c.n.a,c.n.b,y,Y,O,p.a,p.b)m.setColor(255,0,255,255)m.drawRectF(L,ac,1,1)end
 end
-function M()local P,O,R=_(16),_(20),_(24)return{aa=p(_(4),_(8),_(12)),Y=S(P,O,R)}end
-function U(o,q)for F=0,7 do
-local r=F*4
-if y.getBool(F+1)then
-local I=_(r+1)local B=H(_(r+2))local K=H(_(r+3))local A=I*f(K)local l=p(A*d(B),I*d(K),A*f(B))table.X(G,T(l,q))else
+function P()local Q,X,V=_(16),_(20),_(24)return{n=s(_(4),_(8),_(12)),U=S(Q,X,V)}end
+function T(c,H)for e=0,6 do
+local x=e*4
+if K.getBool(e+1)then
+local C=_(x+1)local F=A(_(x+2))local D=A(_(x+3))local q=C*i(D)local p=s(q*j(F),C*j(D),q*i(F))local q=R(N(c.U,p),c.n)table.aa(B,q)else
 break
 end
 end
@@ -175,17 +174,17 @@ end
 			</c>
 			<c type="2">
 				<object id="17">
-					<pos x="-3" y="-5.5"/>
+					<pos x="-3" y="-5.25"/>
 				</object>
 			</c>
 			<c type="2">
 				<object id="19">
-					<pos x="-3" y="-6"/>
+					<pos x="-3" y="-5.75"/>
 				</object>
 			</c>
 			<c type="2">
 				<object id="21">
-					<pos x="-3" y="-6.5"/>
+					<pos x="-3" y="-6.25"/>
 				</object>
 			</c>
 		</components_bridge>
@@ -198,34 +197,33 @@ end
 -- Developed &amp; Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
 -- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
 --      By Nameous Changey
--- Minimized Size: 908 (1273 with comment) chars
+-- Minimized Size: 1057 (1424 with comment) chars
 
-a=255
-t=math
-y=input
 m=screen
-z=m.drawRectF
-v=m.setColor
-_=y.getNumber
-d=t.sin
-f=t.cos
-function p(c,g,b)return{c=c,g=g,b=b}end
-function T(u,s)return{c=u.c-s.c,g=u.g-s.g,b=u.b-s.b}end
-function H(Q)return Q*t.pi*2 end
-function S(D,E,x)local h,k=f(D),d(D)local n,e=f(E),d(E)local j,i=f(x),d(x)return{{n*j,k*e*j-h*i,h*e*j+k*i},{n*i,k*e*i+h*j,h*e*i-k*j},{-e,k*n,h*n}}end
-w=0
-o=nil
-G={}L=1
-function onTick()o=M()local q=p(_(28),0,_(29))local L=_(30)U(o,q)w=w+1
+z=math
+K=input
+_=K.getNumber
+j=z.sin
+i=z.cos
+function s(a,d,b)return{a=a,d=d,b=b}end
+function R(v,t)return{a=v.a+t.a,d=v.d+t.d,b=v.b+t.b}end
+function A(W)return W*z.pi*2 end
+function S(G,I,E)local g,h=i(G),j(G)local o,k=i(I),j(I)local l,f=i(E),j(E)return{{o*l,h*k*l-g*f,g*k*l+h*f},{o*f,h*k*f+g*l,g*k*f-h*l},{-k,h*o,g*o}}end
+function N(w,r)return M(function(e)return w[e][1]*r.a+w[e][2]*r.d+w[e][3]*r.b end)end
+function M(u)return{a=u(1),d=u(2),b=u(3)}end
+J=0
+c=nil
+B={}y=1
+function onTick()c=P()local H=s(_(28),0,_(29))y=_(30)T(c,H)J=J+1
 end
-function onDraw()local J,C=m.getWidth(),m.getHeight()v(a,a,a,a)z(0,0,J,C)for W,l in ipairs(G)do
-local N,Z=map.mapToScreen(0,0,L,J,C,l.c,l.b)v(a,0,a,a)z(N,V,1,1)end
+function onDraw()local Y,O=m.getWidth(),m.getHeight()m.drawMap(c.n.a,c.n.b,y)for Z,p in ipairs(B)do
+local L,ab=map.mapToScreen(c.n.a,c.n.b,y,Y,O,p.a,p.b)m.setColor(255,0,255,255)m.drawRectF(L,ac,1,1)end
 end
-function M()local P,O,R=_(16),_(20),_(24)return{aa=p(_(4),_(8),_(12)),Y=S(P,O,R)}end
-function U(o,q)for F=0,7 do
-local r=F*4
-if y.getBool(F+1)then
-local I=_(r+1)local B=H(_(r+2))local K=H(_(r+3))local A=I*f(K)local l=p(A*d(B),I*d(K),A*f(B))table.X(G,T(l,q))else
+function P()local Q,X,V=_(16),_(20),_(24)return{n=s(_(4),_(8),_(12)),U=S(Q,X,V)}end
+function T(c,H)for e=0,6 do
+local x=e*4
+if K.getBool(e+1)then
+local C=_(x+1)local F=A(_(x+2))local D=A(_(x+3))local q=C*i(D)local p=s(q*j(F),C*j(D),q*i(F))local q=R(N(c.U,p),c.n)table.aa(B,q)else
 break
 end
 end
@@ -307,13 +305,13 @@ end
 				<in1 component_id="8" node_index="1"/>
 			</c2>
 			<c3 id="17">
-				<pos x="-3" y="-5.5"/>
+				<pos x="-3" y="-5.25"/>
 			</c3>
 			<c4 id="19">
-				<pos x="-3" y="-6"/>
+				<pos x="-3" y="-5.75"/>
 			</c4>
 			<c5 id="21">
-				<pos x="-3" y="-6.5"/>
+				<pos x="-3" y="-6.25"/>
 			</c5>
 		</component_bridge_states>
 		<group_states/>

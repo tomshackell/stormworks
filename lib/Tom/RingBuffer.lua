@@ -32,7 +32,7 @@ RingBuffer = {
                 return self.items[lastI]
             end
         end
-    end
+    end,
 }
 ---@endsection
 

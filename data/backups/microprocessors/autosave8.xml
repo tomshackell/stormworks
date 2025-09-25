@@ -1,90 +1,229 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<microprocessor name="DPS Calcultor" description="No description set." width="2" length="1" id_counter="9" id_counter_node="2" sym2="25804" sym3="4770" sym4="4834" sym5="25100" sym6="512" sym8="14406" sym9="16458" sym10="16850" sym11="12882" sym12="2634" sym13="29126">
+<microprocessor name="Radar Jitter Test" description="No description set." width="4" length="2" id_counter="19" id_counter_node="5" sym6="21058" sym7="18724" sym8="18724" sym9="39684" sym10="2340" sym11="2318">
 	<nodes>
 		<n id="1" component_id="2">
-			<node label="Angle" mode="1" type="1" description="The input signal to be processed."/>
+			<node label="Physics Sensor" mode="1" type="5" description="The input signal to be processed."/>
 		</n>
-		<n id="2" component_id="5">
-			<node label="DPS" type="1" description="The input signal to be processed.">
+		<n id="2" component_id="4">
+			<node label="Radar Composite" mode="1" type="5" description="The input signal to be processed.">
+				<position z="1"/>
+			</node>
+		</n>
+		<n id="3" component_id="7">
+			<node label="Video Out" type="6" description="The input signal to be processed.">
 				<position x="1"/>
+			</node>
+		</n>
+		<n id="4" component_id="17">
+			<node label="Target GPS X" mode="1" type="1" description="The input signal to be processed.">
+				<position x="2" z="1"/>
+			</node>
+		</n>
+		<n id="5" component_id="19">
+			<node label="Target GPS Y" mode="1" type="1" description="The input signal to be processed.">
+				<position x="2"/>
 			</node>
 		</n>
 	</nodes>
 	<group>
-		<data type="-1088647281">
+		<data>
 			<inputs/>
 			<outputs/>
 		</data>
 		<components>
-			<c type="40">
-				<object id="7" count="1">
-					<pos x="-1.75" y="-0.25"/>
+			<c type="56">
+				<object id="8">
+					<pos x="0.25" y="1.25"/>
+					<in1 component_id="12"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="9">
+					<pos x="-3" y="0.5"/>
 					<in1 component_id="2"/>
 				</object>
 			</c>
 			<c type="31">
-				<object id="8">
-					<pos x="0.75"/>
-					<in1 component_id="9"/>
+				<object id="10" i="1">
+					<pos x="-3" y="-0.5"/>
+					<in1 component_id="2"/>
 				</object>
 			</c>
-			<c type="56">
-				<object id="9" script="ticks = 0
-
-function onTick()
-	value = input.getNumber(1)			 -- Read the first number from the script's composite input
-	
-	ticks = ticks + 1
-end
-">
-					<pos x="-0.5" y="-0.25"/>
-					<in1 component_id="7"/>
+			<c type="31">
+				<object id="11" i="2">
+					<pos x="-3" y="-1.5"/>
+					<in1 component_id="2"/>
+				</object>
+			</c>
+			<c type="40">
+				<object id="12">
+					<pos x="-1.5" y="-6.5"/>
+					<inc component_id="4"/>
+					<in1/>
+					<in2/>
+					<in3/>
+					<in4 component_id="9"/>
+					<in5/>
+					<in6/>
+					<in7/>
+					<in8 component_id="10"/>
+					<in9/>
+					<in10/>
+					<in11/>
+					<in12 component_id="11"/>
+					<in13/>
+					<in14/>
+					<in15/>
+					<in16 component_id="13"/>
+					<in17/>
+					<in18/>
+					<in19/>
+					<in20 component_id="14"/>
+					<in21/>
+					<in22/>
+					<in23/>
+					<in24 component_id="15"/>
+					<in25/>
+					<in26/>
+					<in27/>
+					<in28 component_id="17"/>
+					<in29/>
+					<in30/>
+					<in31/>
+					<in32 component_id="19"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="13" i="3">
+					<pos x="-3" y="-2.5"/>
+					<in1 component_id="2"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="14" i="4">
+					<pos x="-3" y="-3.5"/>
+					<in1 component_id="2"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="15" i="5">
+					<pos x="-3" y="-4.5"/>
+					<in1 component_id="2"/>
 				</object>
 			</c>
 		</components>
 		<components_bridge>
-			<c type="2">
+			<c type="4">
 				<object id="2">
-					<pos x="-3.5" y="-0.25"/>
+					<pos x="-4.5" y="0.5"/>
 				</object>
 			</c>
-			<c type="3">
-				<object id="5">
-					<pos x="2"/>
-					<in1 component_id="8"/>
+			<c type="4">
+				<object id="4">
+					<pos x="-4.5" y="1.5"/>
+				</object>
+			</c>
+			<c type="7">
+				<object id="7">
+					<pos x="1.75" y="1.25"/>
+					<in1 component_id="8" node_index="1"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="17">
+					<pos x="-3" y="-5.5"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="19">
+					<pos x="-3" y="-6.5"/>
 				</object>
 			</c>
 		</components_bridge>
 		<groups/>
 		<component_states>
-			<c0 id="7" count="1">
-				<pos x="-1.75" y="-0.25"/>
-				<in1 component_id="2"/>
+			<c0 id="8">
+				<pos x="0.25" y="1.25"/>
+				<in1 component_id="12"/>
 			</c0>
-			<c1 id="8">
-				<pos x="0.75"/>
-				<in1 component_id="9"/>
+			<c1 id="9">
+				<pos x="-3" y="0.5"/>
+				<in1 component_id="2"/>
 			</c1>
-			<c2 id="9" script="ticks = 0
-
-function onTick()
-	value = input.getNumber(1)			 -- Read the first number from the script's composite input
-	
-	ticks = ticks + 1
-end
-">
-				<pos x="-0.5" y="-0.25"/>
-				<in1 component_id="7"/>
+			<c2 id="10" i="1">
+				<pos x="-3" y="-0.5"/>
+				<in1 component_id="2"/>
 			</c2>
+			<c3 id="11" i="2">
+				<pos x="-3" y="-1.5"/>
+				<in1 component_id="2"/>
+			</c3>
+			<c4 id="12">
+				<pos x="-1.5" y="-6.5"/>
+				<inc component_id="4"/>
+				<in1/>
+				<in2/>
+				<in3/>
+				<in4 component_id="9"/>
+				<in5/>
+				<in6/>
+				<in7/>
+				<in8 component_id="10"/>
+				<in9/>
+				<in10/>
+				<in11/>
+				<in12 component_id="11"/>
+				<in13/>
+				<in14/>
+				<in15/>
+				<in16 component_id="13"/>
+				<in17/>
+				<in18/>
+				<in19/>
+				<in20 component_id="14"/>
+				<in21/>
+				<in22/>
+				<in23/>
+				<in24 component_id="15"/>
+				<in25/>
+				<in26/>
+				<in27/>
+				<in28 component_id="17"/>
+				<in29/>
+				<in30/>
+				<in31/>
+				<in32 component_id="19"/>
+			</c4>
+			<c5 id="13" i="3">
+				<pos x="-3" y="-2.5"/>
+				<in1 component_id="2"/>
+			</c5>
+			<c6 id="14" i="4">
+				<pos x="-3" y="-3.5"/>
+				<in1 component_id="2"/>
+			</c6>
+			<c7 id="15" i="5">
+				<pos x="-3" y="-4.5"/>
+				<in1 component_id="2"/>
+			</c7>
 		</component_states>
 		<component_bridge_states>
 			<c0 id="2">
-				<pos x="-3.5" y="-0.25"/>
+				<pos x="-4.5" y="0.5"/>
 			</c0>
-			<c1 id="5">
-				<pos x="2"/>
-				<in1 component_id="8"/>
+			<c1 id="4">
+				<pos x="-4.5" y="1.5"/>
 			</c1>
+			<c2 id="7">
+				<pos x="1.75" y="1.25"/>
+				<in1 component_id="8" node_index="1"/>
+			</c2>
+			<c3 id="17">
+				<pos x="-3" y="-5.5"/>
+			</c3>
+			<c4 id="19">
+				<pos x="-3" y="-6.5"/>
+			</c4>
 		</component_bridge_states>
 		<group_states/>
 	</group>
