@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<microprocessor name="Radar Controller" description="No description set." width="3" length="2" id_counter="19" id_counter_node="5" sym1="4260" sym2="2194" sym3="2194" sym4="2866" sym5="2066" sym6="2068" sym8="18642" sym9="10570" sym10="6726" sym11="10826" sym12="19026" sym13="18770" sym14="14542">
+	<nodes>
+		<n id="1" component_id="2">
+			<node label="Radar Composite" mode="1" type="5" description="The input signal to be processed."/>
+		</n>
+		<n id="2" component_id="5">
+			<node label="Video Out" type="6" description="The input signal to be processed.">
+				<position x="1"/>
+			</node>
+		</n>
+		<n id="3" component_id="7">
+			<node label="Radar Sweep Angle" mode="1" type="1" description="The input signal to be processed.">
+				<position z="1"/>
+			</node>
+		</n>
+		<n id="4" component_id="11">
+			<node label="Physics Sensor (dish)" mode="1" type="5" description="The input signal to be processed.">
+				<position x="1" z="1"/>
+			</node>
+		</n>
+		<n id="5" component_id="19">
+			<node label="Zoom Factor" mode="1" type="1" description="The input signal to be processed.">
+				<position x="2"/>
+			</node>
+		</n>
+	</nodes>
+	<group>
+		<data type="-1088647281">
+			<inputs/>
+			<outputs/>
+		</data>
+		<components>
+			<c type="40">
+				<object id="8">
+					<pos x="-0.75" y="-3"/>
+					<inc component_id="2"/>
+					<in1/>
+					<in2/>
+					<in3/>
+					<in4 component_id="12"/>
+					<in5/>
+					<in6/>
+					<in7/>
+					<in8 component_id="13"/>
+					<in9/>
+					<in10/>
+					<in11/>
+					<in12 component_id="14"/>
+					<in13/>
+					<in14/>
+					<in15/>
+					<in16 component_id="15"/>
+					<in17/>
+					<in18/>
+					<in19/>
+					<in20 component_id="16"/>
+					<in21/>
+					<in22/>
+					<in23/>
+					<in24 component_id="17"/>
+					<in25/>
+					<in26/>
+					<in27/>
+					<in28 component_id="19"/>
+					<in29/>
+					<in30/>
+					<in31/>
+					<in32 component_id="7"/>
+				</object>
+			</c>
+			<c type="56">
+				<object id="9" script='-- Author: &lt;Authorname&gt; (Please change this in user settings, Ctrl+Comma)
+-- GitHub: &lt;GithubLink&gt;
+-- Workshop: &lt;WorkshopLink&gt;
+--
+-- Developed &amp; Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
+-- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
+--      By Nameous Changey
+-- Minimized Size: 1291 (1658 with comment) chars
+
+j=screen
+E=ipairs
+n=math
+G=input
+J=table.insert
+a=G.getNumber
+m=n.sin
+o=n.cos
+function K(_,e,c)return{_=_,e=e,c=c}end
+function aa(B,C)return{_=B._+C._,e=B.e+C.e,c=B.c+C.c}end
+function M(u)return u*n.pi*2 end
+function ak(_,q,x)return n.min(n.max(_,q),x)end
+function V(_,q,I,x,X)return ak((_-q)/(x-q),0,1)*(X-I)+I
+end
+function U(O,F,H)local k,i=o(O),m(O)local r,l=o(F),m(F)local h,p=o(H),m(H)return{{r*h,i*l*h-k*p,k*l*h+i*p},{r*p,i*l*p+k*h,k*l*p-i*h},{-l,i*r,k*r}}end
+function ai(D,A)return ac(function(g)return D[g][1]*A._+D[g][2]*A.e+D[g][3]*A.c end)end
+function ac(y)return{_=y(1),e=y(2),c=y(3)}end
+S=200
+af=.25
+t=0
+f={}z=1
+s={}function onTick()f=am()z=a(28)for g=0,7 do
+local v=g*4
+if G.getBool(g+1)then
+local N=a(v+1)local L=M(a(v+2))local P=M(a(v+3))local d=N*o(P)local w=K(d*m(L),N*m(P),d*o(L))local b=f:Y(w)J(s,{b=b,u=t})else
+break
+end
+end
+local R={}for ab,d in E(s)do
+if t&lt;=d.u+S then
+J(R,d)end
+end
+s=R
+t=t+1
+end
+function am()local W,ae,Z=a(16),a(20),a(24)return{b=K(a(4),a(8),a(12)),ah=U(W,ae,Z),Y=function(Q,w)return aa(ai(Q.ah,w),Q.b)end}end
+function onDraw()local al,ag=j.getWidth(),j.getHeight()j.drawMap(f.b._,f.b.c,z)for ab,d in E(s)do
+local ad,T=map.mapToScreen(f.b._,f.b.c,z,al,ag,d.b._,d.b.c)local aj=V(d.u,0,1,S,af)j.setColor(255,0,255,aj*255)j.drawRectF(ad,T,1,1)end
+end
+'>
+					<pos x="0.75" y="4.75"/>
+					<in1 component_id="8"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="12">
+					<pos x="-2.5" y="4"/>
+					<in1 component_id="11"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="13" i="1">
+					<pos x="-2.5" y="3"/>
+					<in1 component_id="11"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="14" i="2">
+					<pos x="-2.5" y="2"/>
+					<in1 component_id="11"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="15" i="3">
+					<pos x="-2.5" y="1"/>
+					<in1 component_id="11"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="16" i="4">
+					<pos x="-2.5"/>
+					<in1 component_id="11"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="17" i="5">
+					<pos x="-2.5" y="-1"/>
+					<in1 component_id="11"/>
+				</object>
+			</c>
+		</components>
+		<components_bridge>
+			<c type="4">
+				<object id="2">
+					<pos x="-4" y="5"/>
+				</object>
+			</c>
+			<c type="7">
+				<object id="5">
+					<pos x="2.5" y="4.75"/>
+					<in1 component_id="9" node_index="1"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="7">
+					<pos x="-4" y="-3"/>
+				</object>
+			</c>
+			<c type="4">
+				<object id="11">
+					<pos x="-4" y="4"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="19">
+					<pos x="-4" y="-2"/>
+				</object>
+			</c>
+		</components_bridge>
+		<groups/>
+		<component_states>
+			<c0 id="8">
+				<pos x="-0.75" y="-3"/>
+				<inc component_id="2"/>
+				<in1/>
+				<in2/>
+				<in3/>
+				<in4 component_id="12"/>
+				<in5/>
+				<in6/>
+				<in7/>
+				<in8 component_id="13"/>
+				<in9/>
+				<in10/>
+				<in11/>
+				<in12 component_id="14"/>
+				<in13/>
+				<in14/>
+				<in15/>
+				<in16 component_id="15"/>
+				<in17/>
+				<in18/>
+				<in19/>
+				<in20 component_id="16"/>
+				<in21/>
+				<in22/>
+				<in23/>
+				<in24 component_id="17"/>
+				<in25/>
+				<in26/>
+				<in27/>
+				<in28 component_id="19"/>
+				<in29/>
+				<in30/>
+				<in31/>
+				<in32 component_id="7"/>
+			</c0>
+			<c1 id="9" script='-- Author: &lt;Authorname&gt; (Please change this in user settings, Ctrl+Comma)
+-- GitHub: &lt;GithubLink&gt;
+-- Workshop: &lt;WorkshopLink&gt;
+--
+-- Developed &amp; Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
+-- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
+--      By Nameous Changey
+-- Minimized Size: 1291 (1658 with comment) chars
+
+j=screen
+E=ipairs
+n=math
+G=input
+J=table.insert
+a=G.getNumber
+m=n.sin
+o=n.cos
+function K(_,e,c)return{_=_,e=e,c=c}end
+function aa(B,C)return{_=B._+C._,e=B.e+C.e,c=B.c+C.c}end
+function M(u)return u*n.pi*2 end
+function ak(_,q,x)return n.min(n.max(_,q),x)end
+function V(_,q,I,x,X)return ak((_-q)/(x-q),0,1)*(X-I)+I
+end
+function U(O,F,H)local k,i=o(O),m(O)local r,l=o(F),m(F)local h,p=o(H),m(H)return{{r*h,i*l*h-k*p,k*l*h+i*p},{r*p,i*l*p+k*h,k*l*p-i*h},{-l,i*r,k*r}}end
+function ai(D,A)return ac(function(g)return D[g][1]*A._+D[g][2]*A.e+D[g][3]*A.c end)end
+function ac(y)return{_=y(1),e=y(2),c=y(3)}end
+S=200
+af=.25
+t=0
+f={}z=1
+s={}function onTick()f=am()z=a(28)for g=0,7 do
+local v=g*4
+if G.getBool(g+1)then
+local N=a(v+1)local L=M(a(v+2))local P=M(a(v+3))local d=N*o(P)local w=K(d*m(L),N*m(P),d*o(L))local b=f:Y(w)J(s,{b=b,u=t})else
+break
+end
+end
+local R={}for ab,d in E(s)do
+if t&lt;=d.u+S then
+J(R,d)end
+end
+s=R
+t=t+1
+end
+function am()local W,ae,Z=a(16),a(20),a(24)return{b=K(a(4),a(8),a(12)),ah=U(W,ae,Z),Y=function(Q,w)return aa(ai(Q.ah,w),Q.b)end}end
+function onDraw()local al,ag=j.getWidth(),j.getHeight()j.drawMap(f.b._,f.b.c,z)for ab,d in E(s)do
+local ad,T=map.mapToScreen(f.b._,f.b.c,z,al,ag,d.b._,d.b.c)local aj=V(d.u,0,1,S,af)j.setColor(255,0,255,aj*255)j.drawRectF(ad,T,1,1)end
+end
+'>
+				<pos x="0.75" y="4.75"/>
+				<in1 component_id="8"/>
+			</c1>
+			<c2 id="12">
+				<pos x="-2.5" y="4"/>
+				<in1 component_id="11"/>
+			</c2>
+			<c3 id="13" i="1">
+				<pos x="-2.5" y="3"/>
+				<in1 component_id="11"/>
+			</c3>
+			<c4 id="14" i="2">
+				<pos x="-2.5" y="2"/>
+				<in1 component_id="11"/>
+			</c4>
+			<c5 id="15" i="3">
+				<pos x="-2.5" y="1"/>
+				<in1 component_id="11"/>
+			</c5>
+			<c6 id="16" i="4">
+				<pos x="-2.5"/>
+				<in1 component_id="11"/>
+			</c6>
+			<c7 id="17" i="5">
+				<pos x="-2.5" y="-1"/>
+				<in1 component_id="11"/>
+			</c7>
+		</component_states>
+		<component_bridge_states>
+			<c0 id="2">
+				<pos x="-4" y="5"/>
+			</c0>
+			<c1 id="5">
+				<pos x="2.5" y="4.75"/>
+				<in1 component_id="9" node_index="1"/>
+			</c1>
+			<c2 id="7">
+				<pos x="-4" y="-3"/>
+			</c2>
+			<c3 id="11">
+				<pos x="-4" y="4"/>
+			</c3>
+			<c4 id="19">
+				<pos x="-4" y="-2"/>
+			</c4>
+		</component_bridge_states>
+		<group_states/>
+	</group>
+</microprocessor>
+

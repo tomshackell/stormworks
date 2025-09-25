@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<microprocessor name="Phys Sensor Test" description="No description set." width="4" length="2" id_counter="22" id_counter_node="7" sym1="9060" sym2="5172" sym3="4692" sym4="12580" sym5="5636" sym6="4110" sym7="960" sym8="1024" sym9="30289" sym10="17745" sym11="9523" sym12="4117" sym13="24597" sym14="19">
+	<nodes>
+		<n id="1" component_id="2">
+			<node label="Physics Sensor" mode="1" type="5" description="The input signal to be processed."/>
+		</n>
+		<n id="2" component_id="4">
+			<node label="In X" mode="1" type="1" description="The input signal to be processed.">
+				<position x="1"/>
+			</node>
+		</n>
+		<n id="3" component_id="6">
+			<node label="In Y" mode="1" type="1" description="The input signal to be processed.">
+				<position x="2"/>
+			</node>
+		</n>
+		<n id="4" component_id="9">
+			<node label="Out X" type="1" description="The input signal to be processed.">
+				<position z="1"/>
+			</node>
+		</n>
+		<n id="5" component_id="12">
+			<node label="Out Y" type="1" description="The input signal to be processed.">
+				<position x="1" z="1"/>
+			</node>
+		</n>
+		<n id="6" component_id="15">
+			<node label="Out Z" type="1" description="The input signal to be processed.">
+				<position x="2" z="1"/>
+			</node>
+		</n>
+		<n id="7" component_id="22">
+			<node label="In Z" mode="1" type="1" description="The input signal to be processed.">
+				<position x="3"/>
+			</node>
+		</n>
+	</nodes>
+	<group>
+		<data type="1891155738">
+			<inputs/>
+			<outputs/>
+		</data>
+		<components>
+			<c type="40">
+				<object id="16" count="3" offset="19">
+					<pos x="-1"/>
+					<inc component_id="2"/>
+					<in1 component_id="4"/>
+					<in2 component_id="6"/>
+					<in3 component_id="22"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="17">
+					<pos x="1.75" y="0.5"/>
+					<in1 component_id="20"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="18" i="1">
+					<pos x="1.75"/>
+					<in1 component_id="20"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="19" i="2">
+					<pos x="1.75" y="-0.5"/>
+					<in1 component_id="20"/>
+				</object>
+			</c>
+			<c type="56">
+				<object id="20" script='-- Author: &lt;Authorname&gt; (Please change this in user settings, Ctrl+Comma)
+-- GitHub: &lt;GithubLink&gt;
+-- Workshop: &lt;WorkshopLink&gt;
+--
+-- Developed &amp; Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
+-- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
+--      By Nameous Changey
+-- Minimized Size: 518 (883 with comment) chars
+
+u=math
+p=output.setNumber
+_=input.getNumber
+r=u.sin
+s=u.cos
+function w(j,l,i)local f,e=s(j),r(j)local m,d=s(l),r(l)local c,b=s(i),r(i)return{{c*m,c*d*e-b*f,c*d*f+b*e},{b*m,b*d*e+c*f,b*d*f-c*e},{-d,m*e,m*f}}end
+function x(a,q)return y(function(t)return a[t][1]*q.k+a[t][2]*q.g+a[t][3]*q.h end)end
+function y(o)return{k=o(1),g=o(2),h=o(3)}end
+function onTick()local z={k=_(1),g=_(2),h=_(3)}local j=-_(4)local l=-_(5)local i=_(6)local v={k=_(20),g=_(21),h=_(22)}local a=w(j,l,i)local n=x(a,v)p(1,n.k)p(2,n.g)p(3,n.h)end
+'>
+					<pos x="0.25" y="-0.25"/>
+					<in1 component_id="16"/>
+				</object>
+			</c>
+		</components>
+		<components_bridge>
+			<c type="4">
+				<object id="2">
+					<pos x="-2.5" y="0.75"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="4">
+					<pos x="-2.5" y="0.25"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="6">
+					<pos x="-2.5" y="-0.25"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="9">
+					<pos x="3" y="0.5"/>
+					<in1 component_id="17"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="12">
+					<pos x="3" y="-0.5"/>
+					<in1 component_id="19"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="15">
+					<pos x="3"/>
+					<in1 component_id="18"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="22">
+					<pos x="-2.5" y="-0.75"/>
+				</object>
+			</c>
+		</components_bridge>
+		<groups/>
+		<component_states>
+			<c0 id="16" count="3" offset="19">
+				<pos x="-1"/>
+				<inc component_id="2"/>
+				<in1 component_id="4"/>
+				<in2 component_id="6"/>
+				<in3 component_id="22"/>
+			</c0>
+			<c1 id="17">
+				<pos x="1.75" y="0.5"/>
+				<in1 component_id="20"/>
+			</c1>
+			<c2 id="18" i="1">
+				<pos x="1.75"/>
+				<in1 component_id="20"/>
+			</c2>
+			<c3 id="19" i="2">
+				<pos x="1.75" y="-0.5"/>
+				<in1 component_id="20"/>
+			</c3>
+			<c4 id="20" script='-- Author: &lt;Authorname&gt; (Please change this in user settings, Ctrl+Comma)
+-- GitHub: &lt;GithubLink&gt;
+-- Workshop: &lt;WorkshopLink&gt;
+--
+-- Developed &amp; Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
+-- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
+--      By Nameous Changey
+-- Minimized Size: 518 (883 with comment) chars
+
+u=math
+p=output.setNumber
+_=input.getNumber
+r=u.sin
+s=u.cos
+function w(j,l,i)local f,e=s(j),r(j)local m,d=s(l),r(l)local c,b=s(i),r(i)return{{c*m,c*d*e-b*f,c*d*f+b*e},{b*m,b*d*e+c*f,b*d*f-c*e},{-d,m*e,m*f}}end
+function x(a,q)return y(function(t)return a[t][1]*q.k+a[t][2]*q.g+a[t][3]*q.h end)end
+function y(o)return{k=o(1),g=o(2),h=o(3)}end
+function onTick()local z={k=_(1),g=_(2),h=_(3)}local j=-_(4)local l=-_(5)local i=_(6)local v={k=_(20),g=_(21),h=_(22)}local a=w(j,l,i)local n=x(a,v)p(1,n.k)p(2,n.g)p(3,n.h)end
+'>
+				<pos x="0.25" y="-0.25"/>
+				<in1 component_id="16"/>
+			</c4>
+		</component_states>
+		<component_bridge_states>
+			<c0 id="2">
+				<pos x="-2.5" y="0.75"/>
+			</c0>
+			<c1 id="4">
+				<pos x="-2.5" y="0.25"/>
+			</c1>
+			<c2 id="6">
+				<pos x="-2.5" y="-0.25"/>
+			</c2>
+			<c3 id="9">
+				<pos x="3" y="0.5"/>
+				<in1 component_id="17"/>
+			</c3>
+			<c4 id="12">
+				<pos x="3" y="-0.5"/>
+				<in1 component_id="19"/>
+			</c4>
+			<c5 id="15">
+				<pos x="3"/>
+				<in1 component_id="18"/>
+			</c5>
+			<c6 id="22">
+				<pos x="-2.5" y="-0.75"/>
+			</c6>
+		</component_bridge_states>
+		<group_states/>
+	</group>
+</microprocessor>
+

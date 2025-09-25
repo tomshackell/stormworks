@@ -1,0 +1,808 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<microprocessor name="Heavy AC 2" description="No description set." width="6" length="4" id_counter="91" id_counter_node="31" sym1="22096" sym2="20816" sym3="20848" sym4="20816" sym5="22048" sym7="6144" sym8="8488" sym9="12968" sym10="10936" sym11="10920" sym12="40">
+	<nodes>
+		<n id="6" component_id="31">
+			<node label="Chamber Feeder" description="The input signal to be processed.">
+				<position x="1" z="1"/>
+			</node>
+		</n>
+		<n id="9" component_id="37">
+			<node label="Ejector Velocity" type="1" description="The input signal to be processed."/>
+		</n>
+		<n id="10" component_id="38">
+			<node label="Chamber Loaded" mode="1" description="The input signal to be processed.">
+				<position z="1"/>
+			</node>
+		</n>
+		<n id="11" component_id="41">
+			<node label="Junction Switch" description="The input signal to be processed.">
+				<position x="1"/>
+			</node>
+		</n>
+		<n id="12" component_id="42">
+			<node label="Left Has Ammo" mode="1" description="The input signal to be processed.">
+				<position x="2" z="1"/>
+			</node>
+		</n>
+		<n id="13" component_id="44">
+			<node label="Right Has Ammo" mode="1" description="The input signal to be processed.">
+				<position x="2"/>
+			</node>
+		</n>
+		<n id="14" component_id="45">
+			<node label="Feeder Loaded" mode="1" description="The input signal to be processed.">
+				<position x="3" z="1"/>
+			</node>
+		</n>
+		<n id="15" component_id="46">
+			<node label="Junction Loaded" mode="1" description="The input signal to be processed.">
+				<position x="3"/>
+			</node>
+		</n>
+		<n id="16" component_id="47">
+			<node label="Consent to Fire" mode="1" description="The input signal to be processed.">
+				<position z="2"/>
+			</node>
+		</n>
+		<n id="17" component_id="49">
+			<node label="Weapon Trigger" description="The input signal to be processed.">
+				<position x="1" z="2"/>
+			</node>
+		</n>
+		<n id="18" component_id="52">
+			<node label="Target Gun Elevation" mode="1" type="1" description="The input signal to be processed.">
+				<position x="2" z="3"/>
+			</node>
+		</n>
+		<n id="19" component_id="54">
+			<node label="Target Gun Azimuth" mode="1" type="1" description="The input signal to be processed.">
+				<position x="2" z="2"/>
+			</node>
+		</n>
+		<n id="20" component_id="56">
+			<node label="Current Gun Elevation" mode="1" type="1" description="The input signal to be processed.">
+				<position x="3" z="3"/>
+			</node>
+		</n>
+		<n id="21" component_id="58">
+			<node label="Current Gun Azimuth" mode="1" type="1" description="The input signal to be processed.">
+				<position x="3" z="2"/>
+			</node>
+		</n>
+		<n id="22" component_id="61">
+			<node label="Gun Elevation Motor" type="1" description="The input signal to be processed.">
+				<position x="4" z="3"/>
+			</node>
+		</n>
+		<n id="23" component_id="64">
+			<node label="Gun Azimuth Motor" type="1" description="The input signal to be processed.">
+				<position x="4" z="2"/>
+			</node>
+		</n>
+		<n id="24" component_id="66">
+			<node label="Current Carriage Azimuth" mode="1" type="1" description="The input signal to be processed.">
+				<position x="4" z="1"/>
+			</node>
+		</n>
+		<n id="25" component_id="69">
+			<node label="Carriage Azimuth Motor" type="1" description="The input signal to be processed.">
+				<position x="5" z="1"/>
+			</node>
+		</n>
+		<n id="26" component_id="71">
+			<node label="Current Carriage Elevation" mode="1" type="1" description="The input signal to be processed.">
+				<position x="4"/>
+			</node>
+		</n>
+		<n id="27" component_id="74">
+			<node label="Carriage Elevation Motor" type="1" description="The input signal to be processed.">
+				<position x="5"/>
+			</node>
+		</n>
+		<n id="28" component_id="78">
+			<node label="Carriage Ammo Count" mode="1" type="1" description="The input signal to be processed.">
+				<position z="3"/>
+			</node>
+		</n>
+		<n id="29" component_id="82">
+			<node label="Feed to Gun" description="The input signal to be processed.">
+				<position x="5" z="3"/>
+			</node>
+		</n>
+		<n id="30" component_id="86">
+			<node label="Feed to Carriage" description="The input signal to be processed.">
+				<position x="5" z="2"/>
+			</node>
+		</n>
+		<n id="31" component_id="90">
+			<node label="Gun Ammo Count" mode="1" type="1" description="The input signal to be processed.">
+				<position x="1" z="3"/>
+			</node>
+		</n>
+	</nodes>
+	<group>
+		<data type="26542080">
+			<inputs/>
+			<outputs/>
+		</data>
+		<components>
+			<c type="56">
+				<object id="24" script='-- Author: &lt;Authorname&gt; (Please change this in user settings, Ctrl+Comma)
+-- GitHub: &lt;GithubLink&gt;
+-- Workshop: &lt;WorkshopLink&gt;
+--
+-- Developed &amp; Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
+-- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
+--      By Nameous Changey
+-- Minimized Size: 2572 (2939 with comment) chars
+
+k=360
+ab=true
+ac=table
+f=false
+M=math
+Y=input
+n=output
+w=n.setBool
+y=n.setNumber
+m=Y.getBool
+j=Y.getNumber
+G=M.abs
+X={ag=function(aK,h)local h=h or{}return{H=h.H or 0,J=h.J or 0,E=h.E or 0,aq=h.aq or 0,A=h.A or-(1/0),F=h.F or(1/0),ai=h.ai or 1.0,b_=nil,ak=0,an=0,D=aK.D}end,D=function(c,e,i)local e=e*c.ai
+local v=e-i
+local au=c.an+v
+local aO=v-c.ak
+local R=c.H*v+c.J*au+c.E*aO+c.aq
+c.ak=v
+local n=M.min(M.max(R,c.A),c.F)if n==R or v*R&lt;=0 then
+c.an=au
+end
+c.b_={e=e,i=i,n=n}return n
+end}function aR(i,e)local q=((e%k)-(i%k)+k)%k
+return(q&gt;180)and(q-k)or q
+end
+function z(i,e)local q=((e%1)-(i%1)+1)%1
+return(q&gt;.5)and(q-1)or q
+end
+local p=0
+function aQ()local P=0
+local aw=1
+local am=2
+local N=3
+local aF=10
+local aC=.001
+local aJ=.001
+local aN=76
+local ah=f
+local a=P
+local aL=X:ag({H=2,J=0,E=0,A=-1,F=1})local ba=X:ag({H=20,J=0,E=0,A=-1,F=1})local aW=aV()local aE=aM()local d=function(_)local l=aW.d({aD=_.aB,bh=_.ax,bg=_.s,ay=a==N,aZ=_.aH&gt;=aN,L=_.L})local b={r=0,o=0,C=0,ao=f,aj=f,O=f}local ae=function(az,bb)return G(az-_.S)&lt;=aC and
+G(bb-_.s)&lt;=aJ
+end
+local Z=_.ad or _.W or _.aG
+local t=_.s
+local I=_.S
+local aP=z(_.s,0)local bd=z(_.s,.5)local bf=G(aP)&lt;G(bd)or not _.bc
+local al=bf and 0 or .5
+if a==P then
+if p&gt;aF and _.af then
+b.O=not _.u
+a=aw
+end
+elseif a==aw then
+local aX=ae(_.V,_.ap)b.O=aX and _.aS
+I=_.V
+t=_.ap
+if not Z and not _.af and not _.u then
+a=am
+end
+elseif a==am then
+I=0
+t=al
+if ae(0,t)then
+a=N
+end
+elseif a==N then
+I=0
+t=al
+if l.x then
+a=P
+end
+end
+local T=ah and not _.u
+ah=_.u
+b.r=aE.d(T)b.ao=not _.u and Z
+b.aj=not _.ad and _.W
+b.o=aL:D(I,_.S)local aU=z(_.s,t)b.C=ba:D(aU,0)return b,l
+end
+return{d=d}end
+function aM()local U=15
+local av=16
+local be=18
+local aT=U+av+be
+local B={}local d=function(T)if T then
+ac.insert(B,p)end
+local r=0
+while#B&gt;0 do
+local K=B[1]if p&gt;=K+aT then
+ac.remove(B,1)elseif p&gt;=K+U+av then
+r=-1
+break
+elseif p&gt;=K+U then
+r=1
+break
+else
+break
+end
+end
+return r
+end
+return{d=d}end
+function aV()local as=0
+local at=1
+local Q=2
+local aY=.01
+local aI=80
+local a=Q
+local d=function(_)local g={C=0,o=0,ar=f,aa=f,x=f}if a==as then
+g.x=f
+g.o=-1
+if _.ay then
+a=at
+end
+g.aa=_.L&lt;aI
+elseif a==at then
+g.o=1
+g.ar=ab
+g.x=f
+if _.aZ then
+a=Q
+end
+elseif a==Q then
+g.o=-1
+g.x=f
+if _.aD&lt;=aY then
+a=as
+g.x=ab
+end
+end
+return g
+end
+return{d=d}end
+function z(i,e)return aR(i*k,e*k)/k
+end
+local aA=aQ()function onTick()local _={V=j(1),S=j(2),ap=j(3),s=j(4),aB=j(5),ax=j(6),L=j(7),aH=j(8),ad=m(1),W=m(2),af=m(3),u=m(4),aG=m(5),aS=m(6),bc=m(7)}local b,l=aA.d(_)y(1,b.r)y(2,b.o)y(3,b.C)y(4,l.o)y(5,l.C)w(1,b.ao)w(2,b.aj)w(3,b.O)w(4,l.ar)w(5,l.aa)p=p+1
+end
+'>
+					<pos x="-1.25" y="-1.25"/>
+					<in1 component_id="27"/>
+				</object>
+			</c>
+			<c type="40">
+				<object id="26" count="8">
+					<pos x="-2.5" y="-0.5"/>
+					<in1 component_id="52"/>
+					<in2 component_id="56"/>
+					<in3 component_id="54"/>
+					<in4 component_id="58"/>
+					<in5 component_id="71"/>
+					<in6 component_id="66"/>
+					<in7 component_id="78"/>
+					<in8 component_id="90"/>
+				</object>
+			</c>
+			<c type="41">
+				<object id="27" count="7">
+					<pos x="-2.5" y="-2.75"/>
+					<inc component_id="26"/>
+					<in1 component_id="42"/>
+					<in2 component_id="44"/>
+					<in3 component_id="45"/>
+					<in4 component_id="38"/>
+					<in5 component_id="46"/>
+					<in6 component_id="47"/>
+					<in7 component_id="91"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="28">
+					<pos x="0.5" y="1.75"/>
+					<in1 component_id="24"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="29" i="1">
+					<pos x="0.5" y="1.25"/>
+					<in1 component_id="24"/>
+				</object>
+			</c>
+			<c type="29">
+				<object id="32">
+					<pos x="0.5" y="-1"/>
+					<in1 component_id="24"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="39" i="2">
+					<pos x="0.5" y="0.75"/>
+					<in1 component_id="24"/>
+				</object>
+			</c>
+			<c type="29">
+				<object id="43" i="1">
+					<pos x="0.5" y="-1.5"/>
+					<in1 component_id="24"/>
+				</object>
+			</c>
+			<c type="29">
+				<object id="50" i="2">
+					<pos x="0.5" y="-2"/>
+					<in1 component_id="24"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="75" i="3">
+					<pos x="0.5" y="0.25"/>
+					<in1 component_id="24"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="76" i="4">
+					<pos x="0.5" y="-0.25"/>
+					<in1 component_id="24"/>
+				</object>
+			</c>
+			<c type="29">
+				<object id="87" i="3">
+					<pos x="0.5" y="-2.5"/>
+					<in1 component_id="24"/>
+				</object>
+			</c>
+			<c type="29">
+				<object id="88" i="4">
+					<pos x="0.5" y="-3"/>
+					<in1 component_id="24"/>
+				</object>
+			</c>
+			<c type="33">
+				<object id="91" n="Allow rear reload">
+					<pos x="-4.5" y="-4.25"/>
+				</object>
+			</c>
+		</components>
+		<components_bridge>
+			<c type="1">
+				<object id="31">
+					<pos x="1.75" y="-1"/>
+					<in1 component_id="32"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="37">
+					<pos x="1.75" y="1.75"/>
+					<in1 component_id="28"/>
+				</object>
+			</c>
+			<c>
+				<object id="38">
+					<pos x="-4.5" y="-2.75"/>
+				</object>
+			</c>
+			<c type="1">
+				<object id="41">
+					<pos x="1.75" y="-1.5"/>
+					<in1 component_id="43"/>
+				</object>
+			</c>
+			<c>
+				<object id="42">
+					<pos x="-4.5" y="-1.25"/>
+				</object>
+			</c>
+			<c>
+				<object id="44">
+					<pos x="-4.5" y="-1.75"/>
+				</object>
+			</c>
+			<c>
+				<object id="45">
+					<pos x="-4.5" y="-2.25"/>
+				</object>
+			</c>
+			<c>
+				<object id="46">
+					<pos x="-4.5" y="-3.25"/>
+				</object>
+			</c>
+			<c>
+				<object id="47">
+					<pos x="-4.5" y="-3.75"/>
+				</object>
+			</c>
+			<c type="1">
+				<object id="49">
+					<pos x="1.75" y="-2"/>
+					<in1 component_id="50"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="52">
+					<pos x="-4.5" y="3"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="54">
+					<pos x="-4.5" y="2"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="56">
+					<pos x="-4.5" y="2.5"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="58">
+					<pos x="-4.5" y="1.5"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="61">
+					<pos x="1.75" y="1.25"/>
+					<in1 component_id="29"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="64">
+					<pos x="1.75" y="0.75"/>
+					<in1 component_id="39"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="66">
+					<pos x="-4.5" y="0.5"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="69">
+					<pos x="1.75" y="-0.25"/>
+					<in1 component_id="76"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="71">
+					<pos x="-4.5" y="1"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="74">
+					<pos x="1.75" y="0.25"/>
+					<in1 component_id="75"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="78">
+					<pos x="-4.5"/>
+				</object>
+			</c>
+			<c type="1">
+				<object id="82">
+					<pos x="1.75" y="-2.5"/>
+					<in1 component_id="87"/>
+				</object>
+			</c>
+			<c type="1">
+				<object id="86">
+					<pos x="1.75" y="-3"/>
+					<in1 component_id="88"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="90">
+					<pos x="-4.5" y="-0.5"/>
+				</object>
+			</c>
+		</components_bridge>
+		<groups/>
+		<component_states>
+			<c0 id="24" script='-- Author: &lt;Authorname&gt; (Please change this in user settings, Ctrl+Comma)
+-- GitHub: &lt;GithubLink&gt;
+-- Workshop: &lt;WorkshopLink&gt;
+--
+-- Developed &amp; Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
+-- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
+--      By Nameous Changey
+-- Minimized Size: 2572 (2939 with comment) chars
+
+k=360
+ab=true
+ac=table
+f=false
+M=math
+Y=input
+n=output
+w=n.setBool
+y=n.setNumber
+m=Y.getBool
+j=Y.getNumber
+G=M.abs
+X={ag=function(aK,h)local h=h or{}return{H=h.H or 0,J=h.J or 0,E=h.E or 0,aq=h.aq or 0,A=h.A or-(1/0),F=h.F or(1/0),ai=h.ai or 1.0,b_=nil,ak=0,an=0,D=aK.D}end,D=function(c,e,i)local e=e*c.ai
+local v=e-i
+local au=c.an+v
+local aO=v-c.ak
+local R=c.H*v+c.J*au+c.E*aO+c.aq
+c.ak=v
+local n=M.min(M.max(R,c.A),c.F)if n==R or v*R&lt;=0 then
+c.an=au
+end
+c.b_={e=e,i=i,n=n}return n
+end}function aR(i,e)local q=((e%k)-(i%k)+k)%k
+return(q&gt;180)and(q-k)or q
+end
+function z(i,e)local q=((e%1)-(i%1)+1)%1
+return(q&gt;.5)and(q-1)or q
+end
+local p=0
+function aQ()local P=0
+local aw=1
+local am=2
+local N=3
+local aF=10
+local aC=.001
+local aJ=.001
+local aN=76
+local ah=f
+local a=P
+local aL=X:ag({H=2,J=0,E=0,A=-1,F=1})local ba=X:ag({H=20,J=0,E=0,A=-1,F=1})local aW=aV()local aE=aM()local d=function(_)local l=aW.d({aD=_.aB,bh=_.ax,bg=_.s,ay=a==N,aZ=_.aH&gt;=aN,L=_.L})local b={r=0,o=0,C=0,ao=f,aj=f,O=f}local ae=function(az,bb)return G(az-_.S)&lt;=aC and
+G(bb-_.s)&lt;=aJ
+end
+local Z=_.ad or _.W or _.aG
+local t=_.s
+local I=_.S
+local aP=z(_.s,0)local bd=z(_.s,.5)local bf=G(aP)&lt;G(bd)or not _.bc
+local al=bf and 0 or .5
+if a==P then
+if p&gt;aF and _.af then
+b.O=not _.u
+a=aw
+end
+elseif a==aw then
+local aX=ae(_.V,_.ap)b.O=aX and _.aS
+I=_.V
+t=_.ap
+if not Z and not _.af and not _.u then
+a=am
+end
+elseif a==am then
+I=0
+t=al
+if ae(0,t)then
+a=N
+end
+elseif a==N then
+I=0
+t=al
+if l.x then
+a=P
+end
+end
+local T=ah and not _.u
+ah=_.u
+b.r=aE.d(T)b.ao=not _.u and Z
+b.aj=not _.ad and _.W
+b.o=aL:D(I,_.S)local aU=z(_.s,t)b.C=ba:D(aU,0)return b,l
+end
+return{d=d}end
+function aM()local U=15
+local av=16
+local be=18
+local aT=U+av+be
+local B={}local d=function(T)if T then
+ac.insert(B,p)end
+local r=0
+while#B&gt;0 do
+local K=B[1]if p&gt;=K+aT then
+ac.remove(B,1)elseif p&gt;=K+U+av then
+r=-1
+break
+elseif p&gt;=K+U then
+r=1
+break
+else
+break
+end
+end
+return r
+end
+return{d=d}end
+function aV()local as=0
+local at=1
+local Q=2
+local aY=.01
+local aI=80
+local a=Q
+local d=function(_)local g={C=0,o=0,ar=f,aa=f,x=f}if a==as then
+g.x=f
+g.o=-1
+if _.ay then
+a=at
+end
+g.aa=_.L&lt;aI
+elseif a==at then
+g.o=1
+g.ar=ab
+g.x=f
+if _.aZ then
+a=Q
+end
+elseif a==Q then
+g.o=-1
+g.x=f
+if _.aD&lt;=aY then
+a=as
+g.x=ab
+end
+end
+return g
+end
+return{d=d}end
+function z(i,e)return aR(i*k,e*k)/k
+end
+local aA=aQ()function onTick()local _={V=j(1),S=j(2),ap=j(3),s=j(4),aB=j(5),ax=j(6),L=j(7),aH=j(8),ad=m(1),W=m(2),af=m(3),u=m(4),aG=m(5),aS=m(6),bc=m(7)}local b,l=aA.d(_)y(1,b.r)y(2,b.o)y(3,b.C)y(4,l.o)y(5,l.C)w(1,b.ao)w(2,b.aj)w(3,b.O)w(4,l.ar)w(5,l.aa)p=p+1
+end
+'>
+				<pos x="-1.25" y="-1.25"/>
+				<in1 component_id="27"/>
+			</c0>
+			<c1 id="26" count="8">
+				<pos x="-2.5" y="-0.5"/>
+				<in1 component_id="52"/>
+				<in2 component_id="56"/>
+				<in3 component_id="54"/>
+				<in4 component_id="58"/>
+				<in5 component_id="71"/>
+				<in6 component_id="66"/>
+				<in7 component_id="78"/>
+				<in8 component_id="90"/>
+			</c1>
+			<c2 id="27" count="7">
+				<pos x="-2.5" y="-2.75"/>
+				<inc component_id="26"/>
+				<in1 component_id="42"/>
+				<in2 component_id="44"/>
+				<in3 component_id="45"/>
+				<in4 component_id="38"/>
+				<in5 component_id="46"/>
+				<in6 component_id="47"/>
+				<in7 component_id="91"/>
+			</c2>
+			<c3 id="28">
+				<pos x="0.5" y="1.75"/>
+				<in1 component_id="24"/>
+			</c3>
+			<c4 id="29" i="1">
+				<pos x="0.5" y="1.25"/>
+				<in1 component_id="24"/>
+			</c4>
+			<c5 id="32">
+				<pos x="0.5" y="-1"/>
+				<in1 component_id="24"/>
+			</c5>
+			<c6 id="39" i="2">
+				<pos x="0.5" y="0.75"/>
+				<in1 component_id="24"/>
+			</c6>
+			<c7 id="43" i="1">
+				<pos x="0.5" y="-1.5"/>
+				<in1 component_id="24"/>
+			</c7>
+			<c8 id="50" i="2">
+				<pos x="0.5" y="-2"/>
+				<in1 component_id="24"/>
+			</c8>
+			<c9 id="75" i="3">
+				<pos x="0.5" y="0.25"/>
+				<in1 component_id="24"/>
+			</c9>
+			<c10 id="76" i="4">
+				<pos x="0.5" y="-0.25"/>
+				<in1 component_id="24"/>
+			</c10>
+			<c11 id="87" i="3">
+				<pos x="0.5" y="-2.5"/>
+				<in1 component_id="24"/>
+			</c11>
+			<c12 id="88" i="4">
+				<pos x="0.5" y="-3"/>
+				<in1 component_id="24"/>
+			</c12>
+			<c13 id="91" n="Allow rear reload">
+				<pos x="-4.5" y="-4.25"/>
+			</c13>
+		</component_states>
+		<component_bridge_states>
+			<c0 id="31">
+				<pos x="1.75" y="-1"/>
+				<in1 component_id="32"/>
+			</c0>
+			<c1 id="37">
+				<pos x="1.75" y="1.75"/>
+				<in1 component_id="28"/>
+			</c1>
+			<c2 id="38">
+				<pos x="-4.5" y="-2.75"/>
+			</c2>
+			<c3 id="41">
+				<pos x="1.75" y="-1.5"/>
+				<in1 component_id="43"/>
+			</c3>
+			<c4 id="42">
+				<pos x="-4.5" y="-1.25"/>
+			</c4>
+			<c5 id="44">
+				<pos x="-4.5" y="-1.75"/>
+			</c5>
+			<c6 id="45">
+				<pos x="-4.5" y="-2.25"/>
+			</c6>
+			<c7 id="46">
+				<pos x="-4.5" y="-3.25"/>
+			</c7>
+			<c8 id="47">
+				<pos x="-4.5" y="-3.75"/>
+			</c8>
+			<c9 id="49">
+				<pos x="1.75" y="-2"/>
+				<in1 component_id="50"/>
+			</c9>
+			<c10 id="52">
+				<pos x="-4.5" y="3"/>
+			</c10>
+			<c11 id="54">
+				<pos x="-4.5" y="2"/>
+			</c11>
+			<c12 id="56">
+				<pos x="-4.5" y="2.5"/>
+			</c12>
+			<c13 id="58">
+				<pos x="-4.5" y="1.5"/>
+			</c13>
+			<c14 id="61">
+				<pos x="1.75" y="1.25"/>
+				<in1 component_id="29"/>
+			</c14>
+			<c15 id="64">
+				<pos x="1.75" y="0.75"/>
+				<in1 component_id="39"/>
+			</c15>
+			<c16 id="66">
+				<pos x="-4.5" y="0.5"/>
+			</c16>
+			<c17 id="69">
+				<pos x="1.75" y="-0.25"/>
+				<in1 component_id="76"/>
+			</c17>
+			<c18 id="71">
+				<pos x="-4.5" y="1"/>
+			</c18>
+			<c19 id="74">
+				<pos x="1.75" y="0.25"/>
+				<in1 component_id="75"/>
+			</c19>
+			<c20 id="78">
+				<pos x="-4.5"/>
+			</c20>
+			<c21 id="82">
+				<pos x="1.75" y="-2.5"/>
+				<in1 component_id="87"/>
+			</c21>
+			<c22 id="86">
+				<pos x="1.75" y="-3"/>
+				<in1 component_id="88"/>
+			</c22>
+			<c23 id="90">
+				<pos x="-4.5" y="-0.5"/>
+			</c23>
+		</component_bridge_states>
+		<group_states/>
+	</group>
+</microprocessor>
+

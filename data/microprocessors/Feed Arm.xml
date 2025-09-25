@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<microprocessor name="Feed Arm Controller" description="No description set." width="4" length="3" id_counter="31" id_counter_node="11" sym2="8788" sym3="8788" sym4="10844" sym5="5268" sym6="8" sym9="14914" sym10="10530" sym11="15206" sym12="9058" sym13="8206" sym14="8192">
+	<nodes>
+		<n id="1" component_id="2">
+			<node label="Feed Arm Rotation Position" mode="1" type="1" description="Current rotation position of the feeder arm (turns)"/>
+		</n>
+		<n id="2" component_id="5">
+			<node label="Feed Arm Twist" type="1" description="Desired twist of the feeder arm">
+				<position x="1"/>
+			</node>
+		</n>
+		<n id="3" component_id="8">
+			<node label="Feed Arm Rotation Motor" type="1" description="Output to the feeder arm rotation motor">
+				<position x="2"/>
+			</node>
+		</n>
+		<n id="4" component_id="14">
+			<node label="Source Feeder Motor" description="If true run the feeder for the source">
+				<position z="1"/>
+			</node>
+		</n>
+		<n id="5" component_id="15">
+			<node label="Drain Feeder Motor" description="If true run the feeder for the drain">
+				<position x="1" z="1"/>
+			</node>
+		</n>
+		<n id="6" component_id="11">
+			<node label="Source Loaded" mode="1" description="Whether the source has a shell waiting">
+				<position z="2"/>
+			</node>
+		</n>
+		<n id="7" component_id="12">
+			<node label="Feed Arm Loaded" mode="1" description="Whether the feeder arm holds a shell">
+				<position x="1" z="2"/>
+			</node>
+		</n>
+		<n id="8" component_id="13">
+			<node label="Drain Loaded" mode="1" description="Whether the drain receiver holds a shell">
+				<position x="2" z="2"/>
+			</node>
+		</n>
+		<n id="9" component_id="26">
+			<node label="Source Rotation" mode="1" type="1" description="Rotation of the feeder arm to pick-up a shell (turns)">
+				<position x="3"/>
+			</node>
+		</n>
+		<n id="10" component_id="28">
+			<node label="Drain Rotation" mode="1" type="1" description="Rotation of the feeder arm to drop-off a shell (turns)">
+				<position x="3" z="1"/>
+			</node>
+		</n>
+	</nodes>
+	<group>
+		<data>
+			<inputs/>
+			<outputs/>
+		</data>
+		<components>
+			<c type="41">
+				<object id="16" count="4">
+					<pos x="-2"/>
+					<in1 component_id="11"/>
+					<in2 component_id="12"/>
+					<in3 component_id="13"/>
+					<in4 component_id="30"/>
+				</object>
+			</c>
+			<c type="56">
+				<object id="17" script='-- Author: &lt;Authorname&gt; (Please change this in user settings, Ctrl+Comma)
+-- GitHub: &lt;GithubLink&gt;
+-- Workshop: &lt;WorkshopLink&gt;
+--
+-- Developed &amp; Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
+-- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
+--      By Nameous Changey
+-- Minimized Size: 853 (1218 with comment) chars
+
+x=false
+s=math
+t=input
+c=output
+u=c.setBool
+F=c.setNumber
+d=t.getNumber
+g=t.getBool
+P={S=function(W,a)local a=a or{}return{i=a.i or 0,w=a.w or 0,C=a.C or 0,r=a.r or 0,p=a.p or-(1/0),k=a.k or(1/0),E=a.E or 1.0,L=nil,D=0,B=0,m=W.m}end,m=function(_,b,f)local b=b*_.E
+local e=b-f
+local v=_.B+e
+local V=e-_.D
+local n=_.i*e+_.w*v+_.C*V+_.r
+_.D=e
+local c=s.min(s.max(n,_.p),_.k)if c==n or e*n&lt;=0 then
+_.B=v
+end
+_.L={b=b,f=f,c=c}return c
+end}function N(f,b)local j=((b%1)-(f%1)+1)%1
+return(j&gt;.5)and(j-1)or j
+end
+A=0
+q=P:S({i=2,p=-1,k=1})function onTick()local H=g(1)local J=g(2)local G=g(3)local Q=g(4)local T=d(1)local M=d(2)local I=d(3)local U=d(4)local K=d(5)local R=d(6)local h=0
+local l=0
+local z=x
+local y=x
+if J then
+h=K
+l=I
+y=not G
+else
+h=U
+l=M
+z=H
+end
+local o=0
+if Q then
+local O=N(T,h)q.i=R
+o=q:m(O,0)else
+o=h*4
+end
+F(1,o)F(2,l)u(1,z)u(2,y)A=A+1
+end
+'>
+					<pos x="-0.75" y="-0.75"/>
+					<in1 component_id="22"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="18">
+					<pos x="0.75" y="0.25"/>
+					<in1 component_id="17"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="19" i="1">
+					<pos x="0.75" y="-0.25"/>
+					<in1 component_id="17"/>
+				</object>
+			</c>
+			<c type="29">
+				<object id="20">
+					<pos x="0.75" y="-1"/>
+					<in1 component_id="17"/>
+				</object>
+			</c>
+			<c type="29">
+				<object id="21" i="1">
+					<pos x="0.75" y="-1.5"/>
+					<in1 component_id="17"/>
+				</object>
+			</c>
+			<c type="40">
+				<object id="22" count="6">
+					<pos x="-2" y="-2"/>
+					<inc component_id="16"/>
+					<in1 component_id="2"/>
+					<in2 component_id="23"/>
+					<in3 component_id="24"/>
+					<in4 component_id="26"/>
+					<in5 component_id="28"/>
+					<in6 component_id="31"/>
+				</object>
+			</c>
+			<c type="34">
+				<object id="23" n="Source Twist">
+					<pos x="-3.75" y="-1.25"/>
+					<v text="1" value="1"/>
+				</object>
+			</c>
+			<c type="34">
+				<object id="24" n="Drain Twist">
+					<pos x="-3.75" y="-1.75"/>
+					<v text="0"/>
+				</object>
+			</c>
+			<c type="33">
+				<object id="30" n="Rot Pivot Type" on="Velocity" off="Position">
+					<pos x="-3.75" y="-0.25"/>
+				</object>
+			</c>
+			<c type="34">
+				<object id="31" n="Rot Velocity PID kp">
+					<pos x="-3.75" y="-3.25"/>
+					<v text="2" value="2"/>
+				</object>
+			</c>
+		</components>
+		<components_bridge>
+			<c type="2">
+				<object id="2">
+					<pos x="-3.75" y="-0.75"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="5">
+					<pos x="2" y="-0.25"/>
+					<in1 component_id="19"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="8">
+					<pos x="2" y="0.25"/>
+					<in1 component_id="18"/>
+				</object>
+			</c>
+			<c>
+				<object id="11">
+					<pos x="-3.75" y="1.25"/>
+				</object>
+			</c>
+			<c>
+				<object id="12">
+					<pos x="-3.75" y="0.75"/>
+				</object>
+			</c>
+			<c>
+				<object id="13">
+					<pos x="-3.75" y="0.25"/>
+				</object>
+			</c>
+			<c type="1">
+				<object id="14">
+					<pos x="2" y="-1"/>
+					<in1 component_id="20"/>
+				</object>
+			</c>
+			<c type="1">
+				<object id="15">
+					<pos x="2" y="-1.5"/>
+					<in1 component_id="21"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="26">
+					<pos x="-3.75" y="-2.25"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="28">
+					<pos x="-3.75" y="-2.75"/>
+				</object>
+			</c>
+		</components_bridge>
+		<groups/>
+		<component_states>
+			<c0 id="16" count="4">
+				<pos x="-2"/>
+				<in1 component_id="11"/>
+				<in2 component_id="12"/>
+				<in3 component_id="13"/>
+				<in4 component_id="30"/>
+			</c0>
+			<c1 id="17" script='-- Author: &lt;Authorname&gt; (Please change this in user settings, Ctrl+Comma)
+-- GitHub: &lt;GithubLink&gt;
+-- Workshop: &lt;WorkshopLink&gt;
+--
+-- Developed &amp; Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
+-- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
+--      By Nameous Changey
+-- Minimized Size: 853 (1218 with comment) chars
+
+x=false
+s=math
+t=input
+c=output
+u=c.setBool
+F=c.setNumber
+d=t.getNumber
+g=t.getBool
+P={S=function(W,a)local a=a or{}return{i=a.i or 0,w=a.w or 0,C=a.C or 0,r=a.r or 0,p=a.p or-(1/0),k=a.k or(1/0),E=a.E or 1.0,L=nil,D=0,B=0,m=W.m}end,m=function(_,b,f)local b=b*_.E
+local e=b-f
+local v=_.B+e
+local V=e-_.D
+local n=_.i*e+_.w*v+_.C*V+_.r
+_.D=e
+local c=s.min(s.max(n,_.p),_.k)if c==n or e*n&lt;=0 then
+_.B=v
+end
+_.L={b=b,f=f,c=c}return c
+end}function N(f,b)local j=((b%1)-(f%1)+1)%1
+return(j&gt;.5)and(j-1)or j
+end
+A=0
+q=P:S({i=2,p=-1,k=1})function onTick()local H=g(1)local J=g(2)local G=g(3)local Q=g(4)local T=d(1)local M=d(2)local I=d(3)local U=d(4)local K=d(5)local R=d(6)local h=0
+local l=0
+local z=x
+local y=x
+if J then
+h=K
+l=I
+y=not G
+else
+h=U
+l=M
+z=H
+end
+local o=0
+if Q then
+local O=N(T,h)q.i=R
+o=q:m(O,0)else
+o=h*4
+end
+F(1,o)F(2,l)u(1,z)u(2,y)A=A+1
+end
+'>
+				<pos x="-0.75" y="-0.75"/>
+				<in1 component_id="22"/>
+			</c1>
+			<c2 id="18">
+				<pos x="0.75" y="0.25"/>
+				<in1 component_id="17"/>
+			</c2>
+			<c3 id="19" i="1">
+				<pos x="0.75" y="-0.25"/>
+				<in1 component_id="17"/>
+			</c3>
+			<c4 id="20">
+				<pos x="0.75" y="-1"/>
+				<in1 component_id="17"/>
+			</c4>
+			<c5 id="21" i="1">
+				<pos x="0.75" y="-1.5"/>
+				<in1 component_id="17"/>
+			</c5>
+			<c6 id="22" count="6">
+				<pos x="-2" y="-2"/>
+				<inc component_id="16"/>
+				<in1 component_id="2"/>
+				<in2 component_id="23"/>
+				<in3 component_id="24"/>
+				<in4 component_id="26"/>
+				<in5 component_id="28"/>
+				<in6 component_id="31"/>
+			</c6>
+			<c7 id="23" n="Source Twist">
+				<pos x="-3.75" y="-1.25"/>
+				<v text="1" value="1"/>
+			</c7>
+			<c8 id="24" n="Drain Twist">
+				<pos x="-3.75" y="-1.75"/>
+				<v text="0"/>
+			</c8>
+			<c9 id="30" n="Rot Pivot Type" on="Velocity" off="Position">
+				<pos x="-3.75" y="-0.25"/>
+			</c9>
+			<c10 id="31" n="Rot Velocity PID kp">
+				<pos x="-3.75" y="-3.25"/>
+				<v text="2" value="2"/>
+			</c10>
+		</component_states>
+		<component_bridge_states>
+			<c0 id="2">
+				<pos x="-3.75" y="-0.75"/>
+			</c0>
+			<c1 id="5">
+				<pos x="2" y="-0.25"/>
+				<in1 component_id="19"/>
+			</c1>
+			<c2 id="8">
+				<pos x="2" y="0.25"/>
+				<in1 component_id="18"/>
+			</c2>
+			<c3 id="11">
+				<pos x="-3.75" y="1.25"/>
+			</c3>
+			<c4 id="12">
+				<pos x="-3.75" y="0.75"/>
+			</c4>
+			<c5 id="13">
+				<pos x="-3.75" y="0.25"/>
+			</c5>
+			<c6 id="14">
+				<pos x="2" y="-1"/>
+				<in1 component_id="20"/>
+			</c6>
+			<c7 id="15">
+				<pos x="2" y="-1.5"/>
+				<in1 component_id="21"/>
+			</c7>
+			<c8 id="26">
+				<pos x="-3.75" y="-2.25"/>
+			</c8>
+			<c9 id="28">
+				<pos x="-3.75" y="-2.75"/>
+			</c9>
+		</component_bridge_states>
+		<group_states/>
+	</group>
+</microprocessor>
+

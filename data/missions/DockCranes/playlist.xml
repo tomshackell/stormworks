@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<playlist folder_path="data/missions/DockCranes" file_store="4" name="Dock Cranes">
+	<locations location_id_counter="1" component_id_counter="2">
+		<locations>
+			<l id="1" tile="data/tiles/mega_island_9_8.xml" name="SAWYER 9_8" is_env_mod="true" env_mod_spawn_num="1">
+				<components>
+					<c component_type="3" id="2" display_name="NWSawyerDockCrane" dynamic_object_type="2" character_outfit_category="11" character_type="1" vehicle_file_name="data/missions_working/vehicle_2.xml" vehicle_file_store="4" vehicle_is_static="true" vehicle_is_invulnerable="true">
+						<spawn_transform 00="-0.021779" 02="-0.999763" 20="0.999763" 22="-0.021779" 30="315.75296" 31="18.258802" 32="417.065704"/>
+						<spawn_bounds>
+							<min x="-32.625" y="-0.125" z="-34.375"/>
+							<max x="9.125" y="29.625" z="29.875"/>
+						</spawn_bounds>
+						<spawn_local_offset x="11.75" y="-14.75" z="2.25"/>
+						<graph_links/>
+					</c>
+				</components>
+			</l>
+		</locations>
+	</locations>
+</playlist>
+

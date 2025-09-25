@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<microprocessor name="Container Cart Controller" description="No description set." width="6" length="3" id_counter="79" id_counter_node="18" transform_index="4" sym5="13004" sym6="4770" sym7="13538" sym8="4108" sym11="27212" sym12="11938" sym13="27298" sym14="8268">
+	<nodes>
+		<n id="1" component_id="3">
+			<node label="Seat Composite" mode="1" type="5" description="The input signal to be processed."/>
+		</n>
+		<n id="2" component_id="6">
+			<node label="FR Motor" type="1" description="The input signal to be processed.">
+				<position x="1"/>
+			</node>
+		</n>
+		<n id="3" component_id="9">
+			<node label="FR Steering" type="1" description="The input signal to be processed.">
+				<position x="1" z="1"/>
+			</node>
+		</n>
+		<n id="4" component_id="12">
+			<node label="FL Motor" type="1" description="The input signal to be processed.">
+				<position x="2"/>
+			</node>
+		</n>
+		<n id="5" component_id="15">
+			<node label="FL Steering" type="1" description="The input signal to be processed.">
+				<position x="2" z="1"/>
+			</node>
+		</n>
+		<n id="6" component_id="18">
+			<node label="RR Motor" type="1" description="The input signal to be processed.">
+				<position x="3"/>
+			</node>
+		</n>
+		<n id="7" component_id="21">
+			<node label="RR Steering" type="1" description="The input signal to be processed.">
+				<position x="3" z="1"/>
+			</node>
+		</n>
+		<n id="8" component_id="24">
+			<node label="RL Motor" type="1" description="The input signal to be processed.">
+				<position x="4"/>
+			</node>
+		</n>
+		<n id="9" component_id="27">
+			<node label="RL Steering" type="1" description="The input signal to be processed.">
+				<position x="4" z="1"/>
+			</node>
+		</n>
+		<n id="10" component_id="43">
+			<node label="Connector Release" description="The input signal to be processed.">
+				<position z="1"/>
+			</node>
+		</n>
+		<n id="11" component_id="33">
+			<node label="Indicator Lights On/Off" description="The input signal to be processed.">
+				<position z="2"/>
+			</node>
+		</n>
+		<n id="12" component_id="44">
+			<node label="FR Brake" type="1" description="The input signal to be processed.">
+				<position x="1" z="2"/>
+			</node>
+		</n>
+		<n id="13" component_id="45">
+			<node label="FL Brake" type="1" description="The input signal to be processed.">
+				<position x="2" z="2"/>
+			</node>
+		</n>
+		<n id="14" component_id="46">
+			<node label="RR Brake" type="1" description="The input signal to be processed.">
+				<position x="3" z="2"/>
+			</node>
+		</n>
+		<n id="15" component_id="47">
+			<node label="RL Brake" type="1" description="The input signal to be processed.">
+				<position x="4" z="2"/>
+			</node>
+		</n>
+		<n id="16" component_id="72">
+			<node label="Grabber Down" description="The input signal to be processed.">
+				<position x="5" z="1"/>
+			</node>
+		</n>
+		<n id="17" component_id="74">
+			<node label="Grabber Up" description="The input signal to be processed.">
+				<position x="5" z="2"/>
+			</node>
+		</n>
+		<n id="18" component_id="79">
+			<node label="Slider position" mode="1" type="1" description="The input signal to be processed.">
+				<position x="5"/>
+			</node>
+		</n>
+	</nodes>
+	<group>
+		<data>
+			<inputs/>
+			<outputs/>
+		</data>
+		<components>
+			<c type="31">
+				<object id="48">
+					<pos x="-4.25" y="2.75"/>
+					<in1 component_id="3"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="49" i="1">
+					<pos x="-4.25" y="-0.25"/>
+					<in1 component_id="3"/>
+				</object>
+			</c>
+			<c type="34">
+				<object id="60" n="Motor Gain">
+					<pos x="-4" y="-1.25"/>
+					<v text="0.3" value="0.3"/>
+				</object>
+			</c>
+			<c type="34">
+				<object id="63" n="Steering gain">
+					<pos x="-4" y="2"/>
+					<v text="0.5" value="0.5"/>
+				</object>
+			</c>
+			<c type="10">
+				<object id="65" e="-x * y">
+					<pos x="-0.75" y="2.5"/>
+					<in1 component_id="48"/>
+					<in2 component_id="63"/>
+				</object>
+			</c>
+			<c type="10">
+				<object id="66" e="x * y">
+					<pos x="-0.75" y="1.5"/>
+					<in1 component_id="48"/>
+					<in2 component_id="63"/>
+				</object>
+			</c>
+			<c type="15">
+				<object id="67">
+					<pos x="-0.75" y="1"/>
+					<n text="0"/>
+				</object>
+			</c>
+			<c type="8">
+				<object id="68">
+					<pos x="-0.75" y="-1.25"/>
+					<in1 component_id="49"/>
+					<in2 component_id="60"/>
+				</object>
+			</c>
+			<c type="29">
+				<object id="69">
+					<pos x="-4.25" y="4.5"/>
+					<in1 component_id="3"/>
+				</object>
+			</c>
+			<c>
+				<object id="70">
+					<pos x="-0.5" y="4"/>
+					<in1 component_id="69"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="75" i="3">
+					<pos x="-4.25" y="-2.5"/>
+					<in1 component_id="3"/>
+				</object>
+			</c>
+			<c type="12">
+				<object id="76">
+					<pos x="-0.75" y="-2.5"/>
+					<in1 component_id="75"/>
+					<min text="0.1" value="0.1"/>
+					<max text="1" value="1"/>
+				</object>
+			</c>
+			<c type="12">
+				<object id="77">
+					<pos x="-0.75" y="-3"/>
+					<in1 component_id="75"/>
+					<min text="-1" value="-1"/>
+					<max text="-0.1" value="-0.1"/>
+				</object>
+			</c>
+		</components>
+		<components_bridge>
+			<c type="4">
+				<object id="3">
+					<pos x="-6.5" y="1"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="6">
+					<pos x="3.25" y="-0.75"/>
+					<in1 component_id="68"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="9">
+					<pos x="3" y="2.5"/>
+					<in1 component_id="66"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="12">
+					<pos x="1.75" y="-0.75"/>
+					<in1 component_id="68"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="15">
+					<pos x="1.75" y="2.5"/>
+					<in1 component_id="65"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="18">
+					<pos x="3.25" y="-1.25"/>
+					<in1 component_id="68"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="21">
+					<pos x="3" y="1.75"/>
+					<in1 component_id="67"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="24">
+					<pos x="1.75" y="-1.25"/>
+					<in1 component_id="68"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="27">
+					<pos x="1.75" y="1.75"/>
+					<in1 component_id="67"/>
+				</object>
+			</c>
+			<c type="1">
+				<object id="33">
+					<pos x="1.75" y="4.5"/>
+					<in1 component_id="69"/>
+				</object>
+			</c>
+			<c type="1">
+				<object id="43">
+					<pos x="1.75" y="4"/>
+					<in1 component_id="70"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="44">
+					<pos x="3.25" y="0.5"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="45">
+					<pos x="1.75" y="0.5"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="46">
+					<pos x="3.25"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="47">
+					<pos x="1.75"/>
+				</object>
+			</c>
+			<c type="1">
+				<object id="72">
+					<pos x="1.75" y="-3"/>
+					<in1 component_id="77"/>
+				</object>
+			</c>
+			<c type="1">
+				<object id="74">
+					<pos x="1.75" y="-2.5"/>
+					<in1 component_id="76"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="79">
+					<pos x="-4.25" y="-3.75"/>
+				</object>
+			</c>
+		</components_bridge>
+		<groups/>
+		<component_states>
+			<c0 id="48">
+				<pos x="-4.25" y="2.75"/>
+				<in1 component_id="3"/>
+			</c0>
+			<c1 id="49" i="1">
+				<pos x="-4.25" y="-0.25"/>
+				<in1 component_id="3"/>
+			</c1>
+			<c2 id="60" n="Motor Gain">
+				<pos x="-4" y="-1.25"/>
+				<v text="0.3" value="0.3"/>
+			</c2>
+			<c3 id="63" n="Steering gain">
+				<pos x="-4" y="2"/>
+				<v text="0.5" value="0.5"/>
+			</c3>
+			<c4 id="65" e="-x * y">
+				<pos x="-0.75" y="2.5"/>
+				<in1 component_id="48"/>
+				<in2 component_id="63"/>
+			</c4>
+			<c5 id="66" e="x * y">
+				<pos x="-0.75" y="1.5"/>
+				<in1 component_id="48"/>
+				<in2 component_id="63"/>
+			</c5>
+			<c6 id="67">
+				<pos x="-0.75" y="1"/>
+				<n text="0"/>
+			</c6>
+			<c7 id="68">
+				<pos x="-0.75" y="-1.25"/>
+				<in1 component_id="49"/>
+				<in2 component_id="60"/>
+			</c7>
+			<c8 id="69">
+				<pos x="-4.25" y="4.5"/>
+				<in1 component_id="3"/>
+			</c8>
+			<c9 id="70">
+				<pos x="-0.5" y="4"/>
+				<in1 component_id="69"/>
+			</c9>
+			<c10 id="75" i="3">
+				<pos x="-4.25" y="-2.5"/>
+				<in1 component_id="3"/>
+			</c10>
+			<c11 id="76">
+				<pos x="-0.75" y="-2.5"/>
+				<in1 component_id="75"/>
+				<min text="0.1" value="0.1"/>
+				<max text="1" value="1"/>
+			</c11>
+			<c12 id="77">
+				<pos x="-0.75" y="-3"/>
+				<in1 component_id="75"/>
+				<min text="-1" value="-1"/>
+				<max text="-0.1" value="-0.1"/>
+			</c12>
+		</component_states>
+		<component_bridge_states>
+			<c0 id="3">
+				<pos x="-6.5" y="1"/>
+			</c0>
+			<c1 id="6">
+				<pos x="3.25" y="-0.75"/>
+				<in1 component_id="68"/>
+			</c1>
+			<c2 id="9">
+				<pos x="3" y="2.5"/>
+				<in1 component_id="66"/>
+			</c2>
+			<c3 id="12">
+				<pos x="1.75" y="-0.75"/>
+				<in1 component_id="68"/>
+			</c3>
+			<c4 id="15">
+				<pos x="1.75" y="2.5"/>
+				<in1 component_id="65"/>
+			</c4>
+			<c5 id="18">
+				<pos x="3.25" y="-1.25"/>
+				<in1 component_id="68"/>
+			</c5>
+			<c6 id="21">
+				<pos x="3" y="1.75"/>
+				<in1 component_id="67"/>
+			</c6>
+			<c7 id="24">
+				<pos x="1.75" y="-1.25"/>
+				<in1 component_id="68"/>
+			</c7>
+			<c8 id="27">
+				<pos x="1.75" y="1.75"/>
+				<in1 component_id="67"/>
+			</c8>
+			<c9 id="33">
+				<pos x="1.75" y="4.5"/>
+				<in1 component_id="69"/>
+			</c9>
+			<c10 id="43">
+				<pos x="1.75" y="4"/>
+				<in1 component_id="70"/>
+			</c10>
+			<c11 id="44">
+				<pos x="3.25" y="0.5"/>
+			</c11>
+			<c12 id="45">
+				<pos x="1.75" y="0.5"/>
+			</c12>
+			<c13 id="46">
+				<pos x="3.25"/>
+			</c13>
+			<c14 id="47">
+				<pos x="1.75"/>
+			</c14>
+			<c15 id="72">
+				<pos x="1.75" y="-3"/>
+				<in1 component_id="77"/>
+			</c15>
+			<c16 id="74">
+				<pos x="1.75" y="-2.5"/>
+				<in1 component_id="76"/>
+			</c16>
+			<c17 id="79">
+				<pos x="-4.25" y="-3.75"/>
+			</c17>
+		</component_bridge_states>
+		<group_states/>
+	</group>
+</microprocessor>
+

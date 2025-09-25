@@ -1,0 +1,18 @@
+{
+	"folders": [
+		{
+			"name": "navalbc",
+			"path": "navalbc"
+		},
+		{
+			"name": "heavyac2",
+			"path": "heavyac2"
+		},
+		{
+			"path": "lib"
+		},
+		{
+			"path": "radar"
+		}
+	]
+}

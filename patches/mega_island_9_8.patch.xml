@@ -1,0 +1,24 @@
+<definition>
+	<meshes>
+		<mesh id="workbench_mesh" file_name="meshes/workbench.mesh"> 
+			<transform 00="-1" 22="-1" 30="218" 31="7.73" 32="305"/>			
+		</mesh>
+	</meshes>
+	<physics_meshes>
+		<physics_mesh id="workbench_phys" file_name="meshes/workbench_phys.phys">
+			<transform 00="-1" 22="-1" 30="218" 31="7.73" 32="305"/>			
+		</mesh>	
+	</physics_meshes>
+	<edit_areas>
+		<edit_area id="vehicle_edit" grid_size="0">
+			<transform 00="-0.017877" 02="-0.99984" 20="0.99984" 22="-0.017877" 30="253.01" 31="26.50" 32="310.50"/>
+			<size x="47" y="40" z="65"/>
+		</edit_area>
+	</edit_areas>
+	<interactables>
+		<interactable id="vehicle_workbench_interact" target_object_id="vehicle_edit" label="Workbench" interact_type="2">
+			<transform 30="218" 31="7.73" 32="305"/>
+			<size x="1.180149" y="1.861132" z="2.192832"/>
+		</interactable>	
+	</interactables>
+</definition>

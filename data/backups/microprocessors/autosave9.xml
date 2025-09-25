@@ -1,472 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<microprocessor name="Modular Engine Controller V2" description="No description set." width="5" length="2" id_counter="112" id_counter_node="17" sym0="640" sym1="640" sym3="14940" sym4="11076" sym5="10956" sym6="2052" sym7="14364" sym9="29268" sym10="21844" sym11="21844" sym12="25172" sym13="16424" sym14="16384">
+<microprocessor name="Radar Controller" description="No description set." width="2" length="2" id_counter="9" id_counter_node="3" sym1="4260" sym2="2194" sym3="2194" sym4="2866" sym5="2066" sym6="2068" sym8="18642" sym9="10570" sym10="6726" sym11="10826" sym12="19026" sym13="18770" sym14="14542">
 	<nodes>
-		<n id="7" component_id="31">
-			<node label="Engine On" mode="1" description="Is the engine turned on"/>
+		<n id="1" component_id="2">
+			<node label="Radar Composite" mode="1" type="5" description="The input signal to be processed."/>
 		</n>
-		<n id="8" component_id="34">
-			<node label="Starter Throttle &amp; Clutch" type="1" description="Controls the starter engine and clutch">
-				<position x="3"/>
-			</node>
-		</n>
-		<n id="9" component_id="36">
-			<node label="RPS" mode="1" type="1" description="RPS read from engine">
-				<position z="1"/>
-			</node>
-		</n>
-		<n id="11" component_id="73">
-			<node label="In Throttle" mode="1" type="1" description="Desired throttle setting from outside">
+		<n id="2" component_id="5">
+			<node label="Video Out" type="6" description="The input signal to be processed.">
 				<position x="1"/>
 			</node>
 		</n>
-		<n id="12" component_id="76">
-			<node label="Target RPS" type="1" description="The target RPS to hold">
-				<position x="2" z="1"/>
-			</node>
-		</n>
-		<n id="13" component_id="80">
-			<node label="Supercharger Bleed Valve" type="1" description="Controls the bleed valve on the super charger">
-				<position x="3" z="1"/>
-			</node>
-		</n>
-		<n id="14" component_id="86">
-			<node label="Air Throttle" type="1" description="The input signal to be processed.">
-				<position x="4" z="1"/>
-			</node>
-		</n>
-		<n id="15" component_id="89">
-			<node label="Fuel Throttle" type="1" description="The input signal to be processed.">
-				<position x="4"/>
-			</node>
-		</n>
-		<n id="16" component_id="92">
-			<node label="Temperature" type="1" description="The input signal to be processed.">
-				<position x="2"/>
-			</node>
-		</n>
-		<n id="17" component_id="94">
-			<node label="Engine Cylinder Composite" mode="1" type="5" description="The input signal to be processed.">
-				<position x="1" z="1"/>
+		<n id="3" component_id="7">
+			<node label="Radar Sweep Angle" mode="1" type="1" description="The input signal to be processed.">
+				<position z="1"/>
 			</node>
 		</n>
 	</nodes>
 	<group>
-		<data type="193367077">
+		<data type="-1088647281">
 			<inputs/>
 			<outputs/>
 		</data>
 		<components>
-			<c type="34">
-				<object id="82" n="Max RPS">
-					<pos x="-5.25" y="3.5"/>
-					<v text="12" value="12"/>
-				</object>
-			</c>
-			<c type="41">
-				<object id="95" count="1">
-					<pos x="-3.75" y="5.75"/>
-					<inc component_id="94"/>
-					<in1 component_id="31"/>
-				</object>
-			</c>
 			<c type="40">
-				<object id="96" count="7" offset="3">
-					<pos x="-2.5" y="4"/>
-					<inc component_id="95"/>
-					<in1 component_id="36"/>
-					<in2 component_id="73"/>
-					<in3 component_id="97"/>
-					<in4 component_id="82"/>
-					<in5 component_id="105"/>
-					<in6 component_id="106"/>
-					<in7 component_id="107"/>
-				</object>
-			</c>
-			<c type="34">
-				<object id="97" n="Min RPS">
-					<pos x="-5.25" y="4"/>
-					<v text="5.6" value="5.6"/>
+				<object id="8" count="1" offset="3">
+					<pos x="-0.75"/>
+					<inc component_id="2"/>
+					<in1 component_id="7"/>
 				</object>
 			</c>
 			<c type="56">
-				<object id="98" script='-- Author: Tom Shackell
--- GitHub: &lt;GithubLink&gt;
--- Workshop: &lt;WorkshopLink&gt;
---
--- Developed &amp; Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
--- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
---      By Nameous Changey
--- Minimized Size: 1128 (1445 with comment) chars
-
-d=.1
-D=false
-E=math
-M=input
-e=output
-c=e.setNumber
-a=M.getNumber
-R=E.max
-B=E.min
-function h(x,j,p)return B(R(x,j),p)end
-function H(x,j,K,p,Z)return(x-j)/(p-j)*(Z-K)+K end
-aj={al=function(aa,b)local b=b or{}return{n=b.n or 0,k=b.k or 0,o=b.o or 0,P=b.P or 0,v=b.v or-(1/0),r=b.r or(1/0),L=b.L or 1.0,ah=nil,T=0,N=0,u=aa.u}end,u=function(_,i,A)local i=i*_.L
-local g=i-A
-local J=_.N+g
-local ai=g-_.T
-local t=_.n*g+_.k*J+_.o*ai+_.P
-_.T=g
-local e=B(R(t,_.v),_.r)if e==t or g*t&lt;=0 then
-_.N=J
-end
-_.ah={i=i,A=A,e=e}return e
-end}O=.2
-U=.05
-am=d
-ab=5
-ae=3
-X=.03
-Y=d
-l=aj:al({n=d,k=.001,v=X,r=1})q=D
-m=0
-function onTick()local I=M.getBool(1)local ag=a(1)local S=a(2)local Q=a(3)local y=a(4)local ak=h(a(5),0,1)local ad=a(6)local W=a(7)l.n=a(8)l.k=a(9)l.o=a(10)if y&gt;=ab then
-q=true
-elseif y&lt;=ae then
-q=D
-end
-local f,s,C,G=0,0,0,0
-local w,z=0,0
-local F=I and not q
-if I then
-if F then
-f=Y
-else
-s=H(ak,0,ad,1,W)f=l:u(s,y)end
-local af=h(Q,0,100)*.01
-w=H(af,0,14-O*2,1,15-O*5)z=S==0 and 0 or ag/S
-m=h(m+(1-(w/z)*U),-1,1)C=f*h(1-m,d,1)G=f*h(1+m,d,1)end
-local V=F and 1 or 0
-local ac=.5-f*d
-c(1,C)c(2,G)c(3,ac)c(4,V)c(5,s)c(6,Q)c(7,w)c(8,z)end
-'>
-					<pos x="-1.25" y="5.5"/>
-					<in1 component_id="96"/>
-				</object>
-			</c>
-			<c type="31">
-				<object id="99">
-					<pos x="0.5" y="5.75"/>
-					<in1 component_id="98"/>
-				</object>
-			</c>
-			<c type="31">
-				<object id="100" i="1">
-					<pos x="0.5" y="5.25"/>
-					<in1 component_id="98"/>
-				</object>
-			</c>
-			<c type="31">
-				<object id="101" i="2">
-					<pos x="0.5" y="4.75"/>
-					<in1 component_id="98"/>
-				</object>
-			</c>
-			<c type="31">
-				<object id="102" i="3">
-					<pos x="0.5" y="4.25"/>
-					<in1 component_id="98"/>
-				</object>
-			</c>
-			<c type="31">
-				<object id="103" i="4">
-					<pos x="0.5" y="3.75"/>
-					<in1 component_id="98"/>
-				</object>
-			</c>
-			<c type="31">
-				<object id="104" i="5">
-					<pos x="0.5" y="3.25"/>
-					<in1 component_id="98"/>
-				</object>
-			</c>
-			<c type="34">
-				<object id="105" n="RPS PID P">
-					<pos x="-5.25" y="3"/>
-					<v text="0.1" value="0.1"/>
-				</object>
-			</c>
-			<c type="34">
-				<object id="106" n="RPS PID I">
-					<pos x="-5.25" y="2.5"/>
-					<v text="0.001" value="0.001"/>
-				</object>
-			</c>
-			<c type="34">
-				<object id="107" n="RPS PID D">
-					<pos x="-5.25" y="2"/>
-					<v text="0"/>
-				</object>
-			</c>
-			<c type="31">
-				<object id="108" i="6">
-					<pos x="0.5" y="2.5"/>
-					<in1 component_id="98"/>
-				</object>
-			</c>
-			<c type="31">
-				<object id="109" i="7">
-					<pos x="0.5" y="1.5"/>
-					<in1 component_id="98"/>
-				</object>
-			</c>
-			<c type="43">
-				<object id="110" l="Stoichiometric">
-					<pos x="1.75" y="2.25"/>
-					<in1 component_id="108"/>
-				</object>
-			</c>
-			<c type="43">
-				<object id="112" l="Cylinder AFR">
-					<pos x="1.75" y="1.25"/>
-					<in1 component_id="109"/>
+				<object id="9">
+					<pos x="0.75"/>
+					<in1 component_id="8"/>
 				</object>
 			</c>
 		</components>
 		<components_bridge>
-			<c>
-				<object id="31">
-					<pos x="-5.25" y="5.5"/>
-				</object>
-			</c>
-			<c type="3">
-				<object id="34">
-					<pos x="1.75" y="4.25"/>
-					<in1 component_id="102"/>
-				</object>
-			</c>
-			<c type="2">
-				<object id="36">
-					<pos x="-5.25" y="5"/>
-				</object>
-			</c>
-			<c type="2">
-				<object id="73">
-					<pos x="-5.25" y="4.5"/>
-				</object>
-			</c>
-			<c type="3">
-				<object id="76">
-					<pos x="1.75" y="3.75"/>
-					<in1 component_id="103"/>
-				</object>
-			</c>
-			<c type="3">
-				<object id="80">
-					<pos x="1.75" y="4.75"/>
-					<in1 component_id="101"/>
-				</object>
-			</c>
-			<c type="3">
-				<object id="86">
-					<pos x="1.75" y="5.75"/>
-					<in1 component_id="99"/>
-				</object>
-			</c>
-			<c type="3">
-				<object id="89">
-					<pos x="1.75" y="5.25"/>
-					<in1 component_id="100"/>
-				</object>
-			</c>
-			<c type="3">
-				<object id="92">
-					<pos x="1.75" y="3.25"/>
-					<in1 component_id="104"/>
-				</object>
-			</c>
 			<c type="4">
-				<object id="94">
-					<pos x="-5.25" y="6"/>
+				<object id="2">
+					<pos x="-2" y="0.25"/>
+				</object>
+			</c>
+			<c type="7">
+				<object id="5">
+					<pos x="2.5"/>
+					<in1 component_id="9" node_index="1"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="7">
+					<pos x="-2" y="-0.25"/>
 				</object>
 			</c>
 		</components_bridge>
 		<groups/>
 		<component_states>
-			<c0 id="82" n="Max RPS">
-				<pos x="-5.25" y="3.5"/>
-				<v text="12" value="12"/>
+			<c0 id="8" count="1" offset="3">
+				<pos x="-0.75"/>
+				<inc component_id="2"/>
+				<in1 component_id="7"/>
 			</c0>
-			<c1 id="95" count="1">
-				<pos x="-3.75" y="5.75"/>
-				<inc component_id="94"/>
-				<in1 component_id="31"/>
+			<c1 id="9">
+				<pos x="0.75"/>
+				<in1 component_id="8"/>
 			</c1>
-			<c2 id="96" count="7" offset="3">
-				<pos x="-2.5" y="4"/>
-				<inc component_id="95"/>
-				<in1 component_id="36"/>
-				<in2 component_id="73"/>
-				<in3 component_id="97"/>
-				<in4 component_id="82"/>
-				<in5 component_id="105"/>
-				<in6 component_id="106"/>
-				<in7 component_id="107"/>
-			</c2>
-			<c3 id="97" n="Min RPS">
-				<pos x="-5.25" y="4"/>
-				<v text="5.6" value="5.6"/>
-			</c3>
-			<c4 id="98" script='-- Author: Tom Shackell
--- GitHub: &lt;GithubLink&gt;
--- Workshop: &lt;WorkshopLink&gt;
---
--- Developed &amp; Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
--- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
---      By Nameous Changey
--- Minimized Size: 1128 (1445 with comment) chars
-
-d=.1
-D=false
-E=math
-M=input
-e=output
-c=e.setNumber
-a=M.getNumber
-R=E.max
-B=E.min
-function h(x,j,p)return B(R(x,j),p)end
-function H(x,j,K,p,Z)return(x-j)/(p-j)*(Z-K)+K end
-aj={al=function(aa,b)local b=b or{}return{n=b.n or 0,k=b.k or 0,o=b.o or 0,P=b.P or 0,v=b.v or-(1/0),r=b.r or(1/0),L=b.L or 1.0,ah=nil,T=0,N=0,u=aa.u}end,u=function(_,i,A)local i=i*_.L
-local g=i-A
-local J=_.N+g
-local ai=g-_.T
-local t=_.n*g+_.k*J+_.o*ai+_.P
-_.T=g
-local e=B(R(t,_.v),_.r)if e==t or g*t&lt;=0 then
-_.N=J
-end
-_.ah={i=i,A=A,e=e}return e
-end}O=.2
-U=.05
-am=d
-ab=5
-ae=3
-X=.03
-Y=d
-l=aj:al({n=d,k=.001,v=X,r=1})q=D
-m=0
-function onTick()local I=M.getBool(1)local ag=a(1)local S=a(2)local Q=a(3)local y=a(4)local ak=h(a(5),0,1)local ad=a(6)local W=a(7)l.n=a(8)l.k=a(9)l.o=a(10)if y&gt;=ab then
-q=true
-elseif y&lt;=ae then
-q=D
-end
-local f,s,C,G=0,0,0,0
-local w,z=0,0
-local F=I and not q
-if I then
-if F then
-f=Y
-else
-s=H(ak,0,ad,1,W)f=l:u(s,y)end
-local af=h(Q,0,100)*.01
-w=H(af,0,14-O*2,1,15-O*5)z=S==0 and 0 or ag/S
-m=h(m+(1-(w/z)*U),-1,1)C=f*h(1-m,d,1)G=f*h(1+m,d,1)end
-local V=F and 1 or 0
-local ac=.5-f*d
-c(1,C)c(2,G)c(3,ac)c(4,V)c(5,s)c(6,Q)c(7,w)c(8,z)end
-'>
-				<pos x="-1.25" y="5.5"/>
-				<in1 component_id="96"/>
-			</c4>
-			<c5 id="99">
-				<pos x="0.5" y="5.75"/>
-				<in1 component_id="98"/>
-			</c5>
-			<c6 id="100" i="1">
-				<pos x="0.5" y="5.25"/>
-				<in1 component_id="98"/>
-			</c6>
-			<c7 id="101" i="2">
-				<pos x="0.5" y="4.75"/>
-				<in1 component_id="98"/>
-			</c7>
-			<c8 id="102" i="3">
-				<pos x="0.5" y="4.25"/>
-				<in1 component_id="98"/>
-			</c8>
-			<c9 id="103" i="4">
-				<pos x="0.5" y="3.75"/>
-				<in1 component_id="98"/>
-			</c9>
-			<c10 id="104" i="5">
-				<pos x="0.5" y="3.25"/>
-				<in1 component_id="98"/>
-			</c10>
-			<c11 id="105" n="RPS PID P">
-				<pos x="-5.25" y="3"/>
-				<v text="0.1" value="0.1"/>
-			</c11>
-			<c12 id="106" n="RPS PID I">
-				<pos x="-5.25" y="2.5"/>
-				<v text="0.001" value="0.001"/>
-			</c12>
-			<c13 id="107" n="RPS PID D">
-				<pos x="-5.25" y="2"/>
-				<v text="0"/>
-			</c13>
-			<c14 id="108" i="6">
-				<pos x="0.5" y="2.5"/>
-				<in1 component_id="98"/>
-			</c14>
-			<c15 id="109" i="7">
-				<pos x="0.5" y="1.5"/>
-				<in1 component_id="98"/>
-			</c15>
-			<c16 id="110" l="Stoichiometric">
-				<pos x="1.75" y="2.25"/>
-				<in1 component_id="108"/>
-			</c16>
-			<c17 id="112" l="Cylinder AFR">
-				<pos x="1.75" y="1.25"/>
-				<in1 component_id="109"/>
-			</c17>
 		</component_states>
 		<component_bridge_states>
-			<c0 id="31">
-				<pos x="-5.25" y="5.5"/>
+			<c0 id="2">
+				<pos x="-2" y="0.25"/>
 			</c0>
-			<c1 id="34">
-				<pos x="1.75" y="4.25"/>
-				<in1 component_id="102"/>
+			<c1 id="5">
+				<pos x="2.5"/>
+				<in1 component_id="9" node_index="1"/>
 			</c1>
-			<c2 id="36">
-				<pos x="-5.25" y="5"/>
+			<c2 id="7">
+				<pos x="-2" y="-0.25"/>
 			</c2>
-			<c3 id="73">
-				<pos x="-5.25" y="4.5"/>
-			</c3>
-			<c4 id="76">
-				<pos x="1.75" y="3.75"/>
-				<in1 component_id="103"/>
-			</c4>
-			<c5 id="80">
-				<pos x="1.75" y="4.75"/>
-				<in1 component_id="101"/>
-			</c5>
-			<c6 id="86">
-				<pos x="1.75" y="5.75"/>
-				<in1 component_id="99"/>
-			</c6>
-			<c7 id="89">
-				<pos x="1.75" y="5.25"/>
-				<in1 component_id="100"/>
-			</c7>
-			<c8 id="92">
-				<pos x="1.75" y="3.25"/>
-				<in1 component_id="104"/>
-			</c8>
-			<c9 id="94">
-				<pos x="-5.25" y="6"/>
-			</c9>
 		</component_bridge_states>
 		<group_states/>
 	</group>

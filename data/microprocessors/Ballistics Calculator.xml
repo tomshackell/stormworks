@@ -1,0 +1,611 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<microprocessor name="Ballistic Calculator" description="No description set." width="5" length="3" id_counter="42" id_counter_node="13" sym1="25804" sym2="4770" sym3="4834" sym4="25090" sym5="524" sym8="2446" sym9="1362" sym10="1490" sym11="1038" sym12="1042" sym13="1042" sym14="14">
+	<nodes>
+		<n id="1" component_id="3">
+			<node label="Physics Sensor" mode="1" type="5" description="The input signal to be processed."/>
+		</n>
+		<n id="2" component_id="5">
+			<node label="Target GPS X" mode="1" type="1" description="The input signal to be processed.">
+				<position x="1" z="2"/>
+			</node>
+		</n>
+		<n id="3" component_id="7">
+			<node label="Target GPS Y" mode="1" type="1" description="The input signal to be processed.">
+				<position x="1" z="1"/>
+			</node>
+		</n>
+		<n id="4" component_id="10">
+			<node label="Elevation (turns)" type="1" description="The input signal to be processed.">
+				<position z="2"/>
+			</node>
+		</n>
+		<n id="5" component_id="13">
+			<node label="Azimuth (turns)" type="1" description="The input signal to be processed.">
+				<position z="1"/>
+			</node>
+		</n>
+		<n id="6" component_id="19">
+			<node label="Target Alt" mode="1" type="1" description="The input signal to be processed.">
+				<position x="1"/>
+			</node>
+		</n>
+		<n id="7" component_id="21">
+			<node label="Target Velocity X" mode="1" type="1" description="The input signal to be processed.">
+				<position x="2" z="2"/>
+			</node>
+		</n>
+		<n id="8" component_id="23">
+			<node label="Target Velocity Y" mode="1" type="1" description="The input signal to be processed.">
+				<position x="2" z="1"/>
+			</node>
+		</n>
+		<n id="9" component_id="25">
+			<node label="Target Velocity Z" mode="1" type="1" description="The input signal to be processed.">
+				<position x="2"/>
+			</node>
+		</n>
+		<n id="10" component_id="28">
+			<node label="DebugX" type="1" description="The input signal to be processed.">
+				<position x="3" z="2"/>
+			</node>
+		</n>
+		<n id="11" component_id="31">
+			<node label="DebugY" type="1" description="The input signal to be processed.">
+				<position x="3" z="1"/>
+			</node>
+		</n>
+		<n id="12" component_id="34">
+			<node label="DebugZ" type="1" description="The input signal to be processed.">
+				<position x="3"/>
+			</node>
+		</n>
+		<n id="13" component_id="42">
+			<node label="Valid Solution" description="The input signal to be processed.">
+				<position x="4"/>
+			</node>
+		</n>
+	</nodes>
+	<group>
+		<data type="1891155738">
+			<inputs/>
+			<outputs/>
+		</data>
+		<components>
+			<c type="20">
+				<object id="1" name="Weapon" i="4">
+					<pos x="-2.25" y="0.75"/>
+					<items>
+						<i l="Machine Gun">
+							<v text="1" value="1"/>
+						</i>
+						<i l="Light AC">
+							<v text="2" value="2"/>
+						</i>
+						<i l="Rotary AC">
+							<v text="3" value="3"/>
+						</i>
+						<i l="Heavy AC">
+							<v text="4" value="4"/>
+						</i>
+						<i l="Battle Cannon">
+							<v text="5" value="5"/>
+						</i>
+						<i l="Artillery Cannon">
+							<v text="6" value="6"/>
+						</i>
+						<i l="Bertha Cannon">
+							<v text="7" value="7"/>
+						</i>
+					</items>
+				</object>
+			</c>
+			<c type="40">
+				<object id="14" count="9" offset="19">
+					<pos x="-0.75" y="-2"/>
+					<inc component_id="3"/>
+					<in1 component_id="1"/>
+					<in2 component_id="5"/>
+					<in3 component_id="7"/>
+					<in4 component_id="19"/>
+					<in5 component_id="21"/>
+					<in6 component_id="23"/>
+					<in7 component_id="25"/>
+					<in8 component_id="38"/>
+					<in9 component_id="39"/>
+				</object>
+			</c>
+			<c type="56">
+				<object id="15" script='
+J=.5
+y=nil
+u=math
+aI=output
+T=aI.setNumber
+aT=u.abs
+ah=u.atan
+e=input.getNumber
+am=u.pi
+g=u.sin
+f=u.cos
+aL=u.sqrt
+function B(c,d,b)return{c=c,d=d,b=b}end
+function P(a,_)return{c=a.c+_.c,d=a.d+_.d,b=a.b+_.b}end
+function aP(a,_)return{c=a.c-_.c,d=a.d-_.d,b=a.b-_.b}end
+function U(a,n)return{c=a.c*n,d=a.d*n,b=a.b*n}end
+function aR(a,_)return{c=a.d*_.b-a.b*_.d,d=a.b*_.c-a.c*_.b,b=a.c*_.d-a.d*_.c}end
+function ad(a,_)return a.c*_.c+a.d*_.d+a.b*_.b end
+function aZ(j)return aL(ad(j,j))end
+function bt(j)return U(j,1/aZ(j))end
+function bw(as,aF,K)local ag,X=f(as*J),g(as*J)local ab,ac=f(aF*J),g(aF*J)local aa,aj=f(K*J),g(K*J)return{Y=ag*ab*aa+X*ac*aj,c=X*ab*aa-ag*ac*aj,d=ag*ac*aa+X*ab*aj,b=ag*ab*aj-X*ac*aa}end
+function aN(m,j)local p=U(aR(m,j),2)return P(P(j,U(p,m.Y)),aR(m,p))end
+function bi(m)local q=1.0/(m.Y^2+m.c^2+m.d^2+m.b^2)return{Y=m.Y*q,c=-m.c*q,d=-m.d*q,b=-m.b*q}end
+function aS(p)return p*am*2 end
+function aX(av)return av/(am*2)end
+local R=am*2
+local function bb(v,x,s)return{{f(x)*f(s),g(v)*g(x)*f(s)-f(v)*g(s),f(v)*g(x)*f(s)+g(v)*g(s)},{f(x)*g(s),g(v)*g(x)*g(s)+f(v)*f(s),f(v)*g(x)*g(s)-g(v)*f(s)},{-g(x),g(v)*f(x),f(v)*f(x)}}end
+local function bd(be,bu)local aO={0,0,0}for q=1,3 do
+aw=0
+for S=1,3 do
+aw=aw+be[q][S]*bu[S]end
+aO[q]=aw
+end
+return aO
+end
+local function bc(bx)local aY={{0,0,0},{0,0,0},{0,0,0}}for q=1,3 do
+for S=1,3 do
+aY[S][q]=bx[q][S]end
+end
+return aY
+end
+function br()local L=bb(e(4),e(5),e(6))local ay=-ah(L[2][1],L[2][2])local aC=u.asin(L[2][3])local aV=ah(L[3][3],L[1][3])local K=u.fmod(R*1.25-aV,R)local bm={e(10),e(11),e(12)}local bo=bc(L)local au=bd(bo,bm)local bG=bb(ay,aC,-aV)local aQ=bw(ay,aC,-K)local bA=bi(aQ)return{ai={c=e(1),d=e(3),b=e(2)},bK={as=ay,aF=aC,K=K},bF={c=e(9),d=e(7),b=-e(8)},bI={c=-au[3]*R,d=-au[1]*R,b=au[2]*R},bM=e(13),bL=e(17),bD=function(h,ao)return aN(bA,aP(ao,h.ai))end,bH=function(h,ao)return P(aN(aQ,ao),h.ai)end}end
+function bh(n,H,E,M)if not H or not E then
+return y,0
+end
+local at,aq=n(H),n(E)if not at or not aq or at*aq&gt;0 then
+return y,0
+end
+local al,ax,az,aK=H,at,E,aq
+local t=0
+while aT(aK-ax)&gt;M do
+local aA=(al+az)/2
+local aG=n(aA)if aG*ax&gt;0 then
+al,ax=aA,aG
+else
+az,aK=aA,aG
+end
+t=t+1
+end
+return(al+az)/2,t
+end
+function bJ(n,H,E,M)local a,k,_,i=H,n(H),E,n(E)if not k or not i or k*i&gt;0 then
+return y,0
+end
+local aW,w,o,O=a,k,_,i
+local W=_-a
+local A=W
+local abs=aT
+local t=0
+while abs(_-a)&gt;M do
+if k~=w and i~=w then
+o=a*i*w/((k-i)*(k-w))+_*k*w/((i-k)*(i-w))+aW*k*i/((w-k)*(w-i))else
+o=_-i*(_-a)/(i-k)end
+local bl=o&lt;(3*a+_)/4 or o&gt;_ or
+abs(A)&lt;M or abs(o-_)&gt;=abs(A/2)or(abs(A)&gt;=M and abs(o-_)&gt;=abs(W/2))if bl then
+o,A=(a+_)/2,_-a
+W=A
+else
+W=A
+A=_-o
+end
+O=n(o)if not O then return y end
+aW,w=_,i
+if k*O&lt;0 then
+_,i=o,O
+else
+a,k=o,O
+end
+if abs(k)&lt;abs(i)then
+a,_=_,a
+k,i=i,k
+end
+if abs(i)&lt;M then
+break
+end
+t=t+1
+end
+return _,t
+end
+bz=30.0
+bs=.1
+bv={{D="Machine Gun",j=800,z=.005,C=5.0},{D="Light AC",j=1000,z=.02,C=5.0},{D="Rotary AC",j=1000,z=.01,C=5.0},{D="Heavy AC",j=900,z=.005,C=10.0},{D="Battle Cannon",j=800,z=.002,C=60.0},{D="Artillery Cannon",j=700,z=.001,C=60.0},{D="Bertha Cannon",j=600,z=.0005,C=60.0}}local bC={bn=function(aH,N,af,V,G,F)local av={N=N,af=af,V=V,G=G,F=F,aB=aH.aB,aE=aH.aE,ae=aH.ae}return av
+end,aB=function(h,r,Q)local l,t=bh(function(bg)return h:aE(r,Q,bg or 0)end,h.G,h.F,bs)if l then
+local p=h:ae(r,l)return{l=l,p=p,t=t}else
+return y
+end
+end,aE=function(h,r,Q,l)local aJ=f(l)if aJ&lt;=0 then return y end
+local p=h:ae(r,l)if not p then return y end
+return-Q+r*u.tan(l)+(h.V*r)/(h.N*h.af*aJ)-(h.V*p)/h.N
+end,ae=function(h,r,l)local b_=1-h.N*r/(h.af*f(l))if b_&lt;=0 then return y else return-u.log(b_)/h.N end
+end}aU=0
+function onTick()local ar=br()local ak=bv[e(20)]local bj=B(e(21),e(22),e(23))local bE=B(e(24),e(25),e(26))local G=aS(e(27))local F=aS(e(28))if not ak or not G or not F then return end
+local bk=bC:bn(ak.z,ak.j,bz,G,F)local an=aP(bj,ar.ai)local ba=B(an.c,an.d,0)local Q=an.b
+local r=aZ(ba)local Z=bk:aB(r,Q)local aM=Z and Z.p&lt;=ak.C
+if aM then
+local bB=P(U(bt(ba),f(Z.l)),U(B(0,0,1),g(Z.l)))local I=ar:bD(P(bB,ar.ai))local ap=ad(I,B(0,1,0))local aD=ad(I,B(1,0,0))local bf=ad(I,B(0,0,1))local bq=aL(ap*ap+aD*aD)local bp=ah(aD,ap)local by=ah(bf,bq)T(1,aX(bp))T(2,aX(by))T(3,I.c)T(4,I.d)T(5,I.b)end
+aI.setBool(1,aM)aU=aU+1
+end
+'>
+					<pos x="0.5"/>
+					<in1 component_id="14"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="16">
+					<pos x="2" y="1.5"/>
+					<in1 component_id="15"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="17" i="1">
+					<pos x="2" y="1"/>
+					<in1 component_id="15"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="35" i="2">
+					<pos x="2" y="0.5"/>
+					<in1 component_id="15"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="36" i="3">
+					<pos x="2"/>
+					<in1 component_id="15"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="37" i="4">
+					<pos x="2" y="-0.5"/>
+					<in1 component_id="15"/>
+				</object>
+			</c>
+			<c type="34">
+				<object id="38" n="Min Elevation (turns)">
+					<pos x="-2.25" y="-2.75"/>
+					<v text="-0.025" value="-0.025"/>
+				</object>
+			</c>
+			<c type="34">
+				<object id="39" n="Max Elevation (turns)">
+					<pos x="-2.25" y="-3.25"/>
+					<v text="0.125" value="0.125"/>
+				</object>
+			</c>
+			<c type="29">
+				<object id="40">
+					<pos x="2" y="-1.25"/>
+					<in1 component_id="15"/>
+				</object>
+			</c>
+		</components>
+		<components_bridge>
+			<c type="4">
+				<object id="3">
+					<pos x="-2.25" y="1.25"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="5">
+					<pos x="-2.25" y="0.25"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="7">
+					<pos x="-2.25" y="-0.25"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="10">
+					<pos x="3.25" y="1"/>
+					<in1 component_id="17"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="13">
+					<pos x="3.25" y="1.5"/>
+					<in1 component_id="16"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="19">
+					<pos x="-2.25" y="-0.75"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="21">
+					<pos x="-2.25" y="-1.25"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="23">
+					<pos x="-2.25" y="-1.75"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="25">
+					<pos x="-2.25" y="-2.25"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="28">
+					<pos x="3.25" y="0.5"/>
+					<in1 component_id="35"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="31">
+					<pos x="3.25"/>
+					<in1 component_id="36"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="34">
+					<pos x="3.25" y="-0.5"/>
+					<in1 component_id="37"/>
+				</object>
+			</c>
+			<c type="1">
+				<object id="42">
+					<pos x="3.25" y="-1.25"/>
+					<in1 component_id="40"/>
+				</object>
+			</c>
+		</components_bridge>
+		<groups/>
+		<component_states>
+			<c0 id="1" name="Weapon" i="4">
+				<pos x="-2.25" y="0.75"/>
+				<items>
+					<i l="Machine Gun">
+						<v text="1" value="1"/>
+					</i>
+					<i l="Light AC">
+						<v text="2" value="2"/>
+					</i>
+					<i l="Rotary AC">
+						<v text="3" value="3"/>
+					</i>
+					<i l="Heavy AC">
+						<v text="4" value="4"/>
+					</i>
+					<i l="Battle Cannon">
+						<v text="5" value="5"/>
+					</i>
+					<i l="Artillery Cannon">
+						<v text="6" value="6"/>
+					</i>
+					<i l="Bertha Cannon">
+						<v text="7" value="7"/>
+					</i>
+				</items>
+			</c0>
+			<c1 id="14" count="9" offset="19">
+				<pos x="-0.75" y="-2"/>
+				<inc component_id="3"/>
+				<in1 component_id="1"/>
+				<in2 component_id="5"/>
+				<in3 component_id="7"/>
+				<in4 component_id="19"/>
+				<in5 component_id="21"/>
+				<in6 component_id="23"/>
+				<in7 component_id="25"/>
+				<in8 component_id="38"/>
+				<in9 component_id="39"/>
+			</c1>
+			<c2 id="15" script='
+J=.5
+y=nil
+u=math
+aI=output
+T=aI.setNumber
+aT=u.abs
+ah=u.atan
+e=input.getNumber
+am=u.pi
+g=u.sin
+f=u.cos
+aL=u.sqrt
+function B(c,d,b)return{c=c,d=d,b=b}end
+function P(a,_)return{c=a.c+_.c,d=a.d+_.d,b=a.b+_.b}end
+function aP(a,_)return{c=a.c-_.c,d=a.d-_.d,b=a.b-_.b}end
+function U(a,n)return{c=a.c*n,d=a.d*n,b=a.b*n}end
+function aR(a,_)return{c=a.d*_.b-a.b*_.d,d=a.b*_.c-a.c*_.b,b=a.c*_.d-a.d*_.c}end
+function ad(a,_)return a.c*_.c+a.d*_.d+a.b*_.b end
+function aZ(j)return aL(ad(j,j))end
+function bt(j)return U(j,1/aZ(j))end
+function bw(as,aF,K)local ag,X=f(as*J),g(as*J)local ab,ac=f(aF*J),g(aF*J)local aa,aj=f(K*J),g(K*J)return{Y=ag*ab*aa+X*ac*aj,c=X*ab*aa-ag*ac*aj,d=ag*ac*aa+X*ab*aj,b=ag*ab*aj-X*ac*aa}end
+function aN(m,j)local p=U(aR(m,j),2)return P(P(j,U(p,m.Y)),aR(m,p))end
+function bi(m)local q=1.0/(m.Y^2+m.c^2+m.d^2+m.b^2)return{Y=m.Y*q,c=-m.c*q,d=-m.d*q,b=-m.b*q}end
+function aS(p)return p*am*2 end
+function aX(av)return av/(am*2)end
+local R=am*2
+local function bb(v,x,s)return{{f(x)*f(s),g(v)*g(x)*f(s)-f(v)*g(s),f(v)*g(x)*f(s)+g(v)*g(s)},{f(x)*g(s),g(v)*g(x)*g(s)+f(v)*f(s),f(v)*g(x)*g(s)-g(v)*f(s)},{-g(x),g(v)*f(x),f(v)*f(x)}}end
+local function bd(be,bu)local aO={0,0,0}for q=1,3 do
+aw=0
+for S=1,3 do
+aw=aw+be[q][S]*bu[S]end
+aO[q]=aw
+end
+return aO
+end
+local function bc(bx)local aY={{0,0,0},{0,0,0},{0,0,0}}for q=1,3 do
+for S=1,3 do
+aY[S][q]=bx[q][S]end
+end
+return aY
+end
+function br()local L=bb(e(4),e(5),e(6))local ay=-ah(L[2][1],L[2][2])local aC=u.asin(L[2][3])local aV=ah(L[3][3],L[1][3])local K=u.fmod(R*1.25-aV,R)local bm={e(10),e(11),e(12)}local bo=bc(L)local au=bd(bo,bm)local bG=bb(ay,aC,-aV)local aQ=bw(ay,aC,-K)local bA=bi(aQ)return{ai={c=e(1),d=e(3),b=e(2)},bK={as=ay,aF=aC,K=K},bF={c=e(9),d=e(7),b=-e(8)},bI={c=-au[3]*R,d=-au[1]*R,b=au[2]*R},bM=e(13),bL=e(17),bD=function(h,ao)return aN(bA,aP(ao,h.ai))end,bH=function(h,ao)return P(aN(aQ,ao),h.ai)end}end
+function bh(n,H,E,M)if not H or not E then
+return y,0
+end
+local at,aq=n(H),n(E)if not at or not aq or at*aq&gt;0 then
+return y,0
+end
+local al,ax,az,aK=H,at,E,aq
+local t=0
+while aT(aK-ax)&gt;M do
+local aA=(al+az)/2
+local aG=n(aA)if aG*ax&gt;0 then
+al,ax=aA,aG
+else
+az,aK=aA,aG
+end
+t=t+1
+end
+return(al+az)/2,t
+end
+function bJ(n,H,E,M)local a,k,_,i=H,n(H),E,n(E)if not k or not i or k*i&gt;0 then
+return y,0
+end
+local aW,w,o,O=a,k,_,i
+local W=_-a
+local A=W
+local abs=aT
+local t=0
+while abs(_-a)&gt;M do
+if k~=w and i~=w then
+o=a*i*w/((k-i)*(k-w))+_*k*w/((i-k)*(i-w))+aW*k*i/((w-k)*(w-i))else
+o=_-i*(_-a)/(i-k)end
+local bl=o&lt;(3*a+_)/4 or o&gt;_ or
+abs(A)&lt;M or abs(o-_)&gt;=abs(A/2)or(abs(A)&gt;=M and abs(o-_)&gt;=abs(W/2))if bl then
+o,A=(a+_)/2,_-a
+W=A
+else
+W=A
+A=_-o
+end
+O=n(o)if not O then return y end
+aW,w=_,i
+if k*O&lt;0 then
+_,i=o,O
+else
+a,k=o,O
+end
+if abs(k)&lt;abs(i)then
+a,_=_,a
+k,i=i,k
+end
+if abs(i)&lt;M then
+break
+end
+t=t+1
+end
+return _,t
+end
+bz=30.0
+bs=.1
+bv={{D="Machine Gun",j=800,z=.005,C=5.0},{D="Light AC",j=1000,z=.02,C=5.0},{D="Rotary AC",j=1000,z=.01,C=5.0},{D="Heavy AC",j=900,z=.005,C=10.0},{D="Battle Cannon",j=800,z=.002,C=60.0},{D="Artillery Cannon",j=700,z=.001,C=60.0},{D="Bertha Cannon",j=600,z=.0005,C=60.0}}local bC={bn=function(aH,N,af,V,G,F)local av={N=N,af=af,V=V,G=G,F=F,aB=aH.aB,aE=aH.aE,ae=aH.ae}return av
+end,aB=function(h,r,Q)local l,t=bh(function(bg)return h:aE(r,Q,bg or 0)end,h.G,h.F,bs)if l then
+local p=h:ae(r,l)return{l=l,p=p,t=t}else
+return y
+end
+end,aE=function(h,r,Q,l)local aJ=f(l)if aJ&lt;=0 then return y end
+local p=h:ae(r,l)if not p then return y end
+return-Q+r*u.tan(l)+(h.V*r)/(h.N*h.af*aJ)-(h.V*p)/h.N
+end,ae=function(h,r,l)local b_=1-h.N*r/(h.af*f(l))if b_&lt;=0 then return y else return-u.log(b_)/h.N end
+end}aU=0
+function onTick()local ar=br()local ak=bv[e(20)]local bj=B(e(21),e(22),e(23))local bE=B(e(24),e(25),e(26))local G=aS(e(27))local F=aS(e(28))if not ak or not G or not F then return end
+local bk=bC:bn(ak.z,ak.j,bz,G,F)local an=aP(bj,ar.ai)local ba=B(an.c,an.d,0)local Q=an.b
+local r=aZ(ba)local Z=bk:aB(r,Q)local aM=Z and Z.p&lt;=ak.C
+if aM then
+local bB=P(U(bt(ba),f(Z.l)),U(B(0,0,1),g(Z.l)))local I=ar:bD(P(bB,ar.ai))local ap=ad(I,B(0,1,0))local aD=ad(I,B(1,0,0))local bf=ad(I,B(0,0,1))local bq=aL(ap*ap+aD*aD)local bp=ah(aD,ap)local by=ah(bf,bq)T(1,aX(bp))T(2,aX(by))T(3,I.c)T(4,I.d)T(5,I.b)end
+aI.setBool(1,aM)aU=aU+1
+end
+'>
+				<pos x="0.5"/>
+				<in1 component_id="14"/>
+			</c2>
+			<c3 id="16">
+				<pos x="2" y="1.5"/>
+				<in1 component_id="15"/>
+			</c3>
+			<c4 id="17" i="1">
+				<pos x="2" y="1"/>
+				<in1 component_id="15"/>
+			</c4>
+			<c5 id="35" i="2">
+				<pos x="2" y="0.5"/>
+				<in1 component_id="15"/>
+			</c5>
+			<c6 id="36" i="3">
+				<pos x="2"/>
+				<in1 component_id="15"/>
+			</c6>
+			<c7 id="37" i="4">
+				<pos x="2" y="-0.5"/>
+				<in1 component_id="15"/>
+			</c7>
+			<c8 id="38" n="Min Elevation (turns)">
+				<pos x="-2.25" y="-2.75"/>
+				<v text="-0.025" value="-0.025"/>
+			</c8>
+			<c9 id="39" n="Max Elevation (turns)">
+				<pos x="-2.25" y="-3.25"/>
+				<v text="0.125" value="0.125"/>
+			</c9>
+			<c10 id="40">
+				<pos x="2" y="-1.25"/>
+				<in1 component_id="15"/>
+			</c10>
+		</component_states>
+		<component_bridge_states>
+			<c0 id="3">
+				<pos x="-2.25" y="1.25"/>
+			</c0>
+			<c1 id="5">
+				<pos x="-2.25" y="0.25"/>
+			</c1>
+			<c2 id="7">
+				<pos x="-2.25" y="-0.25"/>
+			</c2>
+			<c3 id="10">
+				<pos x="3.25" y="1"/>
+				<in1 component_id="17"/>
+			</c3>
+			<c4 id="13">
+				<pos x="3.25" y="1.5"/>
+				<in1 component_id="16"/>
+			</c4>
+			<c5 id="19">
+				<pos x="-2.25" y="-0.75"/>
+			</c5>
+			<c6 id="21">
+				<pos x="-2.25" y="-1.25"/>
+			</c6>
+			<c7 id="23">
+				<pos x="-2.25" y="-1.75"/>
+			</c7>
+			<c8 id="25">
+				<pos x="-2.25" y="-2.25"/>
+			</c8>
+			<c9 id="28">
+				<pos x="3.25" y="0.5"/>
+				<in1 component_id="35"/>
+			</c9>
+			<c10 id="31">
+				<pos x="3.25"/>
+				<in1 component_id="36"/>
+			</c10>
+			<c11 id="34">
+				<pos x="3.25" y="-0.5"/>
+				<in1 component_id="37"/>
+			</c11>
+			<c12 id="42">
+				<pos x="3.25" y="-1.25"/>
+				<in1 component_id="40"/>
+			</c12>
+		</component_bridge_states>
+		<group_states/>
+	</group>
+</microprocessor>
+

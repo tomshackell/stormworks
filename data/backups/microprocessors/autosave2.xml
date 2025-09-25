@@ -1,156 +1,216 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<microprocessor name="Fuel Use Meter" description="No description set." width="2" length="1" id_counter="9" id_counter_node="2" sym3="1124" sym4="650" sym5="3658" sym6="2602" sym7="1226" sym10="17474" sym11="8866" sym12="11942" sym13="10914" sym14="9390">
+<microprocessor name="Radar Controller" description="No description set." width="2" length="2" id_counter="17" id_counter_node="4" sym1="4260" sym2="2194" sym3="2194" sym4="2866" sym5="2066" sym6="2068" sym8="18642" sym9="10570" sym10="6726" sym11="10826" sym12="19026" sym13="18770" sym14="14542">
 	<nodes>
 		<n id="1" component_id="2">
-			<node label="Input Fuel Level" mode="1" type="1" description="The input signal to be processed."/>
+			<node label="Radar Composite" mode="1" type="5" description="The input signal to be processed."/>
 		</n>
 		<n id="2" component_id="5">
-			<node label="Fuel Use Rate (l/min)" type="1" description="The input signal to be processed.">
+			<node label="Video Out" type="6" description="The input signal to be processed.">
 				<position x="1"/>
+			</node>
+		</n>
+		<n id="3" component_id="7">
+			<node label="Radar Sweep Angle" mode="1" type="1" description="The input signal to be processed.">
+				<position z="1"/>
+			</node>
+		</n>
+		<n id="4" component_id="11">
+			<node label="Physics Sensor (base)" mode="1" type="5" description="The input signal to be processed.">
+				<position x="1" z="1"/>
 			</node>
 		</n>
 	</nodes>
 	<group>
-		<data>
+		<data type="-1088647281">
 			<inputs/>
 			<outputs/>
 		</data>
 		<components>
-			<c type="34">
-				<object id="6" n="Mov Avg Buffer Time (s)">
-					<pos x="-2.5" y="-0.25"/>
-					<v text="120" value="120"/>
-				</object>
-			</c>
 			<c type="40">
-				<object id="7" count="2">
-					<pos x="-1"/>
-					<in1 component_id="2"/>
-					<in2 component_id="6"/>
-				</object>
-			</c>
-			<c type="31">
 				<object id="8">
-					<pos x="1.5" y="0.5"/>
-					<in1 component_id="9"/>
+					<pos x="-0.75" y="-3"/>
+					<inc component_id="2"/>
+					<in1/>
+					<in2/>
+					<in3/>
+					<in4 component_id="12"/>
+					<in5/>
+					<in6/>
+					<in7/>
+					<in8 component_id="13"/>
+					<in9/>
+					<in10/>
+					<in11/>
+					<in12 component_id="14"/>
+					<in13/>
+					<in14/>
+					<in15/>
+					<in16 component_id="15"/>
+					<in17/>
+					<in18/>
+					<in19/>
+					<in20 component_id="16"/>
+					<in21/>
+					<in22/>
+					<in23/>
+					<in24 component_id="17"/>
+					<in25/>
+					<in26/>
+					<in27/>
+					<in28 component_id="7"/>
+					<in29/>
+					<in30/>
+					<in31/>
+					<in32/>
 				</object>
 			</c>
 			<c type="56">
-				<object id="9" script='-- Author: Tom Shackell
--- GitHub: &lt;GithubLink&gt;
--- Workshop: &lt;WorkshopLink&gt;
---
--- Developed &amp; Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
--- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
---      By Nameous Changey
--- Minimized Size: 583 (898 with comment) chars
-
-k=input.getNumber
-r={w=function(t)return{h={},c=0,g=0,e=0,d=0,i=t.i}end,i=function(_,p,f,a)local a=a or 1
-if f&lt;=_.g then
-for o=f,_.g-1 do
-local b=_.h[o]_.e=_.e-(b.n*b.a)_.d=_.d-b.a
-_.h[o]=nil
-end
-_.c=f&gt;0 and _.c%f or 0
-end
-local b=_.h[_.c]local s=b and(b.n*b.a)or 0
-_.h[_.c]={n=p,a=a}_.e=_.e+(p*a)-s
-_.d=_.d+a-(b and b.a or 0)_.c=_.c+1
-if _.c&gt;=f then
-_.c=0
-end
-return _.d&gt;0 and _.e/_.d or 0
-end}function x(y)return math.floor(y+.5)end
-l=60
-u=r:w()j=0
-function onTick()local m=k(1)local g=x(k(2)*l)local q=0
-if j~=0 then
-local v=(j-m)*l*60
-q=u:i(v,g)end
-j=m
-output.setNumber(1,q)end
-'>
-					<pos x="0.25" y="0.25"/>
-					<in1 component_id="7"/>
+				<object id="9">
+					<pos x="0.75" y="4.75"/>
+					<in1 component_id="8"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="12">
+					<pos x="-2.5" y="4"/>
+					<in1 component_id="11"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="13" i="1">
+					<pos x="-2.5" y="3"/>
+					<in1 component_id="11"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="14" i="2">
+					<pos x="-2.5" y="2"/>
+					<in1 component_id="11"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="15" i="3">
+					<pos x="-2.5" y="1"/>
+					<in1 component_id="11"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="16" i="4">
+					<pos x="-2.5"/>
+					<in1 component_id="11"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="17" i="5">
+					<pos x="-2.5" y="-1"/>
+					<in1 component_id="11"/>
 				</object>
 			</c>
 		</components>
 		<components_bridge>
-			<c type="2">
+			<c type="4">
 				<object id="2">
-					<pos x="-2.5" y="0.25"/>
+					<pos x="-4" y="5"/>
 				</object>
 			</c>
-			<c type="3">
+			<c type="7">
 				<object id="5">
-					<pos x="2.75" y="0.5"/>
-					<in1 component_id="8"/>
+					<pos x="2.5" y="4.75"/>
+					<in1 component_id="9" node_index="1"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="7">
+					<pos x="-4" y="-2"/>
+				</object>
+			</c>
+			<c type="4">
+				<object id="11">
+					<pos x="-4" y="4"/>
 				</object>
 			</c>
 		</components_bridge>
 		<groups/>
 		<component_states>
-			<c0 id="6" n="Mov Avg Buffer Time (s)">
-				<pos x="-2.5" y="-0.25"/>
-				<v text="120" value="120"/>
+			<c0 id="8">
+				<pos x="-0.75" y="-3"/>
+				<inc component_id="2"/>
+				<in1/>
+				<in2/>
+				<in3/>
+				<in4 component_id="12"/>
+				<in5/>
+				<in6/>
+				<in7/>
+				<in8 component_id="13"/>
+				<in9/>
+				<in10/>
+				<in11/>
+				<in12 component_id="14"/>
+				<in13/>
+				<in14/>
+				<in15/>
+				<in16 component_id="15"/>
+				<in17/>
+				<in18/>
+				<in19/>
+				<in20 component_id="16"/>
+				<in21/>
+				<in22/>
+				<in23/>
+				<in24 component_id="17"/>
+				<in25/>
+				<in26/>
+				<in27/>
+				<in28 component_id="7"/>
+				<in29/>
+				<in30/>
+				<in31/>
+				<in32/>
 			</c0>
-			<c1 id="7" count="2">
-				<pos x="-1"/>
-				<in1 component_id="2"/>
-				<in2 component_id="6"/>
+			<c1 id="9">
+				<pos x="0.75" y="4.75"/>
+				<in1 component_id="8"/>
 			</c1>
-			<c2 id="8">
-				<pos x="1.5" y="0.5"/>
-				<in1 component_id="9"/>
+			<c2 id="12">
+				<pos x="-2.5" y="4"/>
+				<in1 component_id="11"/>
 			</c2>
-			<c3 id="9" script='-- Author: Tom Shackell
--- GitHub: &lt;GithubLink&gt;
--- Workshop: &lt;WorkshopLink&gt;
---
--- Developed &amp; Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
--- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
---      By Nameous Changey
--- Minimized Size: 583 (898 with comment) chars
-
-k=input.getNumber
-r={w=function(t)return{h={},c=0,g=0,e=0,d=0,i=t.i}end,i=function(_,p,f,a)local a=a or 1
-if f&lt;=_.g then
-for o=f,_.g-1 do
-local b=_.h[o]_.e=_.e-(b.n*b.a)_.d=_.d-b.a
-_.h[o]=nil
-end
-_.c=f&gt;0 and _.c%f or 0
-end
-local b=_.h[_.c]local s=b and(b.n*b.a)or 0
-_.h[_.c]={n=p,a=a}_.e=_.e+(p*a)-s
-_.d=_.d+a-(b and b.a or 0)_.c=_.c+1
-if _.c&gt;=f then
-_.c=0
-end
-return _.d&gt;0 and _.e/_.d or 0
-end}function x(y)return math.floor(y+.5)end
-l=60
-u=r:w()j=0
-function onTick()local m=k(1)local g=x(k(2)*l)local q=0
-if j~=0 then
-local v=(j-m)*l*60
-q=u:i(v,g)end
-j=m
-output.setNumber(1,q)end
-'>
-				<pos x="0.25" y="0.25"/>
-				<in1 component_id="7"/>
+			<c3 id="13" i="1">
+				<pos x="-2.5" y="3"/>
+				<in1 component_id="11"/>
 			</c3>
+			<c4 id="14" i="2">
+				<pos x="-2.5" y="2"/>
+				<in1 component_id="11"/>
+			</c4>
+			<c5 id="15" i="3">
+				<pos x="-2.5" y="1"/>
+				<in1 component_id="11"/>
+			</c5>
+			<c6 id="16" i="4">
+				<pos x="-2.5"/>
+				<in1 component_id="11"/>
+			</c6>
+			<c7 id="17" i="5">
+				<pos x="-2.5" y="-1"/>
+				<in1 component_id="11"/>
+			</c7>
 		</component_states>
 		<component_bridge_states>
 			<c0 id="2">
-				<pos x="-2.5" y="0.25"/>
+				<pos x="-4" y="5"/>
 			</c0>
 			<c1 id="5">
-				<pos x="2.75" y="0.5"/>
-				<in1 component_id="8"/>
+				<pos x="2.5" y="4.75"/>
+				<in1 component_id="9" node_index="1"/>
 			</c1>
+			<c2 id="7">
+				<pos x="-4" y="-2"/>
+			</c2>
+			<c3 id="11">
+				<pos x="-4" y="4"/>
+			</c3>
 		</component_bridge_states>
 		<group_states/>
 	</group>

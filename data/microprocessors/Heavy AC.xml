@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<microprocessor name="Heavy AC MC" description="No description set." width="2" length="2" id_counter="15" id_counter_node="4" sym1="1616" sym2="336" sym3="368" sym4="336" sym5="1568" sym7="6144" sym8="8488" sym9="12968" sym10="10936" sym11="10920" sym12="40">
+	<nodes>
+		<n id="1" component_id="1">
+			<node label="Lower Slot Loaded" mode="1" description="The input signal to be processed."/>
+		</n>
+		<n id="2" component_id="2">
+			<node label="Upper Slot Loaded" mode="1" description="The input signal to be processed.">
+				<position z="1"/>
+			</node>
+		</n>
+		<n id="3" component_id="4">
+			<node label="Elevation Angle" mode="1" type="1" description="The input signal to be processed.">
+				<position x="1"/>
+			</node>
+		</n>
+		<n id="4" component_id="7">
+			<node label="Carriage Angle" type="1" description="The input signal to be processed.">
+				<position x="1" z="1"/>
+			</node>
+		</n>
+	</nodes>
+	<group>
+		<data type="26542080">
+			<inputs/>
+			<outputs/>
+		</data>
+		<components>
+			<c type="22">
+				<object id="8">
+					<pos x="0.5"/>
+					<in1 component_id="9"/>
+					<in2 component_id="11"/>
+					<in3 component_id="13"/>
+				</object>
+			</c>
+			<c type="15">
+				<object id="9">
+					<pos x="-1.75" y="1.25"/>
+					<n text="0"/>
+				</object>
+			</c>
+			<c type="34">
+				<object id="10" n="Lowest Elevation">
+					<pos x="-3.25" y="0.5"/>
+					<v text="0.15" value="0.15"/>
+				</object>
+			</c>
+			<c type="6">
+				<object id="11">
+					<pos x="-1.75" y="0.5"/>
+					<in1 component_id="4"/>
+					<in2 component_id="10"/>
+				</object>
+			</c>
+			<c type="25">
+				<object id="13">
+					<pos x="-0.5" y="-1"/>
+					<in1 component_id="14"/>
+					<in2 component_id="15"/>
+				</object>
+			</c>
+			<c type="1">
+				<object id="14">
+					<pos x="-1.75" y="-0.5"/>
+					<in1 component_id="2"/>
+					<in2 component_id="1"/>
+				</object>
+			</c>
+			<c type="5">
+				<object id="15">
+					<pos x="-1.75" y="-1.5"/>
+					<in1 component_id="2"/>
+					<in2 component_id="1"/>
+				</object>
+			</c>
+		</components>
+		<components_bridge>
+			<c>
+				<object id="1">
+					<pos x="-3.25" y="-1.25"/>
+				</object>
+			</c>
+			<c>
+				<object id="2">
+					<pos x="-3.25" y="-0.5"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="4">
+					<pos x="-3.25" y="1.25"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="7">
+					<pos x="2" y="0.5"/>
+					<in1 component_id="8"/>
+				</object>
+			</c>
+		</components_bridge>
+		<groups/>
+		<component_states>
+			<c0 id="8">
+				<pos x="0.5"/>
+				<in1 component_id="9"/>
+				<in2 component_id="11"/>
+				<in3 component_id="13"/>
+			</c0>
+			<c1 id="9">
+				<pos x="-1.75" y="1.25"/>
+				<n text="0"/>
+			</c1>
+			<c2 id="10" n="Lowest Elevation">
+				<pos x="-3.25" y="0.5"/>
+				<v text="0.15" value="0.15"/>
+			</c2>
+			<c3 id="11">
+				<pos x="-1.75" y="0.5"/>
+				<in1 component_id="4"/>
+				<in2 component_id="10"/>
+			</c3>
+			<c4 id="13">
+				<pos x="-0.5" y="-1"/>
+				<in1 component_id="14"/>
+				<in2 component_id="15"/>
+			</c4>
+			<c5 id="14">
+				<pos x="-1.75" y="-0.5"/>
+				<in1 component_id="2"/>
+				<in2 component_id="1"/>
+			</c5>
+			<c6 id="15">
+				<pos x="-1.75" y="-1.5"/>
+				<in1 component_id="2"/>
+				<in2 component_id="1"/>
+			</c6>
+		</component_states>
+		<component_bridge_states>
+			<c0 id="1">
+				<pos x="-3.25" y="-1.25"/>
+			</c0>
+			<c1 id="2">
+				<pos x="-3.25" y="-0.5"/>
+			</c1>
+			<c2 id="4">
+				<pos x="-3.25" y="1.25"/>
+			</c2>
+			<c3 id="7">
+				<pos x="2" y="0.5"/>
+				<in1 component_id="8"/>
+			</c3>
+		</component_bridge_states>
+		<group_states/>
+	</group>
+</microprocessor>
+

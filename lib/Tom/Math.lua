@@ -1,4 +1,7 @@
 -- VectorMath ---------------------------------------------------------------------------------------------------
+---@section vNew
+function vNew(x, y, z) return { x=x, y=y, z=z } end
+---@endsection
 
 ---@section vAdd
 function vAdd(a, b) return { x=a.x+b.x, y=a.y+b.y, z=a.z+b.z } end
@@ -24,8 +27,20 @@ function vCross(a, b) return { x = a.y*b.z - a.z*b.y, y = a.z*b.x - a.x*b.z, z =
 function vDot(a, b) return a.x*b.x + a.y*b.y + a.z*b.z end
 ---@endsection
 
+---@section vLenSq
+function vLenSq(v) return vDot(v, v) end
+---@endsection
+
 ---@section vLen
-function vLen(v) return math.sqrt(vDot(v, v)) end
+function vLen(v) return math.sqrt(vLenSq(v)) end
+---@endsection
+
+---@section vDist
+function vDist(a, b) return vLen(vSub(a, b)) end
+---@endsection
+
+---@section vDistSq
+function vDistSq(a, b) return vLenSq(vSub(a, b)) end
 ---@endsection
 
 ---@section vNorm
@@ -98,15 +113,15 @@ end
 ---@param compass number the value from a Stormworks compass
 ---@return quaternion: the local-to-global orientation quaternion
 function qLocalToGlobalFromSW(forward, right, compass)
-    return qFromEuler(turnsToRad(forward), -turnsToRad(right), turnsToRad(compass))
+    return qFromEuler(-turnsToRad(right), turnsToRad(forward), turnsToRad(compass))
 end
 ---@endsection
 
 ---@section qFromEuler
-function qFromEuler(roll, pitch, yaw)
-    local cr, sr = math.cos(roll * 0.5), math.sin(roll * 0.5)
-    local cp, sp = math.cos(pitch * 0.5), math.sin(pitch * 0.5)
-    local cy, sy = math.cos(yaw * 0.5), math.sin(yaw * 0.5)
+function qFromEuler(rotX, rotY, rotZ)
+    local cr, sr = math.cos(rotY * 0.5), math.sin(rotY * 0.5)
+    local cp, sp = math.cos(rotZ * 0.5), math.sin(rotZ * 0.5)
+    local cy, sy = math.cos(rotX * 0.5), math.sin(rotX * 0.5)
     return { w = cr * cp * cy + sr * sp * sy,
              x = sr * cp * cy - cr * sp * sy,
              y = cr * sp * cy + sr * cp * sy,
@@ -198,6 +213,10 @@ function cameraZoomToFOVRad(fov) return lerpClamp(fov, 0, 2.356194490192, 1, 0.0
 function turnsToRad(t) return t*math.pi*2 end
 ---@endsection
 
+---@section radToTurns
+function radToTurns(r) return r/(math.pi*2) end
+---@endsection
+
 -- General Math ----------------------------------------------------------------------------------------------------------
 
 ---@section round
@@ -236,6 +255,15 @@ function nanGuard(x, r) return (x == x) and x or (r or 0) end
 function angularDiffDeg(current, target)
     local diff = ((target % 360) - (current % 360) + 360) % 360
     return (diff > 180) and (diff - 360) or diff
+end
+---@endsection
+
+--- Calculate the angular difference between two angles (in turns) given the circular property
+--- of angles. For example if current=0.9 and target=0.1, then the angular difference is 0.2.
+---@section angularDiffTurns
+function angularDiffTurns(current, target)
+    local diff = ((target % 1) - (current % 1) + 1) % 1
+    return (diff > 0.5) and (diff - 1) or diff
 end
 ---@endsection
 

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<microprocessor name="DPS Calcultor" description="No description set." width="2" length="1" id_counter="9" id_counter_node="2" sym2="25804" sym3="4770" sym4="4834" sym5="25100" sym6="512" sym8="14406" sym9="16458" sym10="16850" sym11="12882" sym12="2634" sym13="29126">
+	<nodes>
+		<n id="1" component_id="2">
+			<node label="Angle" mode="1" type="1" description="The input signal to be processed."/>
+		</n>
+		<n id="2" component_id="5">
+			<node label="DPS" type="1" description="The input signal to be processed.">
+				<position x="1"/>
+			</node>
+		</n>
+	</nodes>
+	<group>
+		<data type="-1088647281">
+			<inputs/>
+			<outputs/>
+		</data>
+		<components>
+			<c type="40">
+				<object id="7" count="1">
+					<pos x="-1.75" y="-0.25"/>
+					<in1 component_id="2"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="8">
+					<pos x="0.75"/>
+					<in1 component_id="9"/>
+				</object>
+			</c>
+			<c type="56">
+				<object id="9" script="ticks = 0
+lastValue = 0
+lastDPS = 0
+
+
+function onTick()
+	local value = input.getNumber(1)			
+	local r = value - lastValue
+	if r &gt;= 1.0 then 
+		lastValue = value
+		lastDPS = (360 * 60) / ticks
+		ticks = 0
+	end
+	output.setNumber(1, lastDPS)		
+	ticks = ticks + 1
+end
+">
+					<pos x="-0.5" y="-0.25"/>
+					<in1 component_id="7"/>
+				</object>
+			</c>
+		</components>
+		<components_bridge>
+			<c type="2">
+				<object id="2">
+					<pos x="-3.5" y="-0.25"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="5">
+					<pos x="2"/>
+					<in1 component_id="8"/>
+				</object>
+			</c>
+		</components_bridge>
+		<groups/>
+		<component_states>
+			<c0 id="7" count="1">
+				<pos x="-1.75" y="-0.25"/>
+				<in1 component_id="2"/>
+			</c0>
+			<c1 id="8">
+				<pos x="0.75"/>
+				<in1 component_id="9"/>
+			</c1>
+			<c2 id="9" script="ticks = 0
+lastValue = 0
+lastDPS = 0
+
+
+function onTick()
+	local value = input.getNumber(1)			
+	local r = value - lastValue
+	if r &gt;= 1.0 then 
+		lastValue = value
+		lastDPS = (360 * 60) / ticks
+		ticks = 0
+	end
+	output.setNumber(1, lastDPS)		
+	ticks = ticks + 1
+end
+">
+				<pos x="-0.5" y="-0.25"/>
+				<in1 component_id="7"/>
+			</c2>
+		</component_states>
+		<component_bridge_states>
+			<c0 id="2">
+				<pos x="-3.5" y="-0.25"/>
+			</c0>
+			<c1 id="5">
+				<pos x="2"/>
+				<in1 component_id="8"/>
+			</c1>
+		</component_bridge_states>
+		<group_states/>
+	</group>
+</microprocessor>
+

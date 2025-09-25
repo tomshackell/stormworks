@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<microprocessor name="Door" description="No description set." width="2" length="1" id_counter="8" id_counter_node="2">
+<microprocessor name="Door" description="No description set." width="2" length="1" id_counter="11" id_counter_node="2" sym1="8856" sym2="4676" sym3="4804" sym4="5188" sym5="4184" sym8="9286" sym9="10922" sym10="10922" sym11="17482" sym12="6">
 	<nodes>
 		<n id="1" component_id="1">
 			<node label="Open/Close" mode="1" description="The input signal to be processed."/>
@@ -42,6 +42,26 @@
 					<n text="0"/>
 				</object>
 			</c>
+			<c type="34">
+				<object id="9" n="Hinge Min">
+					<pos x="-4" y="-1.25"/>
+					<v text="0"/>
+				</object>
+			</c>
+			<c type="34">
+				<object id="10" n="hinge max">
+					<pos x="-4" y="-1.75"/>
+					<v text="1" value="1"/>
+				</object>
+			</c>
+			<c type="10">
+				<object id="11" e="clamp(x, y, z)" p1="340282346638528859811704183484516925440" p2="340282346638528859811704183484516925440" p3="340282346638528859811704183484516925440">
+					<pos x="0.25" y="-1.25"/>
+					<in1 component_id="5"/>
+					<in2 component_id="9"/>
+					<in3 component_id="10"/>
+				</object>
+			</c>
 		</components>
 		<components_bridge>
 			<c>
@@ -51,8 +71,8 @@
 			</c>
 			<c type="3">
 				<object id="4">
-					<pos x="0.25" y="0.25"/>
-					<in1 component_id="5"/>
+					<pos x="1.75" y="-0.75"/>
+					<in1 component_id="11"/>
 				</object>
 			</c>
 		</components_bridge>
@@ -76,14 +96,28 @@
 				<pos x="-2.75" y="0.25"/>
 				<n text="0"/>
 			</c3>
+			<c4 id="9" n="Hinge Min">
+				<pos x="-4" y="-1.25"/>
+				<v text="0"/>
+			</c4>
+			<c5 id="10" n="hinge max">
+				<pos x="-4" y="-1.75"/>
+				<v text="1" value="1"/>
+			</c5>
+			<c6 id="11" e="clamp(x, y, z)" p1="340282346638528859811704183484516925440" p2="340282346638528859811704183484516925440" p3="340282346638528859811704183484516925440">
+				<pos x="0.25" y="-1.25"/>
+				<in1 component_id="5"/>
+				<in2 component_id="9"/>
+				<in3 component_id="10"/>
+			</c6>
 		</component_states>
 		<component_bridge_states>
 			<c0 id="1">
 				<pos x="-4" y="-0.5"/>
 			</c0>
 			<c1 id="4">
-				<pos x="0.25" y="0.25"/>
-				<in1 component_id="5"/>
+				<pos x="1.75" y="-0.75"/>
+				<in1 component_id="11"/>
 			</c1>
 		</component_bridge_states>
 		<group_states/>

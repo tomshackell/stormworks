@@ -1,78 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<microprocessor name="Fuel Use Meter" description="No description set." width="2" length="1" id_counter="9" id_counter_node="2" sym3="1124" sym4="650" sym5="3658" sym6="2602" sym7="1226" sym10="17474" sym11="8866" sym12="11942" sym13="10914" sym14="9390">
+<microprocessor name="DPS Calcultor" description="No description set." width="2" length="1" id_counter="9" id_counter_node="2" sym2="25804" sym3="4770" sym4="4834" sym5="25100" sym6="512" sym8="14406" sym9="16458" sym10="16850" sym11="12882" sym12="2634" sym13="29126">
 	<nodes>
 		<n id="1" component_id="2">
-			<node label="Input Fuel Level" mode="1" type="1" description="The input signal to be processed."/>
+			<node label="Angle" mode="1" type="1" description="The input signal to be processed."/>
 		</n>
 		<n id="2" component_id="5">
-			<node label="Fuel Use Rate (l/min)" type="1" description="The input signal to be processed.">
+			<node label="DPS" type="1" description="The input signal to be processed.">
 				<position x="1"/>
 			</node>
 		</n>
 	</nodes>
 	<group>
-		<data>
+		<data type="-1088647281">
 			<inputs/>
 			<outputs/>
 		</data>
 		<components>
-			<c type="34">
-				<object id="6" n="Moving average samples">
-					<pos x="-2.5" y="-0.25"/>
-					<v text="5" value="5"/>
-				</object>
-			</c>
 			<c type="40">
-				<object id="7" count="2">
-					<pos x="-1"/>
+				<object id="7" count="1">
+					<pos x="-1.75" y="-0.25"/>
 					<in1 component_id="2"/>
-					<in2 component_id="6"/>
 				</object>
 			</c>
 			<c type="31">
 				<object id="8">
-					<pos x="1.5" y="0.5"/>
+					<pos x="0.75"/>
 					<in1 component_id="9"/>
 				</object>
 			</c>
 			<c type="56">
-				<object id="9" script='-- Author: Tom Shackell
--- GitHub: &lt;GithubLink&gt;
--- Workshop: &lt;WorkshopLink&gt;
---
--- Developed &amp; Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
--- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
---      By Nameous Changey
--- Minimized Size: 585 (900 with comment) chars
+				<object id="9" script="ticks = 0
 
-i=nil
-l=input.getNumber
-y={z=function(x)return{g={},c=0,h=0,e=0,d=0,j=x.j}end,j=function(_,m,f,a)local a=a or 1
-if f&lt;=_.h then
-for o=f,_.h-1 do
-local b=_.g[o]_.e=_.e-(b.q*b.a)_.d=_.d-b.a
-_.g[o]=i
+function onTick()
+	value = input.getNumber(1)			 -- Read the first number from the script's composite input
+	
+	ticks = ticks + 1
 end
-_.c=f&gt;0 and _.c%f or 0
-end
-local b=_.g[_.c]local w=b and(b.q*b.a)or 0
-_.g[_.c]={q=m,a=a}_.e=_.e+(m*a)-w
-_.d=_.d+a-(b and b.a or 0)_.c=_.c+1
-if _.c&gt;=f then
-_.c=0
-end
-return _.d&gt;0 and _.e/_.d or 0
-end}function v(u)return math.floor(u+.5)end
-n=60
-s=y:z()k=i
-function onTick()local p=l(1)local h=v(l(2)*n)local t=0
-if k~=i then
-local r=(k-p)*n*60
-s:j(r,h)end
-k=p
-output.setNumber(1,t)end
-'>
-					<pos x="0.25" y="0.25"/>
+">
+					<pos x="-0.5" y="-0.25"/>
 					<in1 component_id="7"/>
 				</object>
 			</c>
@@ -80,77 +45,44 @@ output.setNumber(1,t)end
 		<components_bridge>
 			<c type="2">
 				<object id="2">
-					<pos x="-2.5" y="0.25"/>
+					<pos x="-3.5" y="-0.25"/>
 				</object>
 			</c>
 			<c type="3">
 				<object id="5">
-					<pos x="2.75" y="0.5"/>
+					<pos x="2"/>
 					<in1 component_id="8"/>
 				</object>
 			</c>
 		</components_bridge>
 		<groups/>
 		<component_states>
-			<c0 id="6" n="Moving average samples">
-				<pos x="-2.5" y="-0.25"/>
-				<v text="5" value="5"/>
-			</c0>
-			<c1 id="7" count="2">
-				<pos x="-1"/>
+			<c0 id="7" count="1">
+				<pos x="-1.75" y="-0.25"/>
 				<in1 component_id="2"/>
-				<in2 component_id="6"/>
-			</c1>
-			<c2 id="8">
-				<pos x="1.5" y="0.5"/>
+			</c0>
+			<c1 id="8">
+				<pos x="0.75"/>
 				<in1 component_id="9"/>
-			</c2>
-			<c3 id="9" script='-- Author: Tom Shackell
--- GitHub: &lt;GithubLink&gt;
--- Workshop: &lt;WorkshopLink&gt;
---
--- Developed &amp; Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
--- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
---      By Nameous Changey
--- Minimized Size: 585 (900 with comment) chars
+			</c1>
+			<c2 id="9" script="ticks = 0
 
-i=nil
-l=input.getNumber
-y={z=function(x)return{g={},c=0,h=0,e=0,d=0,j=x.j}end,j=function(_,m,f,a)local a=a or 1
-if f&lt;=_.h then
-for o=f,_.h-1 do
-local b=_.g[o]_.e=_.e-(b.q*b.a)_.d=_.d-b.a
-_.g[o]=i
+function onTick()
+	value = input.getNumber(1)			 -- Read the first number from the script's composite input
+	
+	ticks = ticks + 1
 end
-_.c=f&gt;0 and _.c%f or 0
-end
-local b=_.g[_.c]local w=b and(b.q*b.a)or 0
-_.g[_.c]={q=m,a=a}_.e=_.e+(m*a)-w
-_.d=_.d+a-(b and b.a or 0)_.c=_.c+1
-if _.c&gt;=f then
-_.c=0
-end
-return _.d&gt;0 and _.e/_.d or 0
-end}function v(u)return math.floor(u+.5)end
-n=60
-s=y:z()k=i
-function onTick()local p=l(1)local h=v(l(2)*n)local t=0
-if k~=i then
-local r=(k-p)*n*60
-s:j(r,h)end
-k=p
-output.setNumber(1,t)end
-'>
-				<pos x="0.25" y="0.25"/>
+">
+				<pos x="-0.5" y="-0.25"/>
 				<in1 component_id="7"/>
-			</c3>
+			</c2>
 		</component_states>
 		<component_bridge_states>
 			<c0 id="2">
-				<pos x="-2.5" y="0.25"/>
+				<pos x="-3.5" y="-0.25"/>
 			</c0>
 			<c1 id="5">
-				<pos x="2.75" y="0.5"/>
+				<pos x="2"/>
 				<in1 component_id="8"/>
 			</c1>
 		</component_bridge_states>

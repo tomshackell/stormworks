@@ -1,0 +1,539 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<microprocessor name="Naval BC " description="No description set." width="5" length="3" id_counter="40" id_counter_node="15" sym1="792" sym2="168" sym3="152" sym4="168" sym5="792" sym7="24576" sym8="32768" sym9="50377" sym10="43693" sym11="43755" sym12="9">
+	<nodes>
+		<n id="1" component_id="2">
+			<node label="Open Breach" description="The input signal to be processed."/>
+		</n>
+		<n id="2" component_id="3">
+			<node label="Consent to Fire" mode="1" description="The input signal to be processed.">
+				<position x="1" z="1"/>
+			</node>
+		</n>
+		<n id="3" component_id="5">
+			<node label="Weapon Trigger" description="The input signal to be processed.">
+				<position x="1"/>
+			</node>
+		</n>
+		<n id="4" component_id="6">
+			<node label="Breach Loaded" mode="1" description="The input signal to be processed.">
+				<position z="1"/>
+			</node>
+		</n>
+		<n id="5" component_id="8">
+			<node label="Target Rotation" mode="1" type="1" description="The input signal to be processed.">
+				<position x="2" z="1"/>
+			</node>
+		</n>
+		<n id="6" component_id="11">
+			<node label="Rotation Motor" type="1" description="The input signal to be processed.">
+				<position x="2"/>
+			</node>
+		</n>
+		<n id="7" component_id="13">
+			<node label="Target Elevation" mode="1" type="1" description="The input signal to be processed.">
+				<position x="3" z="2"/>
+			</node>
+		</n>
+		<n id="8" component_id="16">
+			<node label="Elevation Motor" type="1" description="The input signal to be processed.">
+				<position x="3"/>
+			</node>
+		</n>
+		<n id="9" component_id="17">
+			<node label="Ammo Available" mode="1" description="The input signal to be processed.">
+				<position x="1" z="2"/>
+			</node>
+		</n>
+		<n id="10" component_id="19">
+			<node label="Current Rotation" mode="1" type="1" description="The input signal to be processed.">
+				<position x="2" z="2"/>
+			</node>
+		</n>
+		<n id="11" component_id="21">
+			<node label="Current Elevation" mode="1" type="1" description="The input signal to be processed.">
+				<position x="3" z="1"/>
+			</node>
+		</n>
+		<n id="12" component_id="31">
+			<node label="Ejector Motor" type="1" description="The input signal to be processed.">
+				<position x="4"/>
+			</node>
+		</n>
+		<n id="13" component_id="34">
+			<node label="Feed Breach" description="The input signal to be processed.">
+				<position z="2"/>
+			</node>
+		</n>
+		<n id="14" component_id="39">
+			<node label="Debug Video" type="6" description="The input signal to be processed.">
+				<position x="4" z="1"/>
+			</node>
+		</n>
+		<n id="15" component_id="40">
+			<node label="Power On" mode="1" description="The input signal to be processed.">
+				<position x="4" z="2"/>
+			</node>
+		</n>
+	</nodes>
+	<group>
+		<data>
+			<inputs/>
+			<outputs/>
+		</data>
+		<components>
+			<c type="40">
+				<object id="22" count="4">
+					<pos x="-2.75" y="-1.5"/>
+					<in1 component_id="21"/>
+					<in2 component_id="13"/>
+					<in3 component_id="19"/>
+					<in4 component_id="8"/>
+				</object>
+			</c>
+			<c type="41">
+				<object id="23" count="4">
+					<pos x="-2.75" y="-3"/>
+					<inc component_id="22"/>
+					<in1 component_id="6"/>
+					<in2 component_id="17"/>
+					<in3 component_id="3"/>
+					<in4 component_id="40"/>
+				</object>
+			</c>
+			<c type="56">
+				<object id="24" script='-- Author: &lt;Authorname&gt; (Please change this in user settings, Ctrl+Comma)
+-- GitHub: &lt;GithubLink&gt;
+-- Workshop: &lt;WorkshopLink&gt;
+--
+-- Developed &amp; Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
+-- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
+--      By Nameous Changey
+-- Minimized Size: 1330 (1697 with comment) chars
+
+j=true
+f=false
+U=input
+y=math
+d=output
+u=d.setBool
+v=d.setNumber
+R=y.abs
+i=U.getBool
+k=U.getNumber
+M={W=function(aj,c)local c=c or{}return{m=c.m or 0,I=c.I or 0,D=c.D or 0,S=c.S or 0,o=c.o or-(1/0),l=c.l or(1/0),T=c.T or 1.0,ag=nil,C=0,Q=0,n=aj.n}end,n=function(_,e,h)local e=e*_.T
+local g=e-h
+local K=_.Q+g
+local an=g-_.C
+local z=_.m*g+_.I*K+_.D*an+_.S
+_.C=g
+local d=y.min(y.max(z,_.o),_.l)if d==z or g*z&lt;=0 then
+_.Q=K
+end
+_.ag={e=e,h=h,d=d}return d
+end}function ab(h,e)local w=((e%1)-(h%1)+1)%1
+return(w&gt;.5)and(w-1)or w
+end
+Y=25
+ap=30
+am=32
+N=Y
+L=N+ap
+O=L+am
+p=0
+F=1
+G=2
+H=3
+J=4
+ak=60
+ai=40
+V=.001
+b=0
+a=p
+t=0
+s=-O
+al=M:W({m=2,o=-1,l=1})ah=M:W({m=10,o=-1,l=1})function onTick()local P=k(1)or 0
+local E=k(2)or 0
+local af=k(3)or 0
+local ae=k(4)or 0
+local x=i(1)or f
+local Z=i(2)or f
+local aa=i(3)or f
+local ac=i(4)or f
+if not ac then return end
+local aq=al:n(E,P)local A=ab(af,ae)local ao=ah:n(A,0)local q=f
+local B=f
+if a==p then
+if not x then
+a=F
+t=b+ak
+end
+elseif a==F then
+q=j
+if b&gt;=t then
+s=b
+a=G
+end
+elseif a==G then
+q=j
+if Z then
+a=H
+t=b+ai
+end
+elseif a==H then
+q=j
+B=j
+if b&gt;=t then
+a=J
+end
+elseif a==J then
+if x then
+a=p
+end
+end
+local r=-1
+if b&gt;=s+O then
+r=-1
+elseif b&gt;=s+L then
+r=-1
+elseif b&gt;=s+N then
+r=1
+end
+local X=R(E-P)&lt;V
+and R(A)&lt;V
+local ad=a==p and x
+and aa and X
+v(1,aq)v(2,ao)v(3,r)u(1,ad)u(2,q)u(3,B)b=b+1
+end
+'>
+					<pos x="-1.5" y="-2.25"/>
+					<in1 component_id="23"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="25" i="1">
+					<pos x="0.25" y="-1.25"/>
+					<in1 component_id="24"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="26">
+					<pos x="0.25" y="-0.75"/>
+					<in1 component_id="24"/>
+				</object>
+			</c>
+			<c type="29">
+				<object id="27">
+					<pos x="0.25" y="-2.5"/>
+					<in1 component_id="24"/>
+				</object>
+			</c>
+			<c type="29">
+				<object id="28" i="1">
+					<pos x="0.25" y="-3"/>
+					<in1 component_id="24"/>
+				</object>
+			</c>
+			<c type="31">
+				<object id="32" i="2">
+					<pos x="0.25" y="-1.75"/>
+					<in1 component_id="24"/>
+				</object>
+			</c>
+			<c type="29">
+				<object id="35" i="2">
+					<pos x="0.25" y="-3.5"/>
+					<in1 component_id="24"/>
+				</object>
+			</c>
+		</components>
+		<components_bridge>
+			<c type="1">
+				<object id="2">
+					<pos x="1.5" y="-3"/>
+					<in1 component_id="28"/>
+				</object>
+			</c>
+			<c>
+				<object id="3">
+					<pos x="-4.25" y="-3.25"/>
+				</object>
+			</c>
+			<c type="1">
+				<object id="5">
+					<pos x="1.5" y="-2.5"/>
+					<in1 component_id="27"/>
+				</object>
+			</c>
+			<c>
+				<object id="6">
+					<pos x="-4.25" y="-2.25"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="8">
+					<pos x="-4.25" y="-1.5"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="11">
+					<pos x="1.5" y="-1.25"/>
+					<in1 component_id="25"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="13">
+					<pos x="-4.25" y="-0.5"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="16">
+					<pos x="1.5" y="-0.75"/>
+					<in1 component_id="26"/>
+				</object>
+			</c>
+			<c>
+				<object id="17">
+					<pos x="-4.25" y="-2.75"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="19">
+					<pos x="-4.25" y="-1"/>
+				</object>
+			</c>
+			<c type="2">
+				<object id="21">
+					<pos x="-4.25"/>
+				</object>
+			</c>
+			<c type="3">
+				<object id="31">
+					<pos x="1.5" y="-1.75"/>
+					<in1 component_id="32"/>
+				</object>
+			</c>
+			<c type="1">
+				<object id="34">
+					<pos x="1.5" y="-3.5"/>
+					<in1 component_id="35"/>
+				</object>
+			</c>
+			<c type="7">
+				<object id="39">
+					<pos x="0.25" y="-4"/>
+					<in1 component_id="24" node_index="1"/>
+				</object>
+			</c>
+			<c>
+				<object id="40">
+					<pos x="-4.25" y="-3.75"/>
+				</object>
+			</c>
+		</components_bridge>
+		<groups/>
+		<component_states>
+			<c0 id="22" count="4">
+				<pos x="-2.75" y="-1.5"/>
+				<in1 component_id="21"/>
+				<in2 component_id="13"/>
+				<in3 component_id="19"/>
+				<in4 component_id="8"/>
+			</c0>
+			<c1 id="23" count="4">
+				<pos x="-2.75" y="-3"/>
+				<inc component_id="22"/>
+				<in1 component_id="6"/>
+				<in2 component_id="17"/>
+				<in3 component_id="3"/>
+				<in4 component_id="40"/>
+			</c1>
+			<c2 id="24" script='-- Author: &lt;Authorname&gt; (Please change this in user settings, Ctrl+Comma)
+-- GitHub: &lt;GithubLink&gt;
+-- Workshop: &lt;WorkshopLink&gt;
+--
+-- Developed &amp; Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
+-- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
+--      By Nameous Changey
+-- Minimized Size: 1330 (1697 with comment) chars
+
+j=true
+f=false
+U=input
+y=math
+d=output
+u=d.setBool
+v=d.setNumber
+R=y.abs
+i=U.getBool
+k=U.getNumber
+M={W=function(aj,c)local c=c or{}return{m=c.m or 0,I=c.I or 0,D=c.D or 0,S=c.S or 0,o=c.o or-(1/0),l=c.l or(1/0),T=c.T or 1.0,ag=nil,C=0,Q=0,n=aj.n}end,n=function(_,e,h)local e=e*_.T
+local g=e-h
+local K=_.Q+g
+local an=g-_.C
+local z=_.m*g+_.I*K+_.D*an+_.S
+_.C=g
+local d=y.min(y.max(z,_.o),_.l)if d==z or g*z&lt;=0 then
+_.Q=K
+end
+_.ag={e=e,h=h,d=d}return d
+end}function ab(h,e)local w=((e%1)-(h%1)+1)%1
+return(w&gt;.5)and(w-1)or w
+end
+Y=25
+ap=30
+am=32
+N=Y
+L=N+ap
+O=L+am
+p=0
+F=1
+G=2
+H=3
+J=4
+ak=60
+ai=40
+V=.001
+b=0
+a=p
+t=0
+s=-O
+al=M:W({m=2,o=-1,l=1})ah=M:W({m=10,o=-1,l=1})function onTick()local P=k(1)or 0
+local E=k(2)or 0
+local af=k(3)or 0
+local ae=k(4)or 0
+local x=i(1)or f
+local Z=i(2)or f
+local aa=i(3)or f
+local ac=i(4)or f
+if not ac then return end
+local aq=al:n(E,P)local A=ab(af,ae)local ao=ah:n(A,0)local q=f
+local B=f
+if a==p then
+if not x then
+a=F
+t=b+ak
+end
+elseif a==F then
+q=j
+if b&gt;=t then
+s=b
+a=G
+end
+elseif a==G then
+q=j
+if Z then
+a=H
+t=b+ai
+end
+elseif a==H then
+q=j
+B=j
+if b&gt;=t then
+a=J
+end
+elseif a==J then
+if x then
+a=p
+end
+end
+local r=-1
+if b&gt;=s+O then
+r=-1
+elseif b&gt;=s+L then
+r=-1
+elseif b&gt;=s+N then
+r=1
+end
+local X=R(E-P)&lt;V
+and R(A)&lt;V
+local ad=a==p and x
+and aa and X
+v(1,aq)v(2,ao)v(3,r)u(1,ad)u(2,q)u(3,B)b=b+1
+end
+'>
+				<pos x="-1.5" y="-2.25"/>
+				<in1 component_id="23"/>
+			</c2>
+			<c3 id="25" i="1">
+				<pos x="0.25" y="-1.25"/>
+				<in1 component_id="24"/>
+			</c3>
+			<c4 id="26">
+				<pos x="0.25" y="-0.75"/>
+				<in1 component_id="24"/>
+			</c4>
+			<c5 id="27">
+				<pos x="0.25" y="-2.5"/>
+				<in1 component_id="24"/>
+			</c5>
+			<c6 id="28" i="1">
+				<pos x="0.25" y="-3"/>
+				<in1 component_id="24"/>
+			</c6>
+			<c7 id="32" i="2">
+				<pos x="0.25" y="-1.75"/>
+				<in1 component_id="24"/>
+			</c7>
+			<c8 id="35" i="2">
+				<pos x="0.25" y="-3.5"/>
+				<in1 component_id="24"/>
+			</c8>
+		</component_states>
+		<component_bridge_states>
+			<c0 id="2">
+				<pos x="1.5" y="-3"/>
+				<in1 component_id="28"/>
+			</c0>
+			<c1 id="3">
+				<pos x="-4.25" y="-3.25"/>
+			</c1>
+			<c2 id="5">
+				<pos x="1.5" y="-2.5"/>
+				<in1 component_id="27"/>
+			</c2>
+			<c3 id="6">
+				<pos x="-4.25" y="-2.25"/>
+			</c3>
+			<c4 id="8">
+				<pos x="-4.25" y="-1.5"/>
+			</c4>
+			<c5 id="11">
+				<pos x="1.5" y="-1.25"/>
+				<in1 component_id="25"/>
+			</c5>
+			<c6 id="13">
+				<pos x="-4.25" y="-0.5"/>
+			</c6>
+			<c7 id="16">
+				<pos x="1.5" y="-0.75"/>
+				<in1 component_id="26"/>
+			</c7>
+			<c8 id="17">
+				<pos x="-4.25" y="-2.75"/>
+			</c8>
+			<c9 id="19">
+				<pos x="-4.25" y="-1"/>
+			</c9>
+			<c10 id="21">
+				<pos x="-4.25"/>
+			</c10>
+			<c11 id="31">
+				<pos x="1.5" y="-1.75"/>
+				<in1 component_id="32"/>
+			</c11>
+			<c12 id="34">
+				<pos x="1.5" y="-3.5"/>
+				<in1 component_id="35"/>
+			</c12>
+			<c13 id="39">
+				<pos x="0.25" y="-4"/>
+				<in1 component_id="24" node_index="1"/>
+			</c13>
+			<c14 id="40">
+				<pos x="-4.25" y="-3.75"/>
+			</c14>
+		</component_bridge_states>
+		<group_states/>
+	</group>
+</microprocessor>
+
