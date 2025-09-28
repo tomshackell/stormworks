@@ -2,6 +2,8 @@ require("Tom.Math")
 require("Tom.RotMatrix")
 require("Tom.RingBuffer")
 
+MAX_SAMPLES = 3000
+
 -- Covariance measured
 --
 --  6.81        -0.00035    -0.001
@@ -20,9 +22,16 @@ function onTick()
     orient = getOrient()
     --target = vNew(input.getNumber(28), 0, input.getNumber(29))
     zoom = input.getNumber(30)
+    local reset = input.getBool(9)
+    if reset then
+        samples = {}
+    end    
 
     processRadarDetections(orient)
     covariance = fitRMeas(samples)
+    if covariance then 
+        output.setNumber(2, covariance.meanR)
+    end
     ticks = ticks + 1    
 end
 
@@ -72,7 +81,7 @@ function processRadarDetections(orient)
     
             -- calculate in global position
             --local g = vAdd(rmMulV(orient.rotMatrix, p), orient.posn)       
-            if #samples < 100000 then      
+            if #samples < MAX_SAMPLES then      
                 table.insert(samples, { r = dist, az = azimuth, el = elevation })
             end
         else 
@@ -83,8 +92,6 @@ end
 
 -- samples: array of {r=..., az=..., el=...} (az/el in radians)
 function fitRMeas(samples)
-    local n = #samples
-    if n <= 0 then return nil end
     local sumR, n = 0, 0
     local sumSinAz, sumCosAz = 0,0
     local sumSinEl, sumCosEl = 0,0
@@ -97,6 +104,7 @@ function fitRMeas(samples)
         sumCosEl = sumCosEl + math.cos(s.el)
         n = n + 1
     end
+    if n == 0 then return nil end
 
     local meanR = sumR / n
     local meanAz = math.atan(sumSinAz, sumCosAz)

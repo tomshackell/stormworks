@@ -42,5 +42,11 @@
         "c:/Users/tomsh/.vscode/extensions/nameouschangey.lifeboatapi-0.0.33/assets/lua/Addon/",
         "C:/Dev/stormworks/lib/",
         "/_build/libs/"
+    ],
+    "lifeboatapi.stormworks.libs.gitLibraries": [
+        {
+            "name": "LifeBoatAPI",
+            "gitUrl": "https://github.com/nameouschangey/Stormworks_LifeBoatAPI_MC.git"
+        }
     ]
 }

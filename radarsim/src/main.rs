@@ -1,10 +1,11 @@
 use crate::render::Render;
-use crate::utils::{Scalar, Vec2f, Vec3f};
+use crate::utils::{Polar, Scalar, Vec2f, Vec3f};
 use rand::prelude::ThreadRng;
 use rand::Rng;
 use rand_distr::Normal;
 use tiny_skia::Color;
 
+mod radar;
 mod render;
 mod utils;
 
@@ -74,11 +75,19 @@ impl RadarSim {
             t.time_offs -= dt;
             if t.time_offs < 0.0 {
                 t.time_offs += self.sweep_time;
-                let x = self.rng.sample(self.distribution);
-                let y = self.rng.sample(self.distribution);
-                let z = self.rng.sample(self.distribution);
-                let jitter = Vec3f::new(x, y, z);
-                self.detections.push(t.state.position + jitter);
+
+                // add appropriate noise and introduce a detection
+                println!("----------------------------------------");
+                println!("posn: {:?}", t.state.position);
+                let polar = Polar::from_vector(t.state.position);
+                println!(
+                    "polar: r={}, az={}, el={}",
+                    polar.range, polar.azimuth, polar.elevation
+                );
+                let r_cart = radar::covariance_cart(polar);
+                let detect = radar::perturb_position(r_cart, t.state.position, &mut self.rng);
+                println!("perturb by: {:?}", detect - t.state.position);
+                self.detections.push(detect);
             }
         }
     }
@@ -104,19 +113,18 @@ impl RadarSim {
 fn main() {
     let distr = Normal::new(0.0, SIGMA).unwrap();
     let mut sim = RadarSim::new(5.0, distr);
-    let state = State::new(
-        Vec3f::new(1000.0, 0.0, 1000.0),
-        Vec3f::new(-10.0, 0.0, -10.0),
-    );
+    let state = State::new(Vec3f::new(0.0, 0.0, 10000.0), Vec3f::new(-5.0, 0.0, -5.0));
     sim.add_trajectory(state);
     sim.run(120.0, 1.0 / 60.0);
 
     let mut render = Render::new(
         1000,
         1000,
-        Vec2f::new(-300.0, 1200.0),
-        Vec2f::new(1200.0, -300.0),
+        Vec2f::new(-1200.0, 12000.0),
+        Vec2f::new(300.0, -300.0),
     );
     sim.draw(&mut render);
     render.save("radarsim.png")
+
+    //radar::sample_and_test(32_000.0, 0.0, 0.0, 10_000);
 }
