@@ -71,7 +71,7 @@ pub fn covariance_cart_direct(dist: Scalar) -> Matrix3f {
 pub fn covariance_cart(polar: Polar) -> Matrix3f {
     // Polar covariance matrix
     // Measured from Stormworks, see 'SW Radar Test' in Google Sheets.
-    const VAR_ANG: f32 = 1.31 / 100_000.0; // rad^2
+    const VAR_ANG: Scalar = 1.31 / 100_000.0; // rad^2
     let r = polar.range;
     let d = r / 1000.0;
     let vr = 7.77 - 0.897 * d + 33.5 * d * d;

@@ -1,10 +1,13 @@
+use crate::kalman::Kalman;
 use crate::radar::Radar;
 use crate::render::Render;
 use crate::utils::{Scalar, Vec2f, Vec3f};
+use nalgebra::Matrix3;
 use rand::prelude::ThreadRng;
 use rand::Rng;
 use tiny_skia::Color;
 
+mod kalman;
 mod radar;
 mod render;
 mod utils;
@@ -43,22 +46,31 @@ impl Trace {
     }
 }
 
-struct RadarSim {
+struct RadarSim<R> {
     radar: Radar,
     trajectories: Vec<Trace>,
     detections: Vec<Vec3f>,
+    kalman: Kalman<R>,
+    predictions: Vec<Vec3f>,
     rng: ThreadRng,
+    time: Scalar,
 }
 
-impl RadarSim {
+impl<R> RadarSim<R>
+where
+    R: Fn(Scalar) -> Matrix3<Scalar>,
+{
     const DOT_RADIUS: Scalar = 2.0;
 
-    pub fn new(radar: Radar) -> RadarSim {
+    pub fn new(radar: Radar, kalman: Kalman<R>) -> RadarSim<R> {
         Self {
             radar,
             trajectories: vec![],
             detections: vec![],
+            kalman,
+            predictions: vec![],
             rng: rand::rng(),
+            time: 0.0,
         }
     }
 
@@ -72,8 +84,21 @@ impl RadarSim {
             t.step(dt);
             if let Some(detect) = self.radar.try_detect(t.state.position, &mut self.rng) {
                 self.detections.push(detect);
+                self.kalman.update(self.time, detect);
             }
         }
+        if let Some((pos, vel, last_t)) = self.kalman.state() {
+            println!(
+                "Predict: t={:?} dt={:?} pos={:?} vel={:?}",
+                self.time,
+                self.time - last_t,
+                pos,
+                vel
+            );
+            let pos2 = pos + vel * (self.time - last_t);
+            self.predictions.push(pos2);
+        }
+        self.time += dt;
     }
 
     pub fn run(&mut self, time: Scalar, dt: Scalar) {
@@ -85,12 +110,13 @@ impl RadarSim {
     }
 
     pub fn draw(&self, render: &mut Render) {
-        for t in &self.trajectories {
+        /*for t in &self.trajectories {
             render.draw_poly_line(&t.history, 1.0, Color::from_rgba8(0, 0, 255, 255));
-        }
+        }*/
         for d in &self.detections {
             render.draw_dot(*d, Self::DOT_RADIUS, Color::from_rgba8(255, 0, 0, 255));
         }
+        render.draw_poly_line(&self.predictions, 1.0, Color::from_rgba8(255, 0, 255, 255));
     }
 }
 
@@ -103,18 +129,16 @@ fn main() {
     );
     const DT: Scalar = 1.0 / 60.0;
 
-    let mut sim = RadarSim::new(radar);
-    let state = State::new(
-        Vec3f::new(0.0, 0.0, 10_000.0),
-        Vec3f::new(-10.0, 0.0, -300.0),
-    );
+    let kalman = Kalman::new(0.1, |d| radar::covariance_cart_direct(d));
+    let mut sim = RadarSim::new(radar, kalman);
+    let state = State::new(Vec3f::new(0.0, 0.0, 2000.0), Vec3f::new(-1.0, 0.0, -30.0));
     sim.add_trajectory(state);
     sim.run(120.0, DT);
 
     let mut render = Render::new(
         1000,
         1000,
-        Vec2f::new(-12000.0, 12000.0),
+        Vec2f::new(-1200.0, 2200.0),
         Vec2f::new(300.0, -300.0),
     );
     sim.draw(&mut render);

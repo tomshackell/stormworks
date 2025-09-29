@@ -5,155 +5,155 @@
 -- Developed &amp; Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
 -- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
 --      By Nameous Changey
--- Minimized Size: 3019 (3386 with comment) chars
+-- Minimized Size: 3017 (3384 with comment) chars
 
 n=255
-r=ipairs
-I=nil
-aO=input
-K=screen
-Q=math
-aM=Q.atan
-aQ=K.drawRectF
-ai=K.setColor
-ag=output.setNumber
-aD=aO.getBool
-j=aO.getNumber
-t=Q.sin
-q=Q.cos
-k=Q.pi
-ab=Q.sqrt
-function aa(d,e,c)return{d=d,e=e,c=c}end
-function aR(s,u)return{d=s.d-u.d,e=s.e-u.e,c=s.c-u.c}end
-function bf(s,u)return s.d*u.d+s.e*u.e+s.c*u.c end
-function bj(E)return bf(E,E)end
-function aB(E)return ab(bj(E))end
-function aw(aS)return aS*k*2 end
-function aY(as,aJ,at)local T,p=q(as),t(as)local X,o=q(aJ),t(aJ)local S,P=q(at),t(at)return{{X*S,p*o*S-T*P,T*o*S+p*P},{X*P,p*o*P+T*S,T*o*P-p*S},{-o,p*X,T*X}}end
-function bn()local Y,i,ae=0,0,0
-return function(ay)Y=Y+1
-local aE=ay-i
-i=i+(aE/Y)ae=ae+aE*(ay-i)return i,ab(ae/Y)end
+q=ipairs
+B=nil
+as=input
+H=screen
+O=math
+aH=O.atan
+aP=H.drawRectF
+ad=H.setColor
+an=output.setNumber
+ax=as.getBool
+j=as.getNumber
+v=O.sin
+x=O.cos
+k=O.pi
+ae=O.sqrt
+function ap(c,e,d)return{c=c,e=e,d=d}end
+function be(r,y)return{c=r.c-y.c,e=r.e-y.e,d=r.d-y.d}end
+function aV(r,y)return r.c*y.c+r.e*y.e+r.d*y.d end
+function bc(J)return aV(J,J)end
+function aQ(J)return ae(bc(J))end
+function aJ(bd)return bd*k*2 end
+function ba(aD,aE,au)local V,p=x(aD),v(aD)local W,m=x(aE),v(aE)local P,T=x(au),v(au)return{{W*P,p*m*P-V*T,V*m*P+p*T},{W*T,p*m*T+V*P,V*m*T-p*P},{-m,p*W,V*W}}end
+function bm()local Y,i,ao=0,0,0
+return function(aL)Y=Y+1
+local aN=aL-i
+i=i+(aN/Y)ao=ao+aN*(aL-i)return i,ae(ao/Y)end
 end
-function bb(y)local _=#y
-if _==0 then return I end
-local G,J,L=0,0,0
-for B,b in r(y)do
-G=G+b.d
-J=J+b.e
-L=L+b.c
+function b_(u)local _=#u
+if _==0 then return B end
+local C,M,z=0,0,0
+for I,b in q(u)do
+C=C+b.c
+M=M+b.e
+z=z+b.d
 end
-G,J,L=G/_,J/_,L/_
-local N=0
-for B,b in r(y)do
-local x,w,v=b.d-G,b.e-J,b.c-L
-N=N+(x*x+w*w+v*v)end
-N=N/(2*_)local af=ab(N)return{i={d=G,e=J,c=L},af=af}end
-function ba(y)local _=#y
+C,M,z=C/_,M/_,z/_
+local Q=0
+for I,b in q(u)do
+local t,w,s=b.c-C,b.e-M,b.d-z
+Q=Q+(t*t+w*w+s*s)end
+Q=Q/(2*_)local al=ae(Q)return{i={c=C,e=M,d=z},al=al}end
+function aS(u)local _=#u
 if _&lt;2 then
-return I
+return B
 end
-local ap,ad,ah=0,0,0
-for B,b in r(y)do
-ap=ap+b.d
-ad=ad+b.e
-ah=ah+b.c
+local ar,ac,aq=0,0,0
+for I,b in q(u)do
+ar=ar+b.c
+ac=ac+b.e
+aq=aq+b.d
 end
-local aP=ap/_
-local au=ad/_
-local aF=ah/_
-local V,R,O=0,0,0
-local z,C,A=0,0,0
-for B,b in r(y)do
-local x=b.d-aP
-local w=b.e-au
-local v=b.c-aF
-V=V+x*x
-R=R+w*w
-O=O+v*v
-z=z+x*w
-C=C+x*v
-A=A+w*v
+local aG=ar/_
+local aO=ac/_
+local aC=aq/_
+local R,S,U=0,0,0
+local G,L,D=0,0,0
+for I,b in q(u)do
+local t=b.c-aG
+local w=b.e-aO
+local s=b.d-aC
+R=R+t*t
+S=S+w*w
+U=U+s*s
+G=G+t*w
+L=L+t*s
+D=D+w*s
 end
-local M=_-1
-V=V/M
-R=R/M
-O=O/M
-z=z/M
-C=C/M
-A=A/M
-local aU={V,z,C,z,R,A,C,A,O}return{i={d=aP,e=au,c=aF},av=aU}end
-bc=3000
-aX=true
-ax=0
-Z=I
-h={}F=I
-D=I
-bl=aa(0,0,0)aL=1
-function onTick()Z=bh()aL=j(30)local aW=aD(9)if aW then
-h={}end
-b_(Z)if aX then
-F=ba(h)if F then
-ag(2,aB(F.i))end
+local A=_-1
+R=R/A
+S=S/A
+U=U/A
+G=G/A
+L=L/A
+D=D/A
+local bj={R,G,L,G,S,D,L,D,U}return{i={c=aG,e=aO,d=aC},ay=bj,g=_}end
+bf=3000
+bg=true
+az=0
+X=B
+g={}K=B
+E=B
+bl=ap(0,0,0)aM=1
+function onTick()X=aW()aM=j(30)local aT=ax(9)if aT then
+g={}end
+aZ(X)if bg then
+K=aS(g)if K then
+an(2,aQ(K.i))end
 else
-D=bb(h)if D then
-ag(2,aB(D.i))ag(1,D.af)end
+E=b_(g)if E then
+an(2,aQ(E.i))an(1,E.al)end
 end
-ax=ax+1
+az=az+1
 end
-function onDraw()local ak,U=K.getWidth(),K.getHeight()ai(n,n,n,n)aQ(0,0,ak,U)if F then
-ai(0,0,0,n)local p,o=ak/3,(U-10)/3
-for m=0,2 do
-for aG=0,2 do
-local bi=m*3+aG+1
-local E=F.av[bi]local bd=string.format("%.7f",E*10000)K.drawTextBox(aG*p,m*o,p,o,bd)end
+function onDraw()local ak,N=H.getWidth(),H.getHeight()ad(n,n,n,n)aP(0,0,ak,N)if K then
+ad(0,0,0,n)local p,m=ak/3,(N-10)/3
+for o=0,2 do
+for aA=0,2 do
+local aU=o*3+aA+1
+local J=K.ay[aU]local aY=string.format("%.4f",J)H.drawTextBox(aA*p,o*m,p,m,aY)end
 end
-K.drawText(0,U-10,""..F.h)elseif D then
-ai(n,0,n,n)for B,b in r(h)do
-local aI=aR(b,D.i)local aH=U/(2*aL)local bk,be=aI.d*aH+ak/2,aI.c*aH+U/2
-aQ(bk,be,1,1)end
+H.drawText(0,N-10,""..K.g)elseif E then
+ad(n,0,n,n)for I,b in q(g)do
+local at=be(b,E.i)local av=N/(2*aM)local bi,bk=at.c*av+ak/2,at.d*av+N/2
+aP(bi,bk,1,1)end
 end
 end
-function bh()local aZ,bg,aV=j(16),j(20),j(24)return{bo=aa(j(4),j(8),j(12)),bm=aY(aZ,bg,aV)}end
-function b_(Z)if not Z then return end
-for m=0,1 do
-local _=m*4
-if aD(m+1)then
-local aA=j(_+1)local aC=aw(j(_+2))local aN=aw(j(_+3))local W=aA*q(aN)local b=aa(W*t(aC),aA*t(aN),W*q(aC))if#h&lt;bc then
-table.insert(h,b)end
+function aW()local bb,aR,bh=j(16),j(20),j(24)return{bp=ap(j(4),j(8),j(12)),bo=ba(bb,aR,bh)}end
+function aZ(X)if not X then return end
+for o=0,1 do
+local _=o*4
+if ax(o+1)then
+local aI=j(_+1)local aK=aJ(j(_+2))local aB=aJ(j(_+3))local Z=aI*x(aB)local b=ap(Z*v(aK),aI*v(aB),Z*x(aK))if#g&lt;bf then
+table.insert(g,b)end
 else
 break
 end
 end
 end
-function bp(h)local am,_=0,0
-local aj,an=0,0
-local al,aq=0,0
-for B,l in r(h)do
-am=am+l.W
-aj=aj+t(l.az)an=an+q(l.az)al=al+t(l.aK)aq=aq+q(l.aK)_=_+1
+function bn(g)local ah,_=0,0
+local aa,af=0,0
+local aj,ab=0,0
+for I,l in q(g)do
+ah=ah+l.Z
+aa=aa+v(l.aF)af=af+x(l.aF)aj=aj+v(l.aw)ab=ab+x(l.aw)_=_+1
 end
-if _==0 then return I end
-local ar=am/_
-local ac=aM(aj,an)local ao=aM(al,aq)local a={0,0,0,0,0,0,0,0,0}for B,l in r(h)do
-local g=l.az-ac
-if g&gt;k then g=g-2*k end
-if g&lt;=-k then g=g+2*k end
-local f=l.aK-ao
+if _==0 then return B end
+local ai=ah/_
+local ag=aH(aa,af)local am=aH(aj,ab)local a={0,0,0,0,0,0,0,0,0}for I,l in q(g)do
+local h=l.aF-ag
+if h&gt;k then h=h-2*k end
+if h&lt;=-k then h=h+2*k end
+local f=l.aw-am
 if f&gt;k then f=f-2*k end
 if f&lt;=-k then f=f+2*k end
-local H=l.W-ar
-a[1]=a[1]+H*H
-a[2]=a[2]+H*g
-a[3]=a[3]+H*f
-a[4]=a[4]+g*H
-a[5]=a[5]+g*g
-a[6]=a[6]+g*f
-a[7]=a[7]+f*H
-a[8]=a[8]+f*g
+local F=l.Z-ai
+a[1]=a[1]+F*F
+a[2]=a[2]+F*h
+a[3]=a[3]+F*f
+a[4]=a[4]+h*F
+a[5]=a[5]+h*h
+a[6]=a[6]+h*f
+a[7]=a[7]+f*F
+a[8]=a[8]+f*h
 a[9]=a[9]+f*f
 end
-local aT=1.0/_
-for m=1,9 do a[m]=a[m]*aT end
-return{ar=ar,ac=ac,ao=ao,av=a,h=_}end
+local aX=1.0/_
+for o=1,9 do a[o]=a[o]*aX end
+return{ai=ai,ag=ag,am=am,ay=a,g=_}end
 '><pos x="0.25" y="1.25"/><in1 component_id="12"/></object></c><c type="31"><object id="9"><pos x="-3" y="0.5"/><in1 component_id="2"/></object></c><c type="31"><object id="10" i="1"><pos x="-3" y="-0.5"/><in1 component_id="2"/></object></c><c type="31"><object id="11" i="2"><pos x="-3" y="-1.5"/><in1 component_id="2"/></object></c><c type="40"><object id="12"><pos x="-1.5" y="-6.5"/><inc component_id="31"/><in1/><in2/><in3/><in4 component_id="9"/><in5/><in6/><in7/><in8 component_id="10"/><in9/><in10/><in11/><in12 component_id="11"/><in13/><in14/><in15/><in16 component_id="13"/><in17/><in18/><in19/><in20 component_id="14"/><in21/><in22/><in23/><in24 component_id="15"/><in25/><in26/><in27/><in28/><in29/><in30 component_id="21"/><in31/><in32/></object></c><c type="31"><object id="13" i="3"><pos x="-3" y="-2.5"/><in1 component_id="2"/></object></c><c type="31"><object id="14" i="4"><pos x="-3" y="-3.5"/><in1 component_id="2"/></object></c><c type="31"><object id="15" i="5"><pos x="-3" y="-4.5"/><in1 component_id="2"/></object></c><c type="31"><object id="25"><pos x="1.75" y="2"/><in1 component_id="8"/></object></c><c type="31"><object id="29" i="1"><pos x="1.75" y="1.5"/><in1 component_id="8"/></object></c><c type="41"><object id="31" count="1" offset="8"><pos x="-1.5" y="2"/><inc component_id="4"/><in1 component_id="30"/></object></c></components><components_bridge><c type="4"><object id="2"><pos x="-4.5" y="0.5"/></object></c><c type="4"><object id="4"><pos x="-4.5" y="2.25"/></object></c><c type="7"><object id="7"><pos x="3" y="0.75"/><in1 component_id="8" node_index="1"/></object></c><c type="2"><object id="21"><pos x="-3" y="-6.25"/></object></c><c type="3"><object id="24"><pos x="3" y="2"/><in1 component_id="25"/></object></c><c type="3"><object id="28"><pos x="3" y="1.5"/><in1 component_id="29"/></object></c><c><object id="30"><pos x="-4.5" y="1.75"/></object></c></components_bridge><groups/></group></microprocessor_definition><vp x="11" y="1" z="-166"/><logic_slots><slot/><slot/><slot/><slot/><slot/><slot/><slot/></logic_slots></o></c></components></body></bodies><logic_node_links><logic_node_link><voxel_pos_0 x="8" y="5" z="-161"/><voxel_pos_1 x="12" y="4" z="-161"/></logic_node_link><logic_node_link type="4"><voxel_pos_0 x="21" y="2" z="-173"/><voxel_pos_1 x="12" y="4" z="-161"/></logic_node_link><logic_node_link type="4"><voxel_pos_0 x="21" y="2" z="-173"/><voxel_pos_1 x="9" y="4" z="-161"/></logic_node_link><logic_node_link><voxel_pos_0 x="19" y="1" z="-174"/><voxel_pos_1 x="14" y="2" z="-160"/></logic_node_link><logic_node_link type="4"><voxel_pos_0 x="21" y="2" z="-173"/><voxel_pos_1 x="14" y="2" z="-161"/></logic_node_link><logic_node_link type="4"><voxel_pos_0 x="21" y="2" z="-173"/><voxel_pos_1 x="21" y="4" z="-176"/></logic_node_link><logic_node_link type="4"><voxel_pos_0 x="8" y="5" z="-161"/><voxel_pos_1 x="21" y="2" z="-173"/></logic_node_link><logic_node_link type="4"><voxel_pos_0 x="21" y="2" z="-173"/><voxel_pos_1 x="12" y="2" z="-161"/></logic_node_link><logic_node_link><voxel_pos_0 x="8" y="5" z="-161"/><voxel_pos_1 x="11" y="2" z="-161"/></logic_node_link><logic_node_link><voxel_pos_0 x="8" y="5" z="-161"/><voxel_pos_1 x="9" y="2" z="-161"/></logic_node_link><logic_node_link type="4"><voxel_pos_0 x="21" y="2" z="-173"/><voxel_pos_1 x="10" y="2" z="-161"/></logic_node_link><logic_node_link type="4"><voxel_pos_0 x="21" y="2" z="-173"/><voxel_pos_1 x="8" y="4" z="-161"/></logic_node_link><logic_node_link type="4"><voxel_pos_0 x="21" y="2" z="-173"/><voxel_pos_1 x="21" y="9" z="-177"/></logic_node_link><logic_node_link><voxel_pos_0 x="8" y="5" z="-161"/><voxel_pos_1 x="21" y="9" z="-177"/></logic_node_link><logic_node_link type="1"><voxel_pos_0 x="9" y="4" z="-161"/><voxel_pos_1 x="12" y="1" z="-165"/></logic_node_link><logic_node_link type="6"><voxel_pos_0 x="12" y="1" z="-166"/><voxel_pos_1 x="12" y="4" z="-161"/></logic_node_link><logic_node_link type="5"><voxel_pos_0 x="21" y="4" z="-176"/><voxel_pos_1 x="11" y="1" z="-166"/></logic_node_link><logic_node_link type="1"><voxel_pos_0 x="14" y="1" z="-166"/><voxel_pos_1 x="12" y="2" z="-161"/></logic_node_link><logic_node_link type="1"><voxel_pos_0 x="14" y="1" z="-165"/><voxel_pos_1 x="10" y="2" z="-161"/></logic_node_link><logic_node_link><voxel_pos_0 x="8" y="4" z="-161"/><voxel_pos_1 x="13" y="1" z="-166"/></logic_node_link><logic_node_link type="5"><voxel_pos_0 x="21" y="9" z="-177"/><voxel_pos_1 x="11" y="1" z="-165"/></logic_node_link></logic_node_links></vehicle>
