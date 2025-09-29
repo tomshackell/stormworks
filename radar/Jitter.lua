@@ -1,20 +1,16 @@
 require("Tom.Math")
 require("Tom.RotMatrix")
 require("Tom.RingBuffer")
+require("Tom.Stats")
 
 MAX_SAMPLES = 3000
-
--- Covariance measured
---
---  6.81        -0.00035    -0.001
---  -0.00014    0.0000133   0.0000003
---  -0.00096    0.00000057  0.0000147
---
+USE_COVARIANCE = true 
 
 ticks = 0
 orient = nil 
 samples = {}
 covariance = nil
+gaussian = nil
 target = vNew(0,0,0)
 zoom = 1
 
@@ -28,9 +24,17 @@ function onTick()
     end    
 
     processRadarDetections(orient)
-    covariance = fitRMeas(samples)
-    if covariance then 
-        output.setNumber(2, covariance.meanR)
+    if USE_COVARIANCE then 
+        covariance = calc3DCovariance(samples)
+        if covariance then             
+            output.setNumber(2, vLen(covariance.mean))
+        end
+    else
+        gaussian = fitGaussian(samples)
+        if gaussian then 
+            output.setNumber(2, vLen(gaussian.mean))
+            output.setNumber(1, gaussian.sigma)
+        end
     end
     ticks = ticks + 1    
 end
@@ -48,11 +52,19 @@ function onDraw()
             for j = 0,2 do
                 local idx = i * 3 + j + 1
                 local v = covariance.Rmeas[idx]
-                local text = string.format("%.7f", idx == 1 and v or v * 100000)
+                local text = string.format("%.4f", v)
                 screen.drawTextBox(j * sx, i * sy, sx, sy, text)                
             end
         end        
         screen.drawText(0, h - 10, "" .. covariance.samples)
+    elseif gaussian then
+        screen.setColor(255, 0, 255, 255)
+        for _,p in ipairs(samples) do
+            local q = vSub(p, gaussian.mean)
+            local scale = h / (2 * zoom)
+            local qx,qz = q.x * scale + w/2, q.z * scale + h/2 
+            screen.drawRectF(qx, qz, 1, 1)
+        end
     end
 end
 
@@ -76,13 +88,14 @@ function processRadarDetections(orient)
             local elevation = turnsToRad(input.getNumber(n+3))            
 
             -- work out the position in local space (+z = fwd, +x = right, +y = up)
-            --local r = dist * math.cos(elevation)
-            --local p = vNew(r * math.sin(azimuth), dist * math.sin(elevation), r * math.cos(azimuth))
+            local r = dist * math.cos(elevation)
+            local p = vNew(r * math.sin(azimuth), dist * math.sin(elevation), r * math.cos(azimuth))
     
             -- calculate in global position
             --local g = vAdd(rmMulV(orient.rotMatrix, p), orient.posn)       
             if #samples < MAX_SAMPLES then      
-                table.insert(samples, { r = dist, az = azimuth, el = elevation })
+                --table.insert(samples, { r = dist, az = azimuth, el = elevation })
+                table.insert(samples, p)
             end
         else 
             break

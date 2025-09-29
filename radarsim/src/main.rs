@@ -1,8 +1,8 @@
+use crate::radar::Radar;
 use crate::render::Render;
-use crate::utils::{Polar, Scalar, Vec2f, Vec3f};
+use crate::utils::{Scalar, Vec2f, Vec3f};
 use rand::prelude::ThreadRng;
 use rand::Rng;
-use rand_distr::Normal;
 use tiny_skia::Color;
 
 mod radar;
@@ -44,49 +44,33 @@ impl Trace {
 }
 
 struct RadarSim {
+    radar: Radar,
     trajectories: Vec<Trace>,
     detections: Vec<Vec3f>,
-    sweep_time: Scalar,
     rng: ThreadRng,
-    distribution: Normal<Scalar>,
 }
 
 impl RadarSim {
     const DOT_RADIUS: Scalar = 2.0;
 
-    pub fn new(sweep_time: Scalar, distribution: Normal<Scalar>) -> RadarSim {
+    pub fn new(radar: Radar) -> RadarSim {
         Self {
+            radar,
             trajectories: vec![],
             detections: vec![],
-            sweep_time,
             rng: rand::rng(),
-            distribution,
         }
     }
 
     pub fn add_trajectory(&mut self, state: State) {
-        let time_offs = self.rng.random_range(0.0..self.sweep_time);
-        self.trajectories.push(Trace::new(state, time_offs));
+        self.trajectories.push(Trace::new(state, 0.0));
     }
 
     pub fn step(&mut self, dt: Scalar) {
+        self.radar.step(dt);
         for t in &mut self.trajectories {
             t.step(dt);
-            t.time_offs -= dt;
-            if t.time_offs < 0.0 {
-                t.time_offs += self.sweep_time;
-
-                // add appropriate noise and introduce a detection
-                println!("----------------------------------------");
-                println!("posn: {:?}", t.state.position);
-                let polar = Polar::from_vector(t.state.position);
-                println!(
-                    "polar: r={}, az={}, el={}",
-                    polar.range, polar.azimuth, polar.elevation
-                );
-                let r_cart = radar::covariance_cart(polar);
-                let detect = radar::perturb_position(r_cart, t.state.position, &mut self.rng);
-                println!("perturb by: {:?}", detect - t.state.position);
+            if let Some(detect) = self.radar.try_detect(t.state.position, &mut self.rng) {
                 self.detections.push(detect);
             }
         }
@@ -111,16 +95,26 @@ impl RadarSim {
 }
 
 fn main() {
-    let distr = Normal::new(0.0, SIGMA).unwrap();
-    let mut sim = RadarSim::new(5.0, distr);
-    let state = State::new(Vec3f::new(0.0, 0.0, 10000.0), Vec3f::new(-5.0, 0.0, -5.0));
+    let radar = Radar::new(
+        Radar::fov_to_rad(0.05),
+        Radar::fov_to_rad(0.05),
+        32_000.0,
+        5.5,
+    );
+    const DT: Scalar = 1.0 / 60.0;
+
+    let mut sim = RadarSim::new(radar);
+    let state = State::new(
+        Vec3f::new(0.0, 0.0, 10_000.0),
+        Vec3f::new(-10.0, 0.0, -300.0),
+    );
     sim.add_trajectory(state);
-    sim.run(120.0, 1.0 / 60.0);
+    sim.run(120.0, DT);
 
     let mut render = Render::new(
         1000,
         1000,
-        Vec2f::new(-1200.0, 12000.0),
+        Vec2f::new(-12000.0, 12000.0),
         Vec2f::new(300.0, -300.0),
     );
     sim.draw(&mut render);

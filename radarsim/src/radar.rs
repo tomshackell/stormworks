@@ -1,11 +1,76 @@
-use crate::utils::{Matrix3f, Polar, Scalar, Vec3f};
+use crate::utils::{angular_diff, Matrix3f, Polar, Scalar, Vec3f};
 use rand::prelude::Distribution;
 use rand::thread_rng;
+use rand_distr::num_traits::FloatConst;
 use rand_distr::StandardNormal;
+
+const USE_CART_COVARIANCE: bool = true;
+
+pub struct Radar {
+    fov_x: Scalar,
+    fov_y: Scalar,
+    max_range: Scalar,
+    sweep_time: Scalar,
+    sweep_angle: Scalar,
+}
+
+impl Radar {
+    pub fn new(fov_x: Scalar, fov_y: Scalar, max_range: Scalar, sweep_time: Scalar) -> Self {
+        Self {
+            fov_x,
+            fov_y,
+            max_range,
+            sweep_time,
+            sweep_angle: 0.0,
+        }
+    }
+
+    /// Convert Stormworks radar FOVs into radians
+    pub fn fov_to_rad(v: Scalar) -> Scalar {
+        v * Scalar::PI()
+    }
+
+    pub fn step(&mut self, dt: Scalar) {
+        let sweep_rate = 2.0 * Scalar::PI() / self.sweep_time;
+        self.sweep_angle += dt * sweep_rate;
+    }
+
+    /// Attempt to use the radar to detect a contact at the given position, returns the detected
+    /// position (perturbed by radar noise) or `None` if not detected (out of radar FOV / range).
+    pub fn try_detect(&self, posn: Vec3f, rng: &mut impl rand::Rng) -> Option<Vec3f> {
+        let polar = Polar::from_vector(posn);
+        let az_diff = angular_diff(polar.azimuth, self.sweep_angle);
+        let el_diff = angular_diff(polar.elevation, 0.0);
+        if polar.range <= self.max_range
+            && az_diff.abs() <= self.fov_x
+            && el_diff.abs() <= self.fov_y
+        {
+            let r_cart = if USE_CART_COVARIANCE {
+                covariance_cart_direct(polar.range)
+            } else {
+                covariance_cart(polar)
+            };
+            Some(perturb_position(r_cart, posn, rng))
+        } else {
+            None
+        }
+    }
+}
+
+pub fn covariance_cart_direct(dist: Scalar) -> Matrix3f {
+    // Direct cartesian matrix, see 'SW Radar Test:Cart Covariance' in Google Sheets
+    let d2 = (dist / 1000.0) * (dist / 1000.0);
+    let eps = 1e-6; // diagonal cannot have any values <= 0
+    let r1 = (13.1 * d2 - 2.02).max(eps);
+    let r5 = (13.2 * d2 - 0.385).max(eps);
+    let r9 = (33.4 * d2 - 14.9).max(eps);
+    Matrix3f::from_diagonal(&Vec3f::new(r1, r5, r9))
+}
 
 /// Calculate the 3x3 covariance matrix in Cartesian coordinates
 pub fn covariance_cart(polar: Polar) -> Matrix3f {
     // Polar covariance matrix
+    // Measured from Stormworks, see 'SW Radar Test' in Google Sheets.
     const VAR_ANG: f32 = 1.31 / 100_000.0; // rad^2
     let r = polar.range;
     let d = r / 1000.0;
@@ -27,53 +92,6 @@ pub fn covariance_cart(polar: Polar) -> Matrix3f {
 
     // Cartesian covariance matrix
     jacobian * cov_polar * jacobian.transpose()
-}
-
-/// Calculate the covariance matrix in cartesian space for a contact with the given polar
-/*
-pub fn covariance_cart(polar: Polar) -> Matrix3f {
-    let r_meas = covariance_polar(polar.range);
-    println!("r_meas: {:?}", r_meas);
-    let j = j_from_polar(polar);
-    println!("j: {:?}", j);
-    let jr = j * r_meas;
-    println!("jr: {:?}", jr);
-    let r_cart = jr * j.transpose();
-    println!("r_cart: {:?}", r_cart);
-    r_cart + Matrix3f::identity() * 1e-6 // tiny regularize
-} */
-
-/// Calculate the radar's 3x3 covariance matrix for a polar coordinate
-fn covariance_polar(r: Scalar) -> Matrix3f {
-    // Found by experimentation see 'SW Radar Tests' in Google Sheets
-    const VAR_ANG: Scalar = 1.31 / 100_000.0; // rad^2
-    let d = r / 1000.0;
-    let vr = 7.77 - 0.897 * d + 33.5 * d * d;
-    Matrix3f::from_diagonal(&Vec3f::new(vr, VAR_ANG, VAR_ANG))
-}
-
-/// Calculate the jacobian of the polar covariance matrix
-/*fn j_from_polar(polar: Polar) -> Matrix3f {
-    let r = polar.range;
-    let (ca, sa) = (polar.azimuth.cos(), polar.azimuth.sin());
-    let (ce, se) = (polar.elevation.cos(), polar.elevation.sin());
-    Matrix3f::from([
-        [ca * ce, -r * sa * ce, -r * ca * se],
-        [se, 0.0, r * ce],
-        [sa * ce, r * ca * ce, -r * sa * se],
-    ])
-}*/
-
-fn j_from_polar(polar: Polar) -> Matrix3f {
-    let r = polar.range;
-    let (ca, sa) = (polar.azimuth.cos(), polar.azimuth.sin());
-    let (ce, se) = (polar.elevation.cos(), polar.elevation.sin());
-
-    Matrix3f::from([
-        [sa * ce, r * ca * ce, -r * sa * se], // d(x)/dr, d(x)/daz, d(x)/del
-        [se, 0.0, r * ce],                    // d(y)/dr, d(y)/daz, d(y)/del
-        [ca * ce, -r * sa * ce, -r * ca * se], // d(z)/dr, d(z)/daz, d(z)/del
-    ])
 }
 
 /// Perturb a radar position using the given cartesian covariance matrix
